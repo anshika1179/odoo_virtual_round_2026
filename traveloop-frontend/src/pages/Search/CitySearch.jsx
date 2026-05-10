@@ -78,7 +78,7 @@ export default function CitySearch() {
         </div>
 
         {/* Search + Filters */}
-        <div className="glass shadow-soft" style={{ borderRadius: '24px', padding: '24px', marginBottom: '48px', border: '1px solid rgba(120,90,60,0.08)' }}>
+        <div className="explore-filters-card glass shadow-soft" style={{ borderRadius: '24px', marginBottom: '48px', border: '1px solid rgba(120,90,60,0.08)' }}>
           <div className="filters-container">
             <div className="search-wrapper">
               <Search className="search-icon" />
