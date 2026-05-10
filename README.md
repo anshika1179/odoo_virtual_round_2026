@@ -20,6 +20,29 @@ The application successfully demonstrates complex relational database management
 
 ---
 
+## 🎯 Problem Statement
+
+The challenge was to design and develop a complete travel planning application where users can:
+* Create customized multi-city itineraries.
+* Assign travel dates, activities, and budgets.
+* Discover activities and destinations through search.
+* Receive cost breakdowns and visual calendars.
+* Share their plans publicly or with friends.
+
+The application must demonstrate proper use of relational databases to store and retrieve complex travel data such as user-specific itineraries, stops, activities, and estimated expenses. The system should also support dynamic user interfaces that adapt to each user's trip flow.
+
+## 💡 How Traveloop Solves the Problem
+
+Traveloop directly addresses the fragmentation of modern travel planning. Instead of using Excel for budgets, WhatsApp for sharing, and scattered notes for itineraries, our platform centralizes the entire experience.
+
+* **For Custom Multi-City Itineraries:** We built an interactive drag-and-drop Itinerary Builder. Users simply add "Stops" (cities) and the platform automatically handles the complex date logic, plotting it onto a visually stunning chronological Timeline View.
+* **For Activity & Destination Discovery:** We pre-seeded a robust database of global cities and activities. Users can effortlessly filter these by region, cost, and interest category (e.g., Adventure, Food) and instantly slot them into their trip.
+* **For Cost Breakdowns:** Every activity added dynamically feeds into a centralized Budget Dashboard. We utilized Recharts to provide visual pie-chart breakdowns and implemented ReportLab to generate downloadable PDF invoices on the fly.
+* **For Sharing & Collaboration:** We implemented a secure, UUID-based token system. Users can click "Share" to generate a public, read-only link of their itinerary. Viewers can instantly share it to social media or click **"Copy This Trip"** to securely clone the entire itinerary, complete with all relational database stops and activities, into their own account.
+* **For Relational Database Mastery:** By strictly normalizing our SQLite database with SQLAlchemy (connecting Users → Trips → Stops → Activities & Expenses), we ensured that cascading deletions and real-time budget aggregations work flawlessly, perfectly satisfying the technical requirements of the prompt.
+
+---
+
 ## ✨ 100% Feature Complete
 
 Traveloop strictly adheres to and fully implements all 14 requirements outlined in the hackathon problem statement:
