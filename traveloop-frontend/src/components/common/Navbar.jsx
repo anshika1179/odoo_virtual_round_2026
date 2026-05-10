@@ -25,63 +25,68 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 transition-all" 
-         style={{ backgroundColor: 'rgba(255,248,240,0.92)', backdropFilter: 'blur(10px)', borderBottom: '1px solid rgba(120,90,60,0.08)' }}>
+    <nav className="fixed top-0 left-0 right-0 z-50 transition-all bg-white/90 backdrop-blur-md" 
+         style={{ borderBottom: '1px solid rgba(120,90,60,0.08)' }}>
       <div className="mx-auto flex items-center justify-between"
-           style={{ maxWidth: '1440px', padding: '0 64px', height: '72px' }}>
+           style={{ maxWidth: '1440px', padding: '0 64px', height: '76px' }}>
 
-        {/* Left — Logo + Brand */}
-        <Link to="/" className="flex items-center group shrink-0" style={{ gap: '10px' }}>
-          <img src="/images/logo.png" alt="Traveloop" className="w-8 h-8 rounded-full object-cover group-hover:rotate-[360deg] transition-transform duration-700 ease-in-out" />
-          <span className="brand-font text-[#451a03] hidden sm:inline" style={{ fontSize: '28px', fontWeight: 700 }}>Traveloop.</span>
-        </Link>
+        {/* Left Section (25%) */}
+        <div className="flex items-center" style={{ width: '25%' }}>
+          <Link to="/" className="flex items-center group shrink-0" style={{ gap: '10px' }}>
+            <img src="/images/logo.png" alt="Traveloop" className="w-8 h-8 rounded-full object-cover group-hover:rotate-[360deg] transition-transform duration-700 ease-in-out" />
+            <span className="brand-font text-amber-950 hidden sm:inline" style={{ fontSize: '28px', fontWeight: 700 }}>Traveloop.</span>
+          </Link>
+        </div>
 
-        {/* Center — Nav Links (desktop) */}
-        <div className="hidden md:flex items-center mx-auto" style={{ gap: '28px' }}>
+        {/* Center Section (50%) */}
+        <div className="hidden md:flex items-center justify-center" style={{ width: '50%', gap: '36px' }}>
           {user && navLinks.map(link => (
             <Link key={link.to} to={link.to}
-              className={`flex items-center gap-1.5 transition-all duration-300 ${isActive(link.to) ? 'text-amber-900' : 'text-amber-900/60 hover:text-amber-900'}`}
-              style={{ fontSize: '16px', fontWeight: 500 }}>
+              className={`flex items-center gap-1.5 transition-all duration-300 relative py-2 ${isActive(link.to) ? 'text-amber-950 font-bold' : 'text-amber-900/60 hover:text-amber-950'}`}
+              style={{ fontSize: '15px' }}>
               {link.icon} {link.label}
+              {isActive(link.to) && (
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-[2px] bg-amber-900 rounded-full" />
+              )}
             </Link>
           ))}
         </div>
 
-        {/* Right — Profile / Auth */}
-        <div className="hidden md:flex items-center shrink-0 ml-auto">
+        {/* Right Section (25%) */}
+        <div className="hidden md:flex items-center justify-end" style={{ width: '25%' }}>
           {user ? (
             <div className="flex items-center">
-              <Link to="/profile" className="flex items-center hover:opacity-80 transition-opacity" style={{ marginLeft: '32px', gap: '10px' }}>
-                <div className="w-9 h-9 rounded-full overflow-hidden bg-amber-100 flex items-center justify-center shrink-0 border border-amber-900/10">
+              <Link to="/profile" className="flex items-center hover:opacity-80 transition-opacity" style={{ gap: '12px', paddingRight: '8px' }}>
+                <div className="flex flex-col text-right">
+                  <span className="text-amber-950 leading-tight" style={{ fontSize: '15px', fontWeight: 600 }}>{user.full_name?.split(' ')[0]}</span>
+                </div>
+                <div className="w-10 h-10 rounded-full overflow-hidden bg-gradient-to-br from-amber-100 to-orange-50 flex items-center justify-center shrink-0 border border-amber-900/10 shadow-sm">
                   {user.profile_photo_url ? (
                     <img
                       src={user.profile_photo_url}
                       alt={user.full_name}
                       className="w-full h-full object-cover"
-                      onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = `<span class="text-amber-900 text-sm font-bold">${user.full_name?.[0]?.toUpperCase() || '?'}</span>`; }}
+                      onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = `<span class="text-amber-950 text-sm font-bold">${user.full_name?.[0]?.toUpperCase() || '?'}</span>`; }}
                     />
                   ) : (
-                    <User size={18} strokeWidth={1.5} className="text-amber-900/60" />
+                    <span className="text-amber-950 text-sm font-bold">{user.full_name?.[0]?.toUpperCase() || '?'}</span>
                   )}
                 </div>
-                <div className="flex flex-col text-left">
-                  <span className="text-amber-950 leading-tight" style={{ fontSize: '16px', fontWeight: 600 }}>{user.full_name?.split(' ')[0]}</span>
-                </div>
               </Link>
-              <button onClick={handleLogout} className="p-2 ml-4 rounded-full text-amber-900/40 hover:text-red-500 hover:bg-red-50 transition-all" title="Logout">
-                <LogOut size={20} strokeWidth={1.5} />
+              <button onClick={handleLogout} className="p-2.5 ml-4 rounded-full text-amber-900/40 hover:text-red-500 hover:bg-red-50 transition-all" title="Logout">
+                <LogOut size={18} strokeWidth={2} />
               </button>
             </div>
           ) : (
-            <div className="flex gap-3">
-              <Link to="/login" className="btn-secondary text-sm">Log in</Link>
-              <Link to="/register" className="btn-primary text-sm">Sign up</Link>
+            <div className="flex gap-4">
+              <Link to="/login" className="text-amber-900/70 hover:text-amber-950 font-medium text-sm flex items-center">Log in</Link>
+              <Link to="/register" className="btn-primary text-sm px-6 py-2 rounded-full">Sign up</Link>
             </div>
           )}
         </div>
 
         {/* Mobile toggle */}
-        <button className="md:hidden p-2 text-amber-900/70 ml-auto" onClick={() => setMobileOpen(!mobileOpen)}>
+        <button className="md:hidden p-2 text-amber-900/70 flex justify-end" style={{ width: '25%' }} onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X size={24} strokeWidth={1.5} /> : <Menu size={24} strokeWidth={1.5} />}
         </button>
       </div>

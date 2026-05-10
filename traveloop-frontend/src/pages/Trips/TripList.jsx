@@ -33,16 +33,16 @@ export default function TripList() {
         <p className="text-amber-900/70 mt-1">Manage all your travel plans</p>
       </div>
 
-      <div className="flex flex-col lg:flex-row items-center" style={{ gap: '24px', marginBottom: '48px' }}>
-        {/* Search Bar */}
-        <div className="relative shrink-0">
+      <div className="flex flex-col lg:flex-row items-center justify-between" style={{ marginBottom: '72px' }}>
+        {/* Search Bar (Left) */}
+        <div className="relative shrink-0 flex items-center justify-start" style={{ width: '380px' }}>
           <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-amber-900/40" />
-          <input className="input-glass outline-none transition-colors" placeholder="Search trips..." value={search} onChange={e => setSearch(e.target.value)} 
-            style={{ width: '420px', height: '56px', borderRadius: '18px', padding: '0 20px 0 44px', border: '1px solid rgba(120,90,60,0.12)', fontSize: '15px' }} />
+          <input className="input-glass outline-none transition-colors w-full" placeholder="Search trips..." value={search} onChange={e => setSearch(e.target.value)} 
+            style={{ height: '56px', borderRadius: '18px', padding: '0 20px 0 44px', border: '1px solid rgba(120,90,60,0.12)', fontSize: '15px' }} />
         </div>
         
-        {/* Filters */}
-        <div className="flex items-center" style={{ gap: '8px' }}>
+        {/* Filters (Center) */}
+        <div className="flex items-center justify-center flex-1" style={{ gap: '8px' }}>
           {tabs.map(t => (
             <button key={t.key} onClick={() => setFilter(t.key)}
               className={`px-5 py-3 rounded-2xl text-sm font-medium transition-all ${filter === t.key ? 'bg-amber-900/10 text-amber-950' : 'text-amber-900/60 hover:text-amber-950 hover:bg-amber-900/5'}`}>
@@ -51,9 +51,9 @@ export default function TripList() {
           ))}
         </div>
 
-        {/* CTA Button */}
-        <div className="ml-auto">
-          <Link to="/trips/new" className="btn-primary flex items-center gap-2" style={{ height: '56px', padding: '0 28px', borderRadius: '18px', fontSize: '16px', fontWeight: 600 }}>
+        {/* CTA Button (Right) */}
+        <div className="flex items-center justify-end shrink-0" style={{ width: '380px' }}>
+          <Link to="/trips/new" className="btn-primary flex items-center justify-center gap-2" style={{ height: '56px', padding: '0 28px', borderRadius: '18px', fontSize: '16px', fontWeight: 600 }}>
             <Plus size={18} /> New Trip
           </Link>
         </div>
@@ -62,7 +62,7 @@ export default function TripList() {
       {loading ? (
         <CardSkeleton count={6} />
       ) : trips.length === 0 ? (
-        <div className="flex flex-col items-center justify-center text-center animate-fadeInUp" style={{ minHeight: '400px', maxWidth: '600px', margin: '0 auto' }}>
+        <div className="flex flex-col items-center justify-center text-center animate-fadeInUp" style={{ maxWidth: '600px', margin: '0 auto', paddingTop: '120px' }}>
           <div className="w-28 h-28 rounded-full bg-gradient-to-tr from-amber-100 to-orange-50 flex items-center justify-center mb-8 shadow-sm border border-amber-900/5">
             <Globe size={48} className="text-amber-700/50" />
           </div>
