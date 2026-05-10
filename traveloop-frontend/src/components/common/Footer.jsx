@@ -3,8 +3,8 @@ import { Globe, Heart } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="mt-auto bg-white/60 backdrop-blur-lg border-t border-amber-900/10">
-      <div className="container flex flex-col items-center justify-center text-center" style={{ paddingTop: '64px', paddingBottom: '48px' }}>
+    <footer className="mt-auto footer-wrapper bg-white/60 backdrop-blur-lg border-t border-amber-900/10">
+      <div className="container footer-content">
         
         {/* Brand */}
         <div className="flex flex-col items-center gap-4">
@@ -15,7 +15,7 @@ export default function Footer() {
         </div>
 
         {/* Links */}
-        <div className="flex items-center justify-center" style={{ gap: '36px', marginTop: '28px' }}>
+        <div className="flex items-center justify-center flex-wrap gap-6 md:gap-8">
           <Link to="/" className="text-amber-900/70 hover:text-amber-950 font-medium text-sm transition-colors">Home</Link>
           <Link to="/trips" className="text-amber-900/70 hover:text-amber-950 font-medium text-sm transition-colors">Trips</Link>
           <Link to="/community" className="text-amber-900/70 hover:text-amber-950 font-medium text-sm transition-colors">Community</Link>
@@ -23,12 +23,20 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="bg-amber-950" style={{ width: '420px', height: '1px', opacity: 0.08, marginTop: '32px', marginBottom: '32px' }} />
+        <div className="footer-divider" />
 
         {/* Copyright */}
         <p className="flex items-center justify-center gap-1.5 text-amber-900/50 font-medium" style={{ fontSize: '13px' }}>
           Made with <Heart size={14} className="text-red-400 fill-red-400" /> © {new Date().getFullYear()} Traveloop
         </p>
+
+        {/* Hackathon Credits */}
+        <div className="footer-hackathon">
+          <p className="footer-hackathon-title">Made for Odoo x Parul University Virtual Round</p>
+          <div className="footer-team mt-1">
+            Team Members: ANSHIKA • KHUSHI PATEL • ATUL UPADHYAY • SATYAM KUMAR SINGH
+          </div>
+        </div>
 
       </div>
     </footer>
