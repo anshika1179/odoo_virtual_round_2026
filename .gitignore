@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.db
+*.sqlite3
+.env
+venv/
+env/
+*.egg-info/
+
+# Node
+node_modules/
+dist/
+build/
+.vite/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Uploads
+traveloop-backend/static/uploads/*
+!traveloop-backend/static/uploads/.gitkeep
