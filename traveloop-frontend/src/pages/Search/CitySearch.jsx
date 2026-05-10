@@ -183,6 +183,8 @@ export default function CitySearch() {
             ))}
           </div>
         )}
+        </>
+        )}
 
         {!loading && ((mode === 'cities' && cities.length === 0) || (mode === 'activities' && activities.length === 0)) && (
           <div className="text-center text-amber-900/50" style={{ padding: '80px 0' }}>No results found. Try adjusting your search or filters.</div>
