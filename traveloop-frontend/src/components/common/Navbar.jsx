@@ -38,7 +38,7 @@ export default function Navbar() {
           </Link>
 
           {/* Nav Links */}
-          <div className="hidden md:flex items-center" style={{ marginLeft: '48px', gap: '32px' }}>
+          <div className="hidden md:flex items-center" style={{ marginLeft: '56px', gap: '32px' }}>
             {user && navLinks.map(link => (
               <Link key={link.to} to={link.to}
                 className={`flex items-center gap-1.5 transition-all duration-300 relative py-2 ${isActive(link.to) ? 'text-amber-950 font-bold' : 'text-amber-900/60 hover:text-amber-950'}`}
