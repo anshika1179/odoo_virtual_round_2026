@@ -92,31 +92,36 @@ export default function Landing() {
       </section>
 
       {/* Feature Cards Section */}
-      <section className="mx-auto px-4 sm:px-6" style={{ maxWidth: '1200px', marginTop: '120px' }}>
-        <div className="text-center animate-fadeInUp" style={{ marginBottom: '56px' }}>
-          <h2 className="text-amber-950 font-bold" style={{ fontSize: '36px' }}>Travel Smart</h2>
+      <section className="w-full mx-auto" style={{ maxWidth: '1400px', padding: '120px 64px', boxSizing: 'border-box' }}>
+        <div className="text-center animate-fadeInUp" style={{ marginBottom: '72px' }}>
+          <h2 className="text-amber-950 font-bold" style={{ fontSize: '56px', lineHeight: 1.1 }}>Travel Smart</h2>
+          <p className="text-amber-900/75 mx-auto" style={{ maxWidth: '720px', marginTop: '16px', fontSize: '18px', lineHeight: 1.7 }}>
+            Build day-by-day itineraries, track your travel expenses, and manage your packing lists all in one beautiful place.
+          </p>
         </div>
-        <div className="hidden lg:grid" style={{ gridTemplateColumns: 'repeat(4, minmax(240px, 1fr))', gap: '28px' }}>
+        
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'stretch', gap: '32px', flexWrap: 'wrap', width: 'fit-content', marginLeft: 'auto', marginRight: 'auto' }}>
           {features.map((f, i) => (
-            <div key={i} className="backdrop-blur-xl border border-amber-900/5 group transition-all duration-400 animate-fadeInUp" 
-                 style={{ backgroundColor: 'rgba(255,255,255,0.55)', padding: '28px', borderRadius: '28px', height: '240px', boxShadow: '0 4px 20px rgba(120,90,60,0.04)', animationDelay: `${i * 0.1}s` }}
-                 onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = '0 12px 30px rgba(120,90,60,0.08)'; }}
-                 onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(120,90,60,0.04)'; }}>
-              <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${f.color} flex items-center justify-center text-white mb-5 shadow-sm group-hover:-translate-y-1 transition-transform duration-300`}>
-                <div style={{ transform: 'scale(0.85)' }}>{f.icon}</div>
+            <div key={i} className="group transition-transform duration-400 animate-fadeInUp backdrop-blur-md flex flex-col justify-start" 
+                 style={{ 
+                   width: '280px',
+                   minHeight: '320px', 
+                   borderRadius: '32px', 
+                   padding: '32px', 
+                   backgroundColor: 'rgba(255,255,255,0.58)', 
+                   boxShadow: '0 12px 40px rgba(80,50,20,0.08)', 
+                   gap: '18px',
+                   animationDelay: `${i * 0.1}s` 
+                 }}
+                 onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-6px)'; }}
+                 onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}>
+              
+              <div className={`w-[58px] h-[58px] rounded-[18px] bg-gradient-to-br ${f.color} flex items-center justify-center text-white shadow-sm transition-transform duration-300 group-hover:scale-105`} style={{ marginBottom: '12px' }}>
+                <div style={{ transform: 'scale(1.1)' }}>{f.icon}</div>
               </div>
-              <h3 className="text-amber-950 font-bold mb-2" style={{ fontSize: '18px' }}>{f.title}</h3>
-              <p className="text-amber-900/60 leading-relaxed" style={{ fontSize: '13px' }}>{f.desc}</p>
-            </div>
-          ))}
-        </div>
-        {/* Mobile Fallback Grid */}
-        <div className="grid lg:hidden grid-cols-1 sm:grid-cols-2 gap-6">
-          {features.map((f, i) => (
-            <div key={i} className="bg-white/60 backdrop-blur-xl border border-amber-900/5 p-6 rounded-3xl">
-              <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${f.color} flex items-center justify-center text-white mb-4`}>{f.icon}</div>
-              <h3 className="text-amber-950 font-bold text-lg mb-2">{f.title}</h3>
-              <p className="text-amber-900/70 text-sm leading-relaxed">{f.desc}</p>
+              
+              <h3 className="text-amber-950 font-bold" style={{ fontSize: '28px', lineHeight: 1.3 }}>{f.title}</h3>
+              <p className="text-amber-900/75" style={{ fontSize: '17px', lineHeight: 1.8 }}>{f.desc}</p>
             </div>
           ))}
         </div>
