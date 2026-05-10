@@ -27,7 +27,7 @@ export default function CitySearch() {
   const actTypes = ['SIGHTSEEING', 'FOOD', 'ADVENTURE', 'CULTURE', 'SHOPPING', 'NIGHTLIFE', 'NATURE', 'WELLNESS'];
 
   return (
-    <div className="mx-auto" style={{ maxWidth: '1440px', padding: '120px 64px 80px 64px' }}>
+    <div className="page-container">
       <div className="animate-fadeInUp">
         <h1 className="text-amber-950 font-bold" style={{ fontSize: '36px', marginBottom: '8px' }}>Explore</h1>
         <p className="text-amber-900/70" style={{ marginBottom: '32px' }}>Discover cities and activities for your next trip</p>

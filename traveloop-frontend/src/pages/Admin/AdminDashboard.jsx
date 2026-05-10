@@ -52,7 +52,7 @@ export default function AdminDashboard() {
   }, []);
 
   if (loading) return (
-    <div className="mx-auto" style={{ maxWidth: '1440px', padding: '120px 64px 80px 64px' }}>
+    <div className="page-container">
       <div className="animate-fadeInUp">
         <div className="h-8 skeleton rounded-lg w-64 mb-2" />
         <div className="h-5 skeleton rounded-lg w-80 mb-8" />
@@ -93,7 +93,7 @@ export default function AdminDashboard() {
   }));
 
   return (
-    <div className="mx-auto" style={{ maxWidth: '1440px', padding: '120px 64px 80px 64px' }}>
+    <div className="page-container">
       <div className="animate-fadeInUp">
         <h1 className="text-amber-950 font-bold mb-2 flex items-center gap-3" style={{ fontSize: '36px' }}><LayoutDashboard size={32} className="text-amber-700" /> Admin Dashboard</h1>
         <p className="text-amber-900/70 mb-10">Overview of the Traveloop platform</p>
