@@ -28,7 +28,7 @@ function App() {
         <ToastProvider>
           <div className="flex flex-col min-h-screen">
             <Navbar />
-            <main className="flex-1">
+            <main className="flex-1 main-content">
               <PageTransition>
                 <Routes>
                   {/* Public Routes */}
