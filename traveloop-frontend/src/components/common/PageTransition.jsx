@@ -7,8 +7,8 @@ export default function PageTransition({ children }) {
 
   useEffect(() => {
     setShow(false);
-    const t = requestAnimationFrame(() => setShow(true));
-    return () => cancelAnimationFrame(t);
+    const timer = setTimeout(() => setShow(true), 10);
+    return () => clearTimeout(timer);
   }, [location.pathname]);
 
   return (
