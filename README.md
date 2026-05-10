@@ -9,11 +9,12 @@ Traveloop boasts a **premium, glassmorphism UI** with a warm amber-themed palett
 ### 🌟 Core Capabilities
 1. **Seamless Authentication** — JWT-based login, secure registration with strict frontend and backend validations (including strict phone number formatting and password rules).
 2. **Dynamic Trip Creation** — Build trips with live popular destination suggestions pulled directly from the database, along with robust date and budget validation.
-3. **Interactive Itinerary Builder** — Section-based stops, real-time city searching, and intuitive trip organization.
+3. **Interactive Itinerary Builder** — Section-based stops, real-time city searching, and intuitive trip organization. Includes robust date scaling for multi-century trip dates!
 4. **Rich Budgeting & PDF Export** — Track expenses against your trip budget, view dynamic category breakdowns via elegant Recharts visualizations, and seamlessly export **real, professionally-styled PDF Invoices** (powered by ReportLab on the backend).
 5. **Community Hub** — Upload actual travel photos and share stories to inspire fellow travelers.
 6. **Smart Admin Dashboard** — Monitor platform growth with actual backend-calculated SQLite metrics, live trend lines, and user activity feeds—securely protected by an Admin guard.
 7. **Packing Checklists & Journals** — Keep track of tasks with category-based checklists and a robust trip-notes journaling system.
+8. **Premium User Profiles** — Sleek glassmorphism dashboards tracking upcoming, completed, and ongoing trips, complete with photo upload capabilities.
 
 ## 🚀 Tech Stack
 

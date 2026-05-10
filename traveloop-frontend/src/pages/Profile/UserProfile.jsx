@@ -160,18 +160,26 @@ export default function UserProfile() {
   }, [allTrips]);
 
   return (
-    <div className="page-container">
-      <div className="animate-fadeInUp">
+    <div
+      className="mx-auto flex flex-col items-center"
+      style={{ maxWidth: "1440px", padding: "120px 64px 80px 64px" }}
+    >
+      <div className="animate-fadeInUp w-full" style={{ maxWidth: "1200px" }}>
         {/* Profile Header */}
-        <div className="glass rounded-2xl p-8 mb-8">
-          <div className="flex flex-col sm:flex-row items-start gap-6">
+        <div 
+          className="glass shadow-soft mb-10 relative overflow-hidden"
+          style={{ borderRadius: "32px", border: "1px solid rgba(120,90,60,0.08)" }}
+        >
+          <div className="h-32 w-full bg-gradient-to-r from-amber-700/20 to-orange-500/20 absolute top-0 left-0"></div>
+          
+          <div className="p-8 sm:p-10 relative z-10 pt-16 flex flex-col sm:flex-row items-center sm:items-start gap-8 text-center sm:text-left">
             {/* Avatar with Upload */}
             <div className="relative group shrink-0">
               {photoSrc ? (
                 <img
                   src={photoSrc}
                   alt={user?.full_name}
-                  className="w-24 h-24 rounded-2xl object-cover border-2 border-amber-700/30"
+                  className="w-32 h-32 rounded-3xl object-cover border-4 border-[#FAF7F2] shadow-lg bg-white"
                   onError={(e) => {
                     e.target.style.display = "none";
                     e.target.nextSibling.style.display = "flex";
@@ -179,7 +187,7 @@ export default function UserProfile() {
                 />
               ) : null}
               <div
-                className="w-24 h-24 rounded-2xl bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center text-amber-900 text-3xl font-bold"
+                className="w-32 h-32 rounded-3xl bg-gradient-to-br from-amber-600 to-orange-700 flex items-center justify-center text-white text-5xl font-black shadow-lg border-4 border-[#FAF7F2]"
                 style={{ display: photoSrc ? "none" : "flex" }}
               >
                 {user?.full_name?.[0]?.toUpperCase() || "?"}
@@ -189,12 +197,12 @@ export default function UserProfile() {
               <button
                 onClick={() => fileRef.current?.click()}
                 disabled={uploading}
-                className="absolute inset-0 rounded-2xl bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+                className="absolute inset-0 rounded-3xl bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer border-4 border-transparent"
               >
                 {uploading ? (
-                  <Loader2 size={24} className="text-amber-900 animate-spin" />
+                  <Loader2 size={32} className="text-white animate-spin" />
                 ) : (
-                  <Camera size={24} className="text-amber-900" />
+                  <Camera size={32} className="text-white" />
                 )}
               </button>
               <input
@@ -209,218 +217,259 @@ export default function UserProfile() {
               {photoSrc && !uploading && (
                 <button
                   onClick={handleRemovePhoto}
-                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-amber-900 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-400"
+                  className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-red-50 text-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-red-100 hover:scale-110 shadow-sm border border-red-200"
                   title="Remove photo"
                 >
-                  <Trash2 size={12} />
+                  <Trash2 size={14} />
                 </button>
               )}
             </div>
 
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-1">
-                <h1 className="text-3xl font-bold text-amber-900">
+            <div className="flex-1 mt-2">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 mb-2">
+                <h1 className="text-4xl font-black text-amber-950 tracking-tight">
                   {user?.full_name}
                 </h1>
                 <button
                   onClick={() => setEditing(!editing)}
-                  className="p-2 rounded-lg text-amber-700 hover:text-amber-700 hover:bg-amber-700/10 transition-all"
+                  className="p-2 rounded-xl text-amber-900/40 hover:text-amber-700 hover:bg-amber-100 transition-all mt-1 sm:mt-0"
                 >
-                  <Edit3 size={18} />
+                  <Edit3 size={20} />
                 </button>
               </div>
-              <p className="text-amber-700 flex items-center gap-2">
-                <Mail size={16} /> {user?.email}
-              </p>
-              {user?.city && (
-                <p className="text-amber-600 text-sm flex items-center gap-2 mt-1">
-                  <MapPin size={14} /> {user.city}, {user.country}
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 text-amber-900/70 font-medium">
+                <p className="flex items-center gap-2">
+                  <Mail size={18} className="text-amber-500" /> {user?.email}
                 </p>
-              )}
+                {user?.city && (
+                  <p className="flex items-center gap-2">
+                    <MapPin size={18} className="text-amber-500" /> {user.city}, {user.country}
+                  </p>
+                )}
+              </div>
 
               {/* Upload status message */}
               {uploadMsg && (
-                <p
-                  className={`text-sm mt-2 flex items-center gap-1 ${uploadMsg.includes("failed") || uploadMsg.includes("Please") || uploadMsg.includes("must") ? "text-red-400" : "text-emerald-600"}`}
+                <div
+                  className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg mt-4 text-sm font-bold shadow-sm ${uploadMsg.includes("failed") || uploadMsg.includes("Please") || uploadMsg.includes("must") ? "bg-red-50 text-red-600 border border-red-100" : "bg-emerald-50 text-emerald-700 border border-emerald-100"}`}
                 >
                   {uploadMsg.includes("failed") ||
                   uploadMsg.includes("Please") ||
                   uploadMsg.includes("must") ? null : (
-                    <CheckCircle size={14} />
+                    <CheckCircle size={16} />
                   )}
                   {uploadMsg}
-                </p>
+                </div>
               )}
             </div>
           </div>
 
           {editing && (
-            <div className="mt-6 pt-6 border-t border-amber-200 space-y-4 animate-fadeInUp">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="px-8 sm:px-10 pb-10 border-t border-amber-900/10 pt-8 bg-white/40 animate-fadeInUp">
+              <h3 className="text-xl font-bold text-amber-950 mb-6">Edit Profile Details</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <label className="block text-sm text-amber-800 mb-1.5">
+                  <label className="block text-sm font-bold text-amber-900/60 uppercase tracking-wider mb-2">
                     Full Name
                   </label>
                   <input
-                    className="input-glass"
+                    className="input-glass w-full font-medium text-amber-950"
                     value={form.full_name}
                     onChange={set("full_name")}
+                    style={{ height: "56px", borderRadius: "16px", padding: "0 20px", border: "1px solid rgba(120,90,60,0.12)", fontSize: "16px", outline: "none", backgroundColor: "rgba(255,255,255,0.7)" }}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-amber-800 mb-1.5">
+                  <label className="block text-sm font-bold text-amber-900/60 uppercase tracking-wider mb-2">
                     Phone
                   </label>
                   <input
-                    className="input-glass"
+                    className="input-glass w-full font-medium text-amber-950"
                     value={form.phone}
                     onChange={set("phone")}
+                    style={{ height: "56px", borderRadius: "16px", padding: "0 20px", border: "1px solid rgba(120,90,60,0.12)", fontSize: "16px", outline: "none", backgroundColor: "rgba(255,255,255,0.7)" }}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-amber-800 mb-1.5">
+                  <label className="block text-sm font-bold text-amber-900/60 uppercase tracking-wider mb-2">
                     City
                   </label>
                   <input
-                    className="input-glass"
+                    className="input-glass w-full font-medium text-amber-950"
                     value={form.city}
                     onChange={set("city")}
+                    style={{ height: "56px", borderRadius: "16px", padding: "0 20px", border: "1px solid rgba(120,90,60,0.12)", fontSize: "16px", outline: "none", backgroundColor: "rgba(255,255,255,0.7)" }}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-amber-800 mb-1.5">
+                  <label className="block text-sm font-bold text-amber-900/60 uppercase tracking-wider mb-2">
                     Country
                   </label>
                   <input
-                    className="input-glass"
+                    className="input-glass w-full font-medium text-amber-950"
                     value={form.country}
                     onChange={set("country")}
+                    style={{ height: "56px", borderRadius: "16px", padding: "0 20px", border: "1px solid rgba(120,90,60,0.12)", fontSize: "16px", outline: "none", backgroundColor: "rgba(255,255,255,0.7)" }}
                   />
                 </div>
               </div>
-              <div>
-                <label className="block text-sm text-amber-800 mb-1.5">
+              <div className="mb-8">
+                <label className="block text-sm font-bold text-amber-900/60 uppercase tracking-wider mb-2">
                   About
                 </label>
                 <textarea
-                  className="input-glass"
+                  className="input-glass w-full font-medium text-amber-950"
                   rows={3}
                   value={form.additional_info}
                   onChange={set("additional_info")}
+                  style={{ borderRadius: "16px", padding: "20px", border: "1px solid rgba(120,90,60,0.12)", fontSize: "16px", outline: "none", backgroundColor: "rgba(255,255,255,0.7)", resize: "none" }}
                 />
               </div>
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="btn-primary"
-              >
-                {saving ? (
-                  <Loader2 size={18} className="animate-spin" />
-                ) : (
-                  <Save size={18} />
-                )}{" "}
-                Save Changes
-              </button>
+              <div className="flex gap-4 justify-end">
+                <button
+                  onClick={() => setEditing(false)}
+                  className="btn-secondary"
+                  style={{ height: "56px", borderRadius: "16px", padding: "0 32px", fontSize: "16px", fontWeight: 600 }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="btn-primary flex items-center justify-center gap-2"
+                  style={{ height: "56px", borderRadius: "16px", padding: "0 32px", fontSize: "16px", fontWeight: 700 }}
+                >
+                  {saving ? (
+                    <Loader2 size={20} className="animate-spin" />
+                  ) : (
+                    <Save size={20} />
+                  )}{" "}
+                  Save Profile
+                </button>
+              </div>
             </div>
           )}
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           {stats.map((s, i) => (
             <div
               key={i}
-              className="glass rounded-2xl p-5 glass-hover animate-fadeInUp"
-              style={{ animationDelay: `${i * 0.1}s` }}
+              className="glass shadow-soft hover:shadow-lg transition-all duration-300 animate-fadeInUp flex flex-col p-6"
+              style={{ borderRadius: "24px", border: "1px solid rgba(120,90,60,0.08)", animationDelay: `${i * 0.1}s` }}
             >
-              <div
-                className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-amber-900 mb-3`}
-              >
-                {s.icon}
+              <div className="flex items-center gap-4 mb-4">
+                <div
+                  className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${s.color} flex items-center justify-center text-white shadow-md`}
+                >
+                  {s.icon}
+                </div>
+                <p className="text-sm font-bold text-amber-900/60 uppercase tracking-wider">{s.label}</p>
               </div>
-              <p className="text-2xl font-bold text-amber-900">{s.value}</p>
-              <p className="text-amber-700 text-sm">{s.label}</p>
+              <p className="text-4xl font-black text-amber-950 mt-auto">{s.value}</p>
             </div>
           ))}
         </div>
 
         {/* Trips Sections */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div>
-            <h2 className="text-xl font-bold text-amber-900 mb-4">
-              Upcoming Trips
-            </h2>
+          <div className="glass shadow-soft p-8" style={{ borderRadius: "32px", border: "1px solid rgba(120,90,60,0.08)" }}>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-amber-950 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600"><Plane size={16} /></div>
+                Upcoming Trips
+              </h2>
+            </div>
+            
             {trips.length > 0 ? (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {trips.map((t) => (
                   <div
                     key={t.id}
-                    className="glass rounded-xl p-4 flex items-center justify-between glass-hover"
+                    className="glass rounded-2xl p-5 flex items-center justify-between hover:bg-white/60 transition-colors border border-amber-900/5 group"
                   >
-                    <div>
-                      <h3 className="text-amber-900 font-medium">{t.title}</h3>
-                      <p className="text-amber-600 text-xs flex items-center gap-1">
-                        <Calendar size={12} />{" "}
-                        {new Date(t.start_date).toLocaleDateString()}
-                      </p>
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center text-emerald-600 shrink-0 shadow-inner">
+                        <Calendar size={20} />
+                      </div>
+                      <div>
+                        <h3 className="text-amber-950 font-bold text-lg leading-tight mb-1">{t.title}</h3>
+                        <p className="text-amber-900/60 font-medium text-sm">
+                          {new Date(t.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </p>
+                      </div>
                     </div>
                     <Link
                       to={`/trips/${t.id}/view`}
-                      className="btn-secondary text-xs py-1.5 px-3"
+                      className="w-10 h-10 rounded-xl bg-white text-amber-900/40 hover:text-amber-700 flex items-center justify-center shadow-sm border border-amber-900/10 group-hover:bg-amber-50 group-hover:border-amber-200 transition-all shrink-0"
+                      title="View Trip"
                     >
-                      <Eye size={14} /> View
+                      <Eye size={18} />
                     </Link>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="glass rounded-xl p-8 text-center">
-                <Plane size={32} className="mx-auto text-amber-500 mb-3" />
-                <p className="text-amber-600">No upcoming trips</p>
+              <div className="flex flex-col items-center justify-center text-center py-12 border-2 border-dashed border-amber-900/10 rounded-3xl bg-white/30">
+                <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center mb-4">
+                  <Plane size={24} className="text-amber-400" />
+                </div>
+                <p className="text-amber-900/60 font-medium mb-4">No upcoming trips planned</p>
                 <Link
                   to="/trips/new"
-                  className="text-amber-700 text-sm hover:text-amber-600 mt-2 inline-block"
+                  className="btn-primary inline-flex items-center gap-2"
+                  style={{ height: "48px", borderRadius: "14px", padding: "0 24px", fontSize: "14px", fontWeight: 600 }}
                 >
-                  Plan one →
+                  <Plus size={18} /> Plan a Trip
                 </Link>
               </div>
             )}
           </div>
 
-          <div>
-            <h2 className="text-xl font-bold text-amber-900 mb-4">
-              Previous Trips
-            </h2>
+          <div className="glass shadow-soft p-8" style={{ borderRadius: "32px", border: "1px solid rgba(120,90,60,0.08)" }}>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-amber-950 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600"><Globe size={16} /></div>
+                Previous Trips
+              </h2>
+            </div>
+            
             {prevTrips.length > 0 ? (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {prevTrips.map((t) => (
                   <div
                     key={t.id}
-                    className="glass rounded-xl p-4 flex items-center justify-between glass-hover"
+                    className="glass rounded-2xl p-5 flex items-center justify-between hover:bg-white/60 transition-colors border border-amber-900/5 group"
                   >
-                    <div>
-                      <h3 className="text-amber-900 font-medium">{t.title}</h3>
-                      <p className="text-amber-600 text-xs flex items-center gap-1">
-                        <Calendar size={12} />{" "}
-                        {new Date(t.start_date).toLocaleDateString()}
-                      </p>
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center text-amber-600 shrink-0 shadow-inner">
+                        <CheckCircle size={20} />
+                      </div>
+                      <div>
+                        <h3 className="text-amber-950 font-bold text-lg leading-tight mb-1">{t.title}</h3>
+                        <p className="text-amber-900/60 font-medium text-sm">
+                          {new Date(t.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </p>
+                      </div>
                     </div>
                     <Link
                       to={`/trips/${t.id}/view`}
-                      className="btn-secondary text-xs py-1.5 px-3"
+                      className="w-10 h-10 rounded-xl bg-white text-amber-900/40 hover:text-amber-700 flex items-center justify-center shadow-sm border border-amber-900/10 group-hover:bg-amber-50 group-hover:border-amber-200 transition-all shrink-0"
+                      title="View Trip"
                     >
-                      <Eye size={14} /> View
+                      <Eye size={18} />
                     </Link>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="glass rounded-xl p-8 text-center">
-                <Globe size={32} className="mx-auto text-amber-500 mb-3" />
-                <p className="text-amber-600">No completed trips yet</p>
-                <p className="text-amber-500 text-xs mt-1">
-                  Your travel history will appear here
-                </p>
+              <div className="flex flex-col items-center justify-center text-center py-12 border-2 border-dashed border-amber-900/10 rounded-3xl bg-white/30">
+                <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center mb-4">
+                  <Globe size={24} className="text-amber-400" />
+                </div>
+                <p className="text-amber-900/60 font-medium mb-1">No completed trips yet</p>
+                <p className="text-amber-900/40 text-sm">Your travel history will appear here once you finish a trip.</p>
               </div>
             )}
           </div>
