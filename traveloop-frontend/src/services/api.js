@@ -54,6 +54,7 @@ export const createChecklistItem = (tripId, data) => API.post(`/trips/${tripId}/
 export const updateChecklistItem = (id, data) => API.put(`/checklist/${id}`, data);
 export const deleteChecklistItem = (id) => API.delete(`/checklist/${id}`);
 export const resetChecklist = (tripId) => API.post(`/trips/${tripId}/checklist/reset`);
+export const loadChecklistDefaults = (tripId) => API.post(`/trips/${tripId}/checklist/defaults`);
 
 // Notes
 export const getNotes = (tripId, filter) => API.get(`/trips/${tripId}/notes`, { params: { filter } });
@@ -65,6 +66,11 @@ export const deleteNote = (id) => API.delete(`/notes/${id}`);
 export const getCommunityPosts = (params) => API.get('/community', { params });
 export const createCommunityPost = (data) => API.post('/community', data);
 export const likePost = (id) => API.put(`/community/${id}/like`);
+export const uploadCommunityImage = (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  return API.post('/community/upload-image', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+};
 
 // Share
 export const shareTrip = (tripId) => API.post(`/trips/${tripId}/share`);
