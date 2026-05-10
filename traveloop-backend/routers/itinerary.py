@@ -28,7 +28,10 @@ def create_stop(trip_id: int, data: StopCreate, db: Session = Depends(get_db), c
     db.commit()
     db.refresh(stop)
     return StopResponse(id=stop.id, trip_id=stop.trip_id, city_id=stop.city_id,
-                        city_name=stop.city.name if stop.city else None, section_title=stop.section_title,
+                        city_name=stop.city.name if stop.city else None,
+                        city_lat=stop.city.latitude if stop.city else None,
+                        city_lng=stop.city.longitude if stop.city else None,
+                        section_title=stop.section_title,
                         description=stop.description, arrival_date=stop.arrival_date,
                         departure_date=stop.departure_date, section_budget=stop.section_budget, stop_order=stop.stop_order)
 
@@ -39,7 +42,10 @@ def list_stops(trip_id: int, db: Session = Depends(get_db), current_user: User =
     if not trip:
         raise HTTPException(status_code=404, detail="Trip not found")
     stops = db.query(TripStop).filter(TripStop.trip_id == trip_id).order_by(TripStop.stop_order).all()
-    return [StopResponse(id=s.id, trip_id=s.trip_id, city_id=s.city_id, city_name=s.city.name if s.city else None,
+    return [StopResponse(id=s.id, trip_id=s.trip_id, city_id=s.city_id, 
+                         city_name=s.city.name if s.city else None,
+                         city_lat=s.city.latitude if s.city else None,
+                         city_lng=s.city.longitude if s.city else None,
                          section_title=s.section_title, description=s.description, arrival_date=s.arrival_date,
                          departure_date=s.departure_date, section_budget=s.section_budget, stop_order=s.stop_order) for s in stops]
 
@@ -56,7 +62,10 @@ def update_stop(stop_id: int, data: StopUpdate, db: Session = Depends(get_db), c
         setattr(stop, key, value)
     db.commit()
     db.refresh(stop)
-    return StopResponse(id=stop.id, trip_id=stop.trip_id, city_id=stop.city_id, city_name=stop.city.name if stop.city else None,
+    return StopResponse(id=stop.id, trip_id=stop.trip_id, city_id=stop.city_id, 
+                        city_name=stop.city.name if stop.city else None,
+                        city_lat=stop.city.latitude if stop.city else None,
+                        city_lng=stop.city.longitude if stop.city else None,
                         section_title=stop.section_title, description=stop.description, arrival_date=stop.arrival_date,
                         departure_date=stop.departure_date, section_budget=stop.section_budget, stop_order=stop.stop_order)
 

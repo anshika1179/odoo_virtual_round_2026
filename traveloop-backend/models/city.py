@@ -14,6 +14,8 @@ class City(Base):
     popularity_score = Column(Float, default=0.0)
     description = Column(Text, nullable=True)
     image_url = Column(String(500), nullable=True)
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
 
     # Relationships
     activities = relationship("Activity", back_populates="city")
