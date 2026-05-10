@@ -50,8 +50,17 @@ export default function Navbar() {
             {user ? (
               <>
                 <Link to="/profile" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/5 transition-all">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                    <User size={16} className="text-white" />
+                  <div className="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shrink-0">
+                    {user.profile_photo_url ? (
+                      <img
+                        src={user.profile_photo_url}
+                        alt={user.full_name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => { e.target.style.display = 'none'; e.target.parentElement.innerHTML = `<span class="text-white text-sm font-bold">${user.full_name?.[0]?.toUpperCase() || '?'}</span>`; }}
+                      />
+                    ) : (
+                      <User size={16} className="text-white" />
+                    )}
                   </div>
                   <span className="text-sm text-slate-300">{user.full_name?.split(' ')[0]}</span>
                 </Link>

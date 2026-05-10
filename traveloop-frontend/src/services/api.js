@@ -73,6 +73,12 @@ export const getShared = (token) => API.get(`/shared/${token}`);
 // Profile
 export const getProfile = () => API.get('/profile');
 export const updateProfile = (data) => API.put('/profile', data);
+export const uploadProfilePhoto = (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  return API.post('/profile/photo', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+};
+export const deleteProfilePhoto = () => API.delete('/profile/photo');
 
 // Admin
 export const getAdminStats = () => API.get('/admin/stats');

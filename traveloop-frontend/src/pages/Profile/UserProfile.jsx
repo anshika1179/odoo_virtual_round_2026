@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { getProfile, updateProfile, getTrips } from '../../services/api';
-import { User, Mail, Phone, MapPin, Save, Loader2, Calendar, Eye, Edit3 } from 'lucide-react';
+import { getProfile, updateProfile, getTrips, uploadProfilePhoto, deleteProfilePhoto } from '../../services/api';
+import { User, Mail, Phone, MapPin, Save, Loader2, Calendar, Eye, Edit3, Camera, Trash2, CheckCircle } from 'lucide-react';
 
 export default function UserProfile() {
   const { user, setUser } = useAuth();
@@ -11,6 +11,9 @@ export default function UserProfile() {
   const [prevTrips, setPrevTrips] = useState([]);
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadMsg, setUploadMsg] = useState('');
+  const fileRef = useRef(null);
 
   useEffect(() => {
     if (user) {
@@ -29,7 +32,54 @@ export default function UserProfile() {
     } catch {} finally { setSaving(false); }
   };
 
+  const handlePhotoSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Client-side validation
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      setUploadMsg('Please select a valid image (JPG, PNG, GIF, WEBP)');
+      setTimeout(() => setUploadMsg(''), 3000);
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadMsg('Image must be under 5 MB');
+      setTimeout(() => setUploadMsg(''), 3000);
+      return;
+    }
+
+    setUploading(true);
+    setUploadMsg('');
+    try {
+      const res = await uploadProfilePhoto(file);
+      setUser(res.data);
+      setUploadMsg('Photo updated!');
+      setTimeout(() => setUploadMsg(''), 3000);
+    } catch (err) {
+      setUploadMsg(err.response?.data?.detail || 'Upload failed');
+      setTimeout(() => setUploadMsg(''), 4000);
+    } finally {
+      setUploading(false);
+      if (fileRef.current) fileRef.current.value = '';
+    }
+  };
+
+  const handleRemovePhoto = async () => {
+    if (!user?.profile_photo_url) return;
+    setUploading(true);
+    try {
+      const res = await deleteProfilePhoto();
+      setUser(res.data);
+      setUploadMsg('Photo removed');
+      setTimeout(() => setUploadMsg(''), 3000);
+    } catch {} finally { setUploading(false); }
+  };
+
   const set = (key) => (e) => setForm({...form, [key]: e.target.value});
+
+  // Photo URL — served via Vite's /static proxy to the backend
+  const photoSrc = user?.profile_photo_url || null;
 
   return (
     <div className="pt-20 pb-12 max-w-5xl mx-auto px-4">
@@ -37,9 +87,55 @@ export default function UserProfile() {
         {/* Profile Header */}
         <div className="glass rounded-2xl p-8 mb-8">
           <div className="flex flex-col sm:flex-row items-start gap-6">
-            <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-3xl font-bold shrink-0">
-              {user?.full_name?.[0]?.toUpperCase() || '?'}
+            {/* Avatar with Upload */}
+            <div className="relative group shrink-0">
+              {photoSrc ? (
+                <img
+                  src={photoSrc}
+                  alt={user?.full_name}
+                  className="w-24 h-24 rounded-2xl object-cover border-2 border-indigo-500/30"
+                  onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                />
+              ) : null}
+              <div
+                className="w-24 h-24 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-3xl font-bold"
+                style={{ display: photoSrc ? 'none' : 'flex' }}
+              >
+                {user?.full_name?.[0]?.toUpperCase() || '?'}
+              </div>
+
+              {/* Camera overlay */}
+              <button
+                onClick={() => fileRef.current?.click()}
+                disabled={uploading}
+                className="absolute inset-0 rounded-2xl bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+              >
+                {uploading ? (
+                  <Loader2 size={24} className="text-white animate-spin" />
+                ) : (
+                  <Camera size={24} className="text-white" />
+                )}
+              </button>
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/jpeg,image/png,image/gif,image/webp"
+                onChange={handlePhotoSelect}
+                className="hidden"
+              />
+
+              {/* Remove photo button */}
+              {photoSrc && !uploading && (
+                <button
+                  onClick={handleRemovePhoto}
+                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-400"
+                  title="Remove photo"
+                >
+                  <Trash2 size={12} />
+                </button>
+              )}
             </div>
+
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-1">
                 <h1 className="text-3xl font-bold text-white">{user?.full_name}</h1>
@@ -49,6 +145,14 @@ export default function UserProfile() {
               </div>
               <p className="text-slate-400 flex items-center gap-2"><Mail size={16} /> {user?.email}</p>
               {user?.city && <p className="text-slate-500 text-sm flex items-center gap-2 mt-1"><MapPin size={14} /> {user.city}, {user.country}</p>}
+
+              {/* Upload status message */}
+              {uploadMsg && (
+                <p className={`text-sm mt-2 flex items-center gap-1 ${uploadMsg.includes('failed') || uploadMsg.includes('Please') || uploadMsg.includes('must') ? 'text-red-400' : 'text-green-400'}`}>
+                  {uploadMsg.includes('failed') || uploadMsg.includes('Please') || uploadMsg.includes('must') ? null : <CheckCircle size={14} />}
+                  {uploadMsg}
+                </p>
+              )}
             </div>
           </div>
 
