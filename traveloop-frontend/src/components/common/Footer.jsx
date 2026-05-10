@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Globe, Heart } from 'lucide-react';
+import { Globe } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -15,7 +15,7 @@ export default function Footer() {
         </div>
 
         {/* Links */}
-        <div className="flex items-center justify-center flex-wrap gap-6 md:gap-8">
+        <div className="footer-nav">
           <Link to="/" className="text-amber-900/70 hover:text-amber-950 font-medium text-sm transition-colors">Home</Link>
           <Link to="/trips" className="text-amber-900/70 hover:text-amber-950 font-medium text-sm transition-colors">Trips</Link>
           <Link to="/community" className="text-amber-900/70 hover:text-amber-950 font-medium text-sm transition-colors">Community</Link>
@@ -24,11 +24,6 @@ export default function Footer() {
 
         {/* Divider */}
         <div className="footer-divider" />
-
-        {/* Copyright */}
-        <p className="flex items-center justify-center gap-1.5 text-amber-900/50 font-medium" style={{ fontSize: '13px' }}>
-          Made with <Heart size={14} className="text-red-400 fill-red-400" /> © {new Date().getFullYear()} Traveloop
-        </p>
 
         {/* Hackathon Credits */}
         <div className="footer-hackathon">
