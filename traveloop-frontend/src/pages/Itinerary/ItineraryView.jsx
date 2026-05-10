@@ -135,34 +135,28 @@ export default function ItineraryView() {
             </Link>
           </div>
         ) : (
-          <div className="space-y-12">
+          <div className="space-y-16">
             {days.map((day, dayIdx) => (
               <div key={day.dayNum} className="animate-fadeInUp relative" style={{animationDelay: `${dayIdx * 0.1}s`}}>
                 {/* Day Header */}
-                <div className="flex items-center gap-4 mb-6 sticky top-20 z-10 bg-[#FAF7F2]/90 backdrop-blur-md py-4 rounded-2xl -mx-4 px-4">
-                  <div className="min-w-[56px] min-h-[56px] px-3 py-2 rounded-2xl bg-gradient-to-br from-amber-600 to-orange-700 flex flex-col items-center justify-center text-white shadow-lg shrink-0">
-                    <span className="text-xs font-medium uppercase tracking-widest opacity-80 leading-none">Day</span>
-                    <span className="text-xl sm:text-2xl font-black leading-none mt-1">{day.dayNum}</span>
+                <div className="flex items-center gap-5 mb-8 sticky top-20 z-10 bg-[#FAF7F2]/90 backdrop-blur-md py-4 rounded-2xl -mx-4 px-4">
+                  <div className="shrink-0 rounded-2xl bg-gradient-to-br from-amber-600 to-orange-700 flex flex-col items-center justify-center text-white shadow-lg" style={{ minWidth: '60px', minHeight: '60px', padding: '8px 16px' }}>
+                    <span className="text-[10px] font-semibold uppercase tracking-widest opacity-80 leading-none">Day</span>
+                    <span className="font-black leading-none mt-1" style={{ fontSize: String(day.dayNum).length > 4 ? '13px' : String(day.dayNum).length > 3 ? '16px' : '22px' }}>{day.dayNum}</span>
                   </div>
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <p className="text-amber-900/60 font-semibold uppercase tracking-widest text-sm">{day.date.toLocaleDateString('en-US', { weekday: 'long' })}</p>
-                    <h3 className="text-xl font-bold text-amber-950">{day.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</h3>
+                    <h3 className="text-xl font-bold text-amber-950 truncate">{day.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</h3>
                   </div>
                   <div className="flex-1 h-px bg-gradient-to-r from-amber-900/20 to-transparent ml-4 hidden sm:block" />
                 </div>
 
                 {/* Stops for this day */}
-                <div className="ml-7 border-l-2 border-amber-900/10 pl-8 space-y-8 pb-4 relative">
-                  {/* Decorative timeline circles */}
-                  <div className="absolute top-0 -left-[11px] w-5 h-5 rounded-full bg-amber-100 border-4 border-[#FAF7F2]" />
-                  <div className="absolute bottom-0 -left-[11px] w-5 h-5 rounded-full bg-amber-100 border-4 border-[#FAF7F2]" />
-                  
+                <div className="space-y-8 pl-4">
                   {day.stops.map((stop, idx) => (
-                    <div key={stop.id} className="glass shadow-soft hover:shadow-lg transition-all duration-300 relative group" style={{ borderRadius: "24px", overflow: "hidden", border: "1px solid rgba(120,90,60,0.08)" }}>
-                      {/* Timeline connection dot */}
-                      <div className="absolute top-8 -left-[2.35rem] w-4 h-4 rounded-full bg-amber-500 ring-4 ring-[#FAF7F2] z-10 transition-transform group-hover:scale-125" />
+                    <div key={stop.id} className="glass shadow-soft hover:shadow-lg transition-all duration-300 relative group" style={{ borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(120,90,60,0.08)' }}>
                       
-                      <div className="bg-white/40 px-6 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-amber-900/5">
+                      <div className="bg-white/40 px-8 py-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-amber-900/5">
                         <div className="flex-1">
                           <h4 className="text-amber-950 font-bold text-xl">{stop.section_title}</h4>
                           {stop.city_name && (
@@ -172,13 +166,13 @@ export default function ItineraryView() {
                           )}
                         </div>
                         {stop.section_budget > 0 && (
-                          <span className="badge bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 py-1.5 text-sm font-bold flex items-center gap-1">
+                          <span className="shrink-0 bg-emerald-100 text-emerald-800 border border-emerald-200 px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-1.5">
                             <DollarSign size={16} />{stop.section_budget} Budget
                           </span>
                         )}
                       </div>
 
-                      <div className="p-6">
+                      <div className="p-8">
                         {stop.description && <p className="text-amber-900/80 text-base leading-relaxed mb-6">{stop.description}</p>}
                         
                         {stop.arrival_date && (
