@@ -29,12 +29,12 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-5xl animate-fadeInUp">
-        <div className="glass rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row min-h-[560px]">
+    <div className="login-page">
+      <div className="w-full animate-fadeInUp flex justify-center">
+        <div className="login-card glass shadow-2xl">
 
           {/* Left — Image Panel */}
-          <div className="hidden md:block md:w-1/2 relative">
+          <div className="login-image relative">
             <img
               src="/images/auth-bg.jpg"
               alt="Travel lounge"
@@ -48,8 +48,8 @@ export default function Login() {
           </div>
 
           {/* Right — Form Panel */}
-          <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-            <div className="mb-8">
+          <div className="login-form-section">
+            <div>
               <h1 className="text-3xl font-bold text-amber-900 md:hidden brand-font mb-1">Traveloop</h1>
               <h2 className="text-2xl font-bold text-amber-900">Welcome back</h2>
               <p className="text-amber-700/70 mt-1 text-sm">Please enter your details</p>
@@ -59,8 +59,8 @@ export default function Login() {
               <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-600 text-sm">{error}</div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
                 <label className="block text-sm font-medium text-amber-800 mb-1.5">Email</label>
                 <div className="relative">
                   <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600/50" />
@@ -69,7 +69,7 @@ export default function Login() {
                 </div>
               </div>
 
-              <div>
+              <div className="form-group">
                 <label className="block text-sm font-medium text-amber-800 mb-1.5">Password</label>
                 <div className="relative">
                   <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600/50" />
@@ -78,7 +78,7 @@ export default function Login() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-sm">
+              <div className="options-row text-sm">
                 <label className="flex items-center gap-2 text-amber-700 cursor-pointer">
                   <input type="checkbox" className="rounded border-amber-300 accent-amber-700" />
                   Remember me
@@ -87,7 +87,7 @@ export default function Login() {
               </div>
 
               <button type="submit" disabled={loading}
-                className="btn-primary w-full justify-center text-base py-3 rounded-xl">
+                className="btn-primary signin-btn">
                 {loading ? <Loader2 size={20} className="animate-spin" /> : <><span>Sign In</span> <ArrowRight size={18} /></>}
               </button>
             </form>
