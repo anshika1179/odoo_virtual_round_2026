@@ -52,7 +52,7 @@ export default function AdminDashboard() {
   }, []);
 
   if (loading) return (
-    <div className="page-container">
+    <div className="admin-page">
       <div className="animate-fadeInUp">
         <div className="h-8 skeleton rounded-lg w-64 mb-2" />
         <div className="h-5 skeleton rounded-lg w-80 mb-8" />
@@ -93,7 +93,7 @@ export default function AdminDashboard() {
   }));
 
   return (
-    <div className="page-container">
+    <div className="admin-page">
       <div className="animate-fadeInUp">
         <h1 className="text-amber-950 font-bold mb-2 flex items-center gap-3" style={{ fontSize: '36px' }}><LayoutDashboard size={32} className="text-amber-700" /> Admin Dashboard</h1>
         <p className="text-amber-900/70 mb-10">Overview of the Traveloop platform</p>
@@ -159,14 +159,14 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3" style={{ gap: '32px' }}>
+        <div className="admin-grid">
           {/* Users Table */}
-          <div className="lg:col-span-2 glass" style={{ borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(120,90,60,0.08)' }}>
+          <div className="users-card glass" style={{ border: '1px solid rgba(120,90,60,0.08)' }}>
             <div className="px-8 py-6 border-b border-amber-900/10 bg-white/40">
               <h3 className="text-amber-950 font-bold text-lg">Registered Users</h3>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="users-table text-sm">
                 <thead>
                   <tr className="text-amber-900/50 border-b border-amber-900/10">
                     <th className="text-left p-6 font-semibold uppercase tracking-wider text-xs">Name</th>
@@ -180,7 +180,7 @@ export default function AdminDashboard() {
                   {users.map(u => (
                     <tr key={u.id} className="border-b border-amber-900/5 hover:bg-amber-50/50 transition-colors">
                       <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
+                        <div className="user-info">
                           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-100 to-orange-50 border border-amber-900/10 flex items-center justify-center text-amber-950 text-sm font-bold shadow-sm">
                             {u.full_name?.[0]?.toUpperCase() || '?'}
                           </div>
@@ -201,17 +201,17 @@ export default function AdminDashboard() {
           </div>
 
           {/* Activity Feed */}
-          <div className="glass" style={{ borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(120,90,60,0.08)' }}>
+          <div className="activity-card glass" style={{ borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(120,90,60,0.08)' }}>
             <div className="px-8 py-6 border-b border-amber-900/10 bg-white/40">
               <h3 className="text-amber-950 font-bold text-lg flex items-center gap-2"><Clock size={20} className="text-amber-700" /> Recent Activity</h3>
             </div>
             <div style={{ padding: '24px' }} className="space-y-2">
               {activityFeed.map((a, i) => (
-                <div key={a.id} className="flex items-start gap-4 p-4 rounded-2xl hover:bg-amber-50/50 transition-colors animate-fadeInUp" style={{animationDelay: `${i * 0.1}s`}}>
+                <div key={a.id} className="activity-item p-4 rounded-2xl hover:bg-amber-50/50 transition-colors animate-fadeInUp" style={{animationDelay: `${i * 0.1}s`}}>
                   <div className={`w-10 h-10 rounded-xl bg-gradient-to-br from-amber-100 to-orange-50 border border-amber-900/5 flex items-center justify-center text-amber-900 shrink-0 shadow-sm`}>
                     {a.icon}
                   </div>
-                  <div className="flex-1 min-w-0 pt-0.5">
+                  <div className="activity-text flex-1 min-w-0 pt-0.5">
                     <p className="text-amber-950 font-semibold text-sm">{a.text}</p>
                     <p className="text-amber-900/50 text-xs font-medium mt-1">{a.time}</p>
                   </div>
