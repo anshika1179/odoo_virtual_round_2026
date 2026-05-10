@@ -32,7 +32,7 @@ export default function Landing() {
           <div className="absolute -bottom-[20%] -left-[10%] w-[60%] h-[60%] bg-gradient-to-tr from-orange-100/30 via-yellow-50/10 to-transparent rounded-full blur-3xl opacity-50" />
         </div>
 
-        <div className="mx-auto w-full relative z-10" style={{ maxWidth: '1440px', padding: '0 64px' }}>
+        <div className="container relative z-10">
           <div className="flex flex-col lg:flex-row items-center justify-between" style={{ gap: '80px' }}>
             
             {/* Left — Text Content */}
@@ -92,7 +92,7 @@ export default function Landing() {
       </section>
 
       {/* Feature Cards Section */}
-      <section className="w-full mx-auto" style={{ maxWidth: '1400px', padding: '120px 64px', boxSizing: 'border-box' }}>
+      <section className="container" style={{ paddingTop: '120px', paddingBottom: '120px' }}>
         <div className="text-center animate-fadeInUp" style={{ marginBottom: '72px' }}>
           <h2 className="text-amber-950 font-bold" style={{ fontSize: '56px', lineHeight: 1.1 }}>Travel Smart</h2>
           <p className="text-amber-900/75 mx-auto" style={{ maxWidth: '720px', marginTop: '16px', fontSize: '18px', lineHeight: 1.7 }}>
@@ -128,7 +128,7 @@ export default function Landing() {
       </section>
 
       {/* Top Regional Selections */}
-      <section className="mx-auto px-4 sm:px-6" style={{ maxWidth: '1280px', marginTop: '120px' }}>
+      <section className="container" style={{ marginTop: '120px' }}>
         <div className="flex items-end justify-between mb-10">
           <div>
             <h2 className="text-amber-950 font-bold" style={{ fontSize: '36px' }}>Top Destinations</h2>
@@ -170,7 +170,7 @@ export default function Landing() {
 
       {/* Previous Trips */}
       {prevTrips.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16">
+        <section className="container py-12 md:py-16">
           <h2 className="text-2xl md:text-3xl font-bold text-amber-900 mb-2">Previous Trips</h2>
           <p className="text-amber-700 mb-6 md:mb-8 text-sm md:text-base">Revisit your past adventures</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">

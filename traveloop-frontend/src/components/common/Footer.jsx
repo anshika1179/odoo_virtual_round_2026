@@ -4,7 +4,7 @@ import { Globe, Heart } from 'lucide-react';
 export default function Footer() {
   return (
     <footer className="mt-auto bg-white/60 backdrop-blur-lg border-t border-amber-900/10">
-      <div className="mx-auto flex flex-col items-center justify-center text-center" style={{ maxWidth: '1200px', paddingTop: '64px', paddingBottom: '48px' }}>
+      <div className="container flex flex-col items-center justify-center text-center" style={{ paddingTop: '64px', paddingBottom: '48px' }}>
         
         {/* Brand */}
         <div className="flex flex-col items-center gap-4">

@@ -172,3 +172,40 @@ body {
   border-radius: 2px;
   animation: slide-indicator 0.3s ease-out;
 }
+
+/* Global Container Classes */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.page-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.nav-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 0 32px;
+  }
+  .page-container {
+    padding: 48px 32px 80px 32px;
+  }
+  .nav-container {
+    padding: 0 32px;
+  }
+}

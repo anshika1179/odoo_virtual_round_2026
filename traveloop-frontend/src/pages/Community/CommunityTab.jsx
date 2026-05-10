@@ -34,7 +34,7 @@ export default function CommunityTab() {
   };
 
   return (
-    <div className="mx-auto flex flex-col items-center" style={{ maxWidth: '1440px', padding: '120px 64px 80px 64px' }}>
+    <div className="page-container flex flex-col items-center">
       <div className="animate-fadeInUp w-full" style={{ maxWidth: '800px' }}>
         <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 text-center sm:text-left">
           <div>
