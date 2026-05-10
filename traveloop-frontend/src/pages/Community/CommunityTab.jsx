@@ -81,60 +81,57 @@ export default function CommunityTab() {
   const removeImage = () => setNewPost({ ...newPost, image_url: "" });
 
   return (
-    <div
-      className="mx-auto flex flex-col items-center"
-      style={{ maxWidth: "1440px", padding: "120px 64px 80px 64px" }}
-    >
-      <div className="animate-fadeInUp w-full" style={{ maxWidth: "800px" }}>
-        <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4 text-center sm:text-left">
-          <div>
+    <div className="community-page">
+      <div className="animate-fadeInUp w-full">
+        <div className="community-header">
+          <div className="community-header-left">
             <h1
-              className="text-amber-950 font-bold flex items-center justify-center sm:justify-start gap-3"
+              className="text-amber-950 font-bold flex items-center gap-3"
               style={{ fontSize: "36px" }}
             >
               <Users size={32} className="text-amber-700" /> Community
             </h1>
-            <p className="text-amber-900/70 mt-1">
+            <p className="text-amber-900/70">
               Share experiences and get inspired by fellow travelers
             </p>
+            
+            {/* Search */}
+            <div className="relative community-search">
+              <Search
+                size={18}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-amber-900/40"
+              />
+              <input
+                className="input-glass outline-none transition-colors w-full"
+                placeholder="Search community posts..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                style={{
+                  height: "56px",
+                  borderRadius: "18px",
+                  padding: "0 20px 0 44px",
+                  border: "1px solid rgba(120,90,60,0.12)",
+                  fontSize: "15px",
+                }}
+              />
+            </div>
           </div>
-          {user && (
-            <button
-              onClick={() => setShowCreate(!showCreate)}
-              className="btn-primary flex items-center gap-2"
-              style={{
-                padding: "0 24px",
-                height: "48px",
-                borderRadius: "16px",
-              }}
-            >
-              <Plus size={18} /> Share Experience
-            </button>
-          )}
-        </div>
-
-        {/* Search */}
-        <div
-          className="relative mb-10 mx-auto"
-          style={{ width: "100%", maxWidth: "520px" }}
-        >
-          <Search
-            size={18}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-amber-900/40"
-          />
-          <input
-            className="input-glass outline-none transition-colors w-full"
-            placeholder="Search community posts..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={{
-              height: "56px",
-              borderRadius: "18px",
-              padding: "0 20px 0 44px",
-              border: "1px solid rgba(120,90,60,0.12)",
-              fontSize: "15px",
-            }}
-          />
+          
+          <div className="community-header-right">
+            {user && (
+              <button
+                onClick={() => setShowCreate(!showCreate)}
+                className="btn-primary flex items-center gap-2"
+                style={{
+                  padding: "0 24px",
+                  height: "48px",
+                  borderRadius: "16px",
+                }}
+              >
+                <Plus size={18} /> Share Experience
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Create Post */}
@@ -343,32 +340,18 @@ export default function CommunityTab() {
         )}
 
         {!loading && posts.length === 0 && (
-          <div
-            className="flex flex-col items-center justify-center animate-fadeInUp"
-            style={{
-              maxWidth: "700px",
-              margin: "0 auto",
-              paddingTop: "100px",
-              textAlign: "center",
-            }}
-          >
-            <div className="w-28 h-28 rounded-full bg-gradient-to-tr from-amber-100 to-orange-50 flex items-center justify-center mb-8 shadow-sm border border-amber-900/5">
+          <div className="community-empty-state animate-fadeInUp">
+            <div className="w-28 h-28 rounded-full bg-gradient-to-tr from-amber-100 to-orange-50 flex items-center justify-center shadow-sm border border-amber-900/5">
               <Camera size={48} className="text-amber-700/50" />
             </div>
-            <h3
-              className="text-amber-950 font-bold"
-              style={{ fontSize: "32px", marginBottom: "16px" }}
-            >
+            <h2 className="text-amber-950 font-bold" style={{ fontSize: "32px" }}>
               Share your travel stories
-            </h3>
-            <p
-              className="text-amber-900/70"
-              style={{ fontSize: "18px", lineHeight: 1.6, marginBottom: "8px" }}
-            >
+            </h2>
+            <p className="text-amber-900/70" style={{ fontSize: "18px" }}>
               Be the first to share! Post your travel experiences, tips, and
               photos to inspire fellow travelers.
             </p>
-            <p className="text-amber-900/50 text-sm flex items-center justify-center gap-2 mb-8">
+            <p className="text-amber-900/50 text-sm flex items-center justify-center gap-2">
               <Sparkles size={16} className="text-amber-500" /> Your story could
               inspire someone's next adventure
             </p>
@@ -377,7 +360,6 @@ export default function CommunityTab() {
                 onClick={() => setShowCreate(true)}
                 className="btn-primary flex items-center gap-2"
                 style={{
-                  marginTop: "32px",
                   height: "56px",
                   padding: "0 36px",
                   borderRadius: "18px",
