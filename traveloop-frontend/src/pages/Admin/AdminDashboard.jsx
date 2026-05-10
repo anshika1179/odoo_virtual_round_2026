@@ -27,10 +27,14 @@ function useCountUp(target, duration = 1200) {
 function AnimatedStat({ card }) {
   const displayValue = useCountUp(card.value);
   return (
-    <div className="glass rounded-2xl p-6 glass-hover">
-      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center text-amber-900 mb-3`}>{card.icon}</div>
-      <p className="text-3xl font-bold text-amber-900">{displayValue}</p>
-      <p className="text-amber-700 text-sm">{card.label}</p>
+    <div className="glass hover:-translate-y-1 hover:shadow-soft transition-all duration-300" style={{ borderRadius: '24px', padding: '28px', height: '140px', border: '1px solid rgba(120,90,60,0.08)' }}>
+      <div className="flex items-center gap-4">
+        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${card.color} flex items-center justify-center text-amber-950 shrink-0 shadow-sm`}>{card.icon}</div>
+        <div>
+          <p className="text-3xl font-bold text-amber-950">{displayValue}</p>
+          <p className="text-amber-900/70 text-sm font-medium">{card.label}</p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -48,7 +52,7 @@ export default function AdminDashboard() {
   }, []);
 
   if (loading) return (
-    <div className="pt-20 pb-12 max-w-7xl mx-auto px-4">
+    <div className="mx-auto" style={{ maxWidth: '1440px', padding: '120px 64px 80px 64px' }}>
       <div className="animate-fadeInUp">
         <div className="h-8 skeleton rounded-lg w-64 mb-2" />
         <div className="h-5 skeleton rounded-lg w-80 mb-8" />
@@ -89,98 +93,106 @@ export default function AdminDashboard() {
   }));
 
   return (
-    <div className="pt-20 pb-12 max-w-7xl mx-auto px-4">
+    <div className="mx-auto" style={{ maxWidth: '1440px', padding: '120px 64px 80px 64px' }}>
       <div className="animate-fadeInUp">
-        <h1 className="text-3xl font-bold text-amber-900 mb-2 flex items-center gap-3"><LayoutDashboard size={32} className="text-amber-700" /> Admin Dashboard</h1>
-        <p className="text-amber-700 mb-8">Overview of the Traveloop platform</p>
+        <h1 className="text-amber-950 font-bold mb-2 flex items-center gap-3" style={{ fontSize: '36px' }}><LayoutDashboard size={32} className="text-amber-700" /> Admin Dashboard</h1>
+        <p className="text-amber-900/70 mb-10">Overview of the Traveloop platform</p>
 
         {/* Stat Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ gap: '28px', marginBottom: '40px' }}>
           {statCards.map(card => (
             <AnimatedStat key={card.label} card={card} />
           ))}
         </div>
 
         {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div className="glass rounded-2xl p-6">
-            <h3 className="text-amber-900 font-semibold mb-4">Trip Status Distribution</h3>
-            <ResponsiveContainer width="100%" height={220}>
-              <PieChart>
-                <Pie data={tripData} cx="50%" cy="50%" innerRadius={45} outerRadius={75} paddingAngle={5} dataKey="value">
-                  {tripData.map((_, i) => <Cell key={i} fill={COLORS[i]} />)}
-                </Pie>
-                <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '12px', color: '#e2e8f0' }} />
-                <Legend wrapperStyle={{ color: '#94a3b8', fontSize: '12px' }} />
-              </PieChart>
-            </ResponsiveContainer>
+        <div className="grid grid-cols-1 lg:grid-cols-3" style={{ gap: '32px', marginBottom: '40px' }}>
+          <div className="glass" style={{ borderRadius: '24px', padding: '32px', border: '1px solid rgba(120,90,60,0.08)' }}>
+            <h3 className="text-amber-950 font-bold text-lg mb-6">Trip Status Distribution</h3>
+            <div style={{ minHeight: '360px', width: '100%' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={tripData} cx="50%" cy="50%" innerRadius={70} outerRadius={110} paddingAngle={5} dataKey="value">
+                    {tripData.map((_, i) => <Cell key={i} fill={COLORS[i]} />)}
+                  </Pie>
+                  <Tooltip contentStyle={{ background: '#fff', border: '1px solid rgba(120,90,60,0.1)', borderRadius: '16px', color: '#451a03', boxShadow: '0 10px 25px rgba(120,90,60,0.1)' }} />
+                  <Legend wrapperStyle={{ color: '#78350f', fontSize: '14px', fontWeight: 500 }} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </div>
 
-          <div className="glass rounded-2xl p-6">
-            <h3 className="text-amber-900 font-semibold mb-4">Platform Overview</h3>
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={overviewData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                <XAxis dataKey="name" tick={{ fill: '#94a3b8', fontSize: 12 }} />
-                <YAxis tick={{ fill: '#94a3b8', fontSize: 12 }} />
-                <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '12px', color: '#e2e8f0' }} />
-                <Bar dataKey="value" fill="#6366f1" radius={[6, 6, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="glass" style={{ borderRadius: '24px', padding: '32px', border: '1px solid rgba(120,90,60,0.08)' }}>
+            <h3 className="text-amber-950 font-bold text-lg mb-6">Platform Overview</h3>
+            <div style={{ minHeight: '360px', width: '100%' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={overviewData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(120,90,60,0.1)" vertical={false} />
+                  <XAxis dataKey="name" tick={{ fill: '#78350f', fontSize: 13 }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fill: '#78350f', fontSize: 13 }} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={{ background: '#fff', border: '1px solid rgba(120,90,60,0.1)', borderRadius: '16px', color: '#451a03', boxShadow: '0 10px 25px rgba(120,90,60,0.1)' }} cursor={{fill: 'rgba(120,90,60,0.04)'}} />
+                  <Bar dataKey="value" fill="#d97706" radius={[8, 8, 0, 0]} maxBarSize={50} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
 
-          <div className="glass rounded-2xl p-6">
-            <h3 className="text-amber-900 font-semibold mb-4">Growth Trend <span className="text-amber-600 text-xs font-normal">(last 12 months)</span></h3>
-            <ResponsiveContainer width="100%" height={220}>
-              <LineChart data={growthData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                <XAxis dataKey="label" tick={{ fill: '#94a3b8', fontSize: 11 }} interval={1} />
-                <YAxis tick={{ fill: '#94a3b8', fontSize: 12 }} />
-                <Tooltip
-                  contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '12px', color: '#e2e8f0' }}
-                  formatter={(value, name) => [value, name === 'cumulative_users' ? 'Users' : 'Trips']}
-                  labelFormatter={(label) => `Month: ${label}`}
-                />
-                <Legend wrapperStyle={{ color: '#94a3b8', fontSize: '12px' }} formatter={(val) => val === 'cumulative_users' ? 'Users' : 'Trips'} />
-                <Line type="monotone" dataKey="cumulative_users" stroke="#6366f1" strokeWidth={3} dot={{ r: 4, fill: '#6366f1' }} activeDot={{ r: 6 }} />
-                <Line type="monotone" dataKey="cumulative_trips" stroke="#10b981" strokeWidth={3} dot={{ r: 4, fill: '#10b981' }} activeDot={{ r: 6 }} />
-              </LineChart>
-            </ResponsiveContainer>
+          <div className="glass" style={{ borderRadius: '24px', padding: '32px', border: '1px solid rgba(120,90,60,0.08)' }}>
+            <h3 className="text-amber-950 font-bold text-lg mb-6">Growth Trend <span className="text-amber-900/50 text-sm font-medium ml-2">(last 12 months)</span></h3>
+            <div style={{ minHeight: '360px', width: '100%' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={growthData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(120,90,60,0.1)" vertical={false} />
+                  <XAxis dataKey="label" tick={{ fill: '#78350f', fontSize: 12 }} axisLine={false} tickLine={false} interval={1} />
+                  <YAxis tick={{ fill: '#78350f', fontSize: 13 }} axisLine={false} tickLine={false} />
+                  <Tooltip
+                    contentStyle={{ background: '#fff', border: '1px solid rgba(120,90,60,0.1)', borderRadius: '16px', color: '#451a03', boxShadow: '0 10px 25px rgba(120,90,60,0.1)' }}
+                    formatter={(value, name) => [value, name === 'cumulative_users' ? 'Users' : 'Trips']}
+                    labelFormatter={(label) => `Month: ${label}`}
+                  />
+                  <Legend wrapperStyle={{ color: '#78350f', fontSize: '14px', fontWeight: 500 }} formatter={(val) => val === 'cumulative_users' ? 'Users' : 'Trips'} />
+                  <Line type="monotone" dataKey="cumulative_users" stroke="#d97706" strokeWidth={4} dot={{ r: 5, fill: '#d97706', strokeWidth: 2, stroke: '#fff' }} activeDot={{ r: 8 }} />
+                  <Line type="monotone" dataKey="cumulative_trips" stroke="#10b981" strokeWidth={4} dot={{ r: 5, fill: '#10b981', strokeWidth: 2, stroke: '#fff' }} activeDot={{ r: 8 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3" style={{ gap: '32px' }}>
           {/* Users Table */}
-          <div className="lg:col-span-2 glass rounded-2xl overflow-hidden">
-            <div className="bg-gradient-to-r from-amber-700/15 to-orange-600/15 px-6 py-4">
-              <h3 className="text-amber-900 font-semibold">Registered Users</h3>
+          <div className="lg:col-span-2 glass" style={{ borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(120,90,60,0.08)' }}>
+            <div className="px-8 py-6 border-b border-amber-900/10 bg-white/40">
+              <h3 className="text-amber-950 font-bold text-lg">Registered Users</h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-amber-700 border-b border-amber-200">
-                    <th className="text-left p-4 font-medium">Name</th>
-                    <th className="text-left p-4 font-medium">Email</th>
-                    <th className="text-left p-4 font-medium">Location</th>
-                    <th className="text-center p-4 font-medium">Trips</th>
-                    <th className="text-left p-4 font-medium">Joined</th>
+                  <tr className="text-amber-900/50 border-b border-amber-900/10">
+                    <th className="text-left p-6 font-semibold uppercase tracking-wider text-xs">Name</th>
+                    <th className="text-left p-6 font-semibold uppercase tracking-wider text-xs">Email</th>
+                    <th className="text-left p-6 font-semibold uppercase tracking-wider text-xs">Location</th>
+                    <th className="text-center p-6 font-semibold uppercase tracking-wider text-xs">Trips</th>
+                    <th className="text-left p-6 font-semibold uppercase tracking-wider text-xs">Joined</th>
                   </tr>
                 </thead>
                 <tbody>
                   {users.map(u => (
-                    <tr key={u.id} className="border-b border-amber-100 hover:bg-white/[0.02]">
-                      <td className="p-4">
+                    <tr key={u.id} className="border-b border-amber-900/5 hover:bg-amber-50/50 transition-colors">
+                      <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center text-amber-900 text-xs font-bold">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-100 to-orange-50 border border-amber-900/10 flex items-center justify-center text-amber-950 text-sm font-bold shadow-sm">
                             {u.full_name?.[0]?.toUpperCase() || '?'}
                           </div>
-                          <span className="text-amber-900 font-medium">{u.full_name}</span>
+                          <span className="text-amber-950 font-bold">{u.full_name}</span>
                         </div>
                       </td>
-                      <td className="p-4 text-amber-700">{u.email}</td>
-                      <td className="p-4 text-amber-700">{u.city ? `${u.city}, ${u.country}` : '-'}</td>
-                      <td className="p-4 text-center"><span className="badge badge-upcoming">{u.trip_count}</span></td>
-                      <td className="p-4 text-amber-600 text-xs">{u.created_at ? new Date(u.created_at).toLocaleDateString() : '-'}</td>
+                      <td className="px-6 py-4 text-amber-900/70 font-medium">{u.email}</td>
+                      <td className="px-6 py-4 text-amber-900/70 font-medium">{u.city ? `${u.city}, ${u.country}` : '-'}</td>
+                      <td className="px-6 py-4 text-center">
+                        <span className="px-3 py-1.5 rounded-full bg-amber-900/5 text-amber-900 text-xs font-bold">{u.trip_count}</span>
+                      </td>
+                      <td className="px-6 py-4 text-amber-900/60 text-sm font-medium">{u.created_at ? new Date(u.created_at).toLocaleDateString() : '-'}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -189,24 +201,24 @@ export default function AdminDashboard() {
           </div>
 
           {/* Activity Feed */}
-          <div className="glass rounded-2xl overflow-hidden">
-            <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 px-6 py-4">
-              <h3 className="text-amber-900 font-semibold flex items-center gap-2"><Clock size={16} /> Recent Activity</h3>
+          <div className="glass" style={{ borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(120,90,60,0.08)' }}>
+            <div className="px-8 py-6 border-b border-amber-900/10 bg-white/40">
+              <h3 className="text-amber-950 font-bold text-lg flex items-center gap-2"><Clock size={20} className="text-amber-700" /> Recent Activity</h3>
             </div>
-            <div className="p-4 space-y-1">
+            <div style={{ padding: '24px' }} className="space-y-2">
               {activityFeed.map((a, i) => (
-                <div key={a.id} className="flex items-start gap-3 p-3 rounded-xl hover:bg-white/[0.02] transition-colors animate-fadeInUp" style={{animationDelay: `${i * 0.1}s`}}>
-                  <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${a.iconColor} flex items-center justify-center text-amber-900 shrink-0 mt-0.5`}>
+                <div key={a.id} className="flex items-start gap-4 p-4 rounded-2xl hover:bg-amber-50/50 transition-colors animate-fadeInUp" style={{animationDelay: `${i * 0.1}s`}}>
+                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br from-amber-100 to-orange-50 border border-amber-900/5 flex items-center justify-center text-amber-900 shrink-0 shadow-sm`}>
                     {a.icon}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-amber-800 text-sm">{a.text}</p>
-                    <p className="text-amber-500 text-xs mt-0.5">{a.time}</p>
+                  <div className="flex-1 min-w-0 pt-0.5">
+                    <p className="text-amber-950 font-semibold text-sm">{a.text}</p>
+                    <p className="text-amber-900/50 text-xs font-medium mt-1">{a.time}</p>
                   </div>
                 </div>
               ))}
               {activityFeed.length === 0 && (
-                <div className="text-center py-8 text-amber-600 text-sm">No recent activity</div>
+                <div className="text-center py-8 text-amber-900/50 text-sm font-medium">No recent activity</div>
               )}
             </div>
           </div>

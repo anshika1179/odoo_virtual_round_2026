@@ -25,7 +25,7 @@ export default function Landing() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative overflow-hidden" style={{ paddingTop: '80px', paddingBottom: '120px' }}>
+      <section className="relative overflow-hidden flex items-center justify-center" style={{ minHeight: '80vh', paddingTop: '80px', paddingBottom: '120px' }}>
         {/* Minimalist Background Gradients */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-[20%] -right-[10%] w-[70%] h-[70%] bg-gradient-to-br from-amber-100/40 via-orange-50/20 to-transparent rounded-full blur-3xl opacity-60" />
@@ -33,18 +33,18 @@ export default function Landing() {
         </div>
 
         <div className="mx-auto w-full relative z-10" style={{ maxWidth: '1440px', padding: '0 64px' }}>
-          <div className="flex flex-col lg:flex-row items-center" style={{ gap: '72px' }}>
+          <div className="flex flex-col lg:flex-row items-center justify-between" style={{ gap: '80px' }}>
             
             {/* Left — Text Content */}
-            <div className="animate-fadeInUp" style={{ width: '48%' }}>
-              <h1 className="text-amber-950" style={{ fontSize: '72px', lineHeight: 1.05, fontWeight: 700, marginBottom: '28px' }}>
-                <div style={{ marginBottom: '10px' }}>
+            <div className="flex flex-col justify-center animate-fadeInUp" style={{ width: '48%', maxWidth: '520px' }}>
+              <h1 className="text-amber-950" style={{ fontSize: '72px', lineHeight: 1.1, fontWeight: 700, marginBottom: '32px' }}>
+                <div style={{ marginBottom: '16px' }}>
                   <span className="text-amber-700 font-serif italic" style={{ fontSize: '64px', fontWeight: 400 }}>Travel beautifully.</span>
                 </div>
                 Plan simply.
               </h1>
               
-              <p className="text-amber-900" style={{ maxWidth: '520px', fontSize: '20px', lineHeight: 1.8, marginBottom: '36px', opacity: 0.85 }}>
+              <p className="text-amber-900" style={{ fontSize: '20px', lineHeight: 1.8, marginBottom: '40px', opacity: 0.85 }}>
                 Curate stunning itineraries, manage your budgets, and explore the world with an elegant platform designed for modern wanderers.
               </p>
 
@@ -63,11 +63,11 @@ export default function Landing() {
             </div>
 
             {/* Right — Hero Visual */}
-            <div className="hidden lg:flex justify-end animate-fadeInUp" style={{ width: '52%', animationDelay: '0.2s' }}>
+            <div className="hidden lg:flex justify-end items-center animate-fadeInUp" style={{ width: '52%', animationDelay: '0.2s' }}>
               <div className="relative group" 
-                   style={{ width: '620px', height: '420px', borderRadius: '32px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(80,50,20,0.12)', transform: 'translateY(0)', transition: 'transform 0.3s ease' }}
-                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
-                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+                   style={{ width: '620px', height: '440px', borderRadius: '32px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(80,50,20,0.12)', transform: 'translateY(0)', transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1)' }}
+                   onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-8px)'; e.currentTarget.style.boxShadow = '0 30px 70px rgba(80,50,20,0.18)'; }}
+                   onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 20px 60px rgba(80,50,20,0.12)'; }}>
                 
                 <img src="https://images.unsplash.com/photo-1534113414509-0eec2bfb493f?w=800" alt="Amalfi Coast" 
                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
@@ -75,7 +75,7 @@ export default function Landing() {
                 <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
 
                 {/* Card Header Overlay */}
-                <div className="absolute top-0 left-0 w-full flex justify-between items-start" style={{ padding: '20px 24px' }}>
+                <div className="absolute top-0 left-0 w-full flex justify-between items-start" style={{ padding: '24px 28px' }}>
                   <div className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl shadow-sm border border-white/50">
                     <h3 className="text-amber-950 font-bold text-lg">Amalfi Coast</h3>
                     <p className="text-amber-900/70 text-xs font-medium">Italy</p>
@@ -92,14 +92,16 @@ export default function Landing() {
       </section>
 
       {/* Feature Cards Section */}
-      <section className="mx-auto" style={{ maxWidth: '1440px', padding: '0 64px', marginTop: '80px' }}>
-        <div className="text-left" style={{ marginBottom: '18px' }}>
+      <section className="mx-auto" style={{ maxWidth: '1440px', padding: '0 64px', marginTop: '140px' }}>
+        <div className="text-left animate-fadeInUp" style={{ marginBottom: '48px' }}>
           <h2 className="text-amber-950 font-bold" style={{ fontSize: '32px' }}>Travel Smart</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" style={{ gap: '28px', paddingTop: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
           {features.map((f, i) => (
-            <div key={i} className="bg-white/60 backdrop-blur-xl border border-amber-900/5 group hover:shadow-soft transition-all duration-300 animate-fadeInUp" 
-                 style={{ padding: '28px', borderRadius: '24px', minHeight: '220px', animationDelay: `${i * 0.1}s` }}>
+            <div key={i} className="bg-white/60 backdrop-blur-xl border border-amber-900/5 group transition-all duration-300 animate-fadeInUp" 
+                 style={{ padding: '32px', borderRadius: '28px', minHeight: '240px', boxShadow: '0 8px 30px rgba(120,90,60,0.06)', animationDelay: `${i * 0.15}s` }}
+                 onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(120,90,60,0.12)'; }}
+                 onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(120,90,60,0.06)'; }}>
               <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${f.color} flex items-center justify-center text-white mb-6 shadow-sm group-hover:-translate-y-1 transition-transform`}>
                 {f.icon}
               </div>

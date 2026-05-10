@@ -27,60 +27,75 @@ export default function TripList() {
   const badgeClass = (s) => s === 'ONGOING' ? 'badge-ongoing' : s === 'UPCOMING' ? 'badge-upcoming' : 'badge-completed';
 
   return (
-    <div className="pt-20 pb-12 max-w-6xl mx-auto px-4">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-amber-900">My Trips</h1>
-          <p className="text-amber-700">Manage all your travel plans</p>
-        </div>
-        <Link to="/trips/new" className="btn-primary"><Plus size={18} /> New Trip</Link>
+    <div className="mx-auto" style={{ maxWidth: '1440px', padding: '120px 64px 80px 64px' }}>
+      <div className="mb-8">
+        <h1 className="text-amber-950 font-bold" style={{ fontSize: '36px' }}>My Trips</h1>
+        <p className="text-amber-900/70 mt-1">Manage all your travel plans</p>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <div className="relative flex-1">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600" />
-          <input className="input-glass pl-10" placeholder="Search trips..." value={search} onChange={e => setSearch(e.target.value)} />
+      <div className="flex flex-col lg:flex-row items-center" style={{ gap: '24px', marginBottom: '48px' }}>
+        {/* Search Bar */}
+        <div className="relative shrink-0">
+          <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-amber-900/40" />
+          <input className="input-glass outline-none transition-colors" placeholder="Search trips..." value={search} onChange={e => setSearch(e.target.value)} 
+            style={{ width: '420px', height: '56px', borderRadius: '18px', padding: '0 20px 0 44px', border: '1px solid rgba(120,90,60,0.12)', fontSize: '15px' }} />
         </div>
-        <div className="flex gap-2">
+        
+        {/* Filters */}
+        <div className="flex items-center" style={{ gap: '8px' }}>
           {tabs.map(t => (
             <button key={t.key} onClick={() => setFilter(t.key)}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${filter === t.key ? 'bg-amber-700/15 text-amber-600 border border-amber-700/30' : 'text-amber-700 hover:text-amber-900 hover:bg-white/5'}`}>
+              className={`px-5 py-3 rounded-2xl text-sm font-medium transition-all ${filter === t.key ? 'bg-amber-900/10 text-amber-950' : 'text-amber-900/60 hover:text-amber-950 hover:bg-amber-900/5'}`}>
               {t.label}
             </button>
           ))}
+        </div>
+
+        {/* CTA Button */}
+        <div className="ml-auto">
+          <Link to="/trips/new" className="btn-primary flex items-center gap-2" style={{ height: '56px', padding: '0 28px', borderRadius: '18px', fontSize: '16px', fontWeight: 600 }}>
+            <Plus size={18} /> New Trip
+          </Link>
         </div>
       </div>
 
       {loading ? (
         <CardSkeleton count={6} />
       ) : trips.length === 0 ? (
-        <div className="text-center py-20 animate-fadeInUp">
-          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-amber-700/15 to-orange-600/15 flex items-center justify-center mx-auto mb-6">
-            <Globe size={40} className="text-amber-700/60" />
+        <div className="flex flex-col items-center justify-center text-center animate-fadeInUp" style={{ minHeight: '400px', maxWidth: '600px', margin: '0 auto' }}>
+          <div className="w-28 h-28 rounded-full bg-gradient-to-tr from-amber-100 to-orange-50 flex items-center justify-center mb-8 shadow-sm border border-amber-900/5">
+            <Globe size={48} className="text-amber-700/50" />
           </div>
-          <h3 className="text-2xl font-bold text-amber-900 mb-2">Your adventure awaits!</h3>
-          <p className="text-amber-700 mb-2 max-w-md mx-auto">You haven't planned any trips yet. Start by exploring popular destinations like Paris, Tokyo, or Bali.</p>
-          <p className="text-amber-600 text-sm mb-6">Build itineraries, track budgets, and pack smarter.</p>
-          <Link to="/trips/new" className="btn-primary text-lg py-3 px-8"><Plane size={20} /> Plan Your First Trip</Link>
+          <h3 className="text-amber-950 font-bold" style={{ fontSize: '28px', marginBottom: '16px' }}>Your adventure awaits</h3>
+          <p className="text-amber-900/70" style={{ fontSize: '16px', lineHeight: 1.6, marginBottom: '8px' }}>You haven't planned any trips yet. Start by exploring popular destinations like Paris, Tokyo, or Bali.</p>
+          <p className="text-amber-900/50 text-sm mb-8">Build itineraries, track budgets, and pack smarter.</p>
+          <Link to="/trips/new" className="btn-primary flex items-center gap-2" style={{ height: '56px', padding: '0 32px', borderRadius: '18px', fontSize: '16px', fontWeight: 600 }}>
+            <Plane size={18} /> Plan Your First Trip
+          </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: '32px' }}>
           {trips.map((trip, i) => (
-            <Link to={`/trips/${trip.id}/view`} key={trip.id} className="trip-card animate-fadeInUp" style={{animationDelay: `${i * 0.05}s`}}>
-              <div className="h-40 bg-gradient-to-br from-amber-700/15 to-orange-600/15 relative">
-                {trip.cover_photo_url ? <img src={trip.cover_photo_url} className="w-full h-full object-cover" alt="" /> : (
-                  <div className="flex items-center justify-center h-full"><MapPin size={40} className="text-amber-700/30" /></div>
+            <Link to={`/trips/${trip.id}/view`} key={trip.id} className="glass group hover:-translate-y-1 hover:shadow-soft transition-all duration-300 animate-fadeInUp block" 
+                  style={{ borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(120,90,60,0.08)', animationDelay: `${i * 0.05}s` }}>
+              <div className="h-48 relative overflow-hidden">
+                {trip.cover_photo_url ? <img src={trip.cover_photo_url} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="" /> : (
+                  <div className="flex items-center justify-center h-full bg-amber-50/50"><MapPin size={40} className="text-amber-900/20" /></div>
                 )}
-                <div className="absolute top-3 right-3"><span className={`badge ${badgeClass(trip.status)}`}>{trip.status}</span></div>
-              </div>
-              <div className="p-5">
-                <h3 className="text-amber-900 font-semibold text-lg mb-1">{trip.title}</h3>
-                <p className="text-amber-700 text-sm line-clamp-2 mb-3">{trip.description || 'No description'}</p>
-                <div className="flex items-center justify-between text-xs text-amber-600">
-                  <span className="flex items-center gap-1"><Calendar size={12} /> {new Date(trip.start_date).toLocaleDateString()}</span>
-                  <span className="flex items-center gap-1"><DollarSign size={12} /> ${trip.total_budget}</span>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                <div className="absolute top-4 right-4">
+                  <span className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-sm ${trip.status === 'ONGOING' ? 'bg-amber-100 text-amber-800' : trip.status === 'UPCOMING' ? 'bg-blue-50 text-blue-700' : 'bg-green-50 text-green-700'}`}>
+                    {trip.status}
+                  </span>
                 </div>
-                <div className="mt-3 text-xs text-amber-600">{trip.stops?.length || 0} stops</div>
+              </div>
+              <div style={{ padding: '24px' }}>
+                <h3 className="text-amber-950 font-bold text-lg mb-2">{trip.title}</h3>
+                <p className="text-amber-900/60 text-sm line-clamp-2 mb-4 leading-relaxed">{trip.description || 'No description provided.'}</p>
+                <div className="flex items-center justify-between pt-4 border-t border-amber-900/10">
+                  <span className="flex items-center gap-1.5 text-xs font-medium text-amber-900/70"><Calendar size={14} /> {new Date(trip.start_date).toLocaleDateString()}</span>
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-amber-900"><DollarSign size={14} /> ${trip.total_budget}</span>
+                </div>
               </div>
             </Link>
           ))}
