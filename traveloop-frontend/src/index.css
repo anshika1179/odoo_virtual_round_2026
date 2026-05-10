@@ -319,3 +319,45 @@ body {
   .login-form-section { padding: 40px 24px; }
   .login-image { min-height: 240px; }
 }
+
+/* Footer Adjustments */
+.footer-wrapper {
+  margin-top: 96px;
+}
+footer {
+  padding-top: 72px;
+  padding-bottom: 40px;
+}
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+.footer-divider {
+  margin: 20px 0;
+  width: 100%;
+  max-width: 420px;
+  height: 1px;
+  background-color: rgb(69, 26, 3);
+  opacity: 0.08;
+}
+.footer-hackathon {
+  margin-top: 24px;
+  text-align: center;
+  line-height: 1.8;
+  opacity: 0.9;
+}
+.footer-hackathon-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: rgb(69, 26, 3);
+}
+.footer-team {
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  color: rgba(69, 26, 3, 0.7);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
