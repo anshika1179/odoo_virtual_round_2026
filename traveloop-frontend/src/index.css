@@ -576,3 +576,65 @@ h2, h3, h4 {
     width: 100%;
   }
 }
+
+/* Explore Search Styles */
+.search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+}
+
+.search-wrapper input {
+  width: 100%;
+  height: 56px;
+  padding: 0 18px 0 52px;
+  border-radius: 18px;
+  border: none;
+  background: #f8f3eb;
+  font-size: 15px;
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+
+.search-wrapper input:focus {
+  box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.12);
+}
+
+.search-icon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  opacity: 0.55;
+  color: #8b5e3c;
+}
+
+.filters-container {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.region-select {
+  height: 56px;
+  border-radius: 18px;
+  padding: 0 18px;
+  background: #f8f3eb;
+  border: none;
+  font-size: 15px;
+  outline: none;
+}
+
+@media (max-width: 768px) {
+  .filters-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .search-wrapper, .region-select {
+    max-width: 100%;
+    width: 100%;
+  }
+}
