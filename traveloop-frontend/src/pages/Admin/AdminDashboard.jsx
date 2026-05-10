@@ -1,9 +1,39 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getAdminStats, getAdminUsers } from '../../services/api';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { Users, Map, Globe, TrendingUp, Loader2, LayoutDashboard } from 'lucide-react';
+import { Users, Map, Globe, TrendingUp, LayoutDashboard, Clock, UserPlus, Plane as PlaneIcon } from 'lucide-react';
+import { StatSkeleton, TableSkeleton } from '../../components/common/Skeletons';
 
 const COLORS = ['#6366f1', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6'];
+
+/* Animated counter hook */
+function useCountUp(target, duration = 1200) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  useEffect(() => {
+    if (typeof target !== 'number' || target === 0) { setCount(target); return; }
+    let start = 0;
+    const step = Math.max(1, Math.ceil(target / (duration / 16)));
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) { setCount(target); clearInterval(timer); }
+      else setCount(start);
+    }, 16);
+    return () => clearInterval(timer);
+  }, [target, duration]);
+  return count;
+}
+
+function AnimatedStat({ card }) {
+  const displayValue = useCountUp(card.value);
+  return (
+    <div className="glass rounded-2xl p-6 glass-hover">
+      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center text-white mb-3`}>{card.icon}</div>
+      <p className="text-3xl font-bold text-white">{displayValue}</p>
+      <p className="text-slate-400 text-sm">{card.label}</p>
+    </div>
+  );
+}
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
@@ -16,7 +46,16 @@ export default function AdminDashboard() {
       .catch(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="pt-20 flex justify-center"><Loader2 size={32} className="animate-spin text-indigo-400" /></div>;
+  if (loading) return (
+    <div className="pt-20 pb-12 max-w-7xl mx-auto px-4">
+      <div className="animate-fadeInUp">
+        <div className="h-8 skeleton rounded-lg w-64 mb-2" />
+        <div className="h-5 skeleton rounded-lg w-80 mb-8" />
+        <StatSkeleton count={4} />
+        <div className="mt-8"><TableSkeleton rows={5} cols={5} /></div>
+      </div>
+    </div>
+  );
 
   const tripData = [
     { name: 'Ongoing', value: stats?.ongoing_trips || 0 },
@@ -39,6 +78,15 @@ export default function AdminDashboard() {
     { label: 'Activities', value: stats?.total_activities || 0, icon: <TrendingUp size={24} />, color: 'from-green-500 to-green-600' },
   ];
 
+  // Generate mock activity feed from users data
+  const activityFeed = users.slice(0, 5).map((u, i) => ({
+    id: i,
+    icon: i % 3 === 0 ? <UserPlus size={16} /> : i % 3 === 1 ? <PlaneIcon size={16} /> : <Globe size={16} />,
+    iconColor: i % 3 === 0 ? 'from-indigo-500 to-blue-600' : i % 3 === 1 ? 'from-purple-500 to-pink-600' : 'from-amber-500 to-orange-600',
+    text: i % 3 === 0 ? `${u.full_name} joined Traveloop` : i % 3 === 1 ? `${u.full_name} created a new trip` : `${u.full_name} explored destinations`,
+    time: u.created_at ? new Date(u.created_at).toLocaleDateString() : 'Recently',
+  }));
+
   return (
     <div className="pt-20 pb-12 max-w-7xl mx-auto px-4">
       <div className="animate-fadeInUp">
@@ -48,11 +96,7 @@ export default function AdminDashboard() {
         {/* Stat Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {statCards.map(card => (
-            <div key={card.label} className="glass rounded-2xl p-6 glass-hover">
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center text-white mb-3`}>{card.icon}</div>
-              <p className="text-3xl font-bold text-white">{card.value}</p>
-              <p className="text-slate-400 text-sm">{card.label}</p>
-            </div>
+            <AnimatedStat key={card.label} card={card} />
           ))}
         </div>
 
@@ -101,34 +145,66 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Users Table */}
-        <div className="glass rounded-2xl overflow-hidden">
-          <div className="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 px-6 py-4">
-            <h3 className="text-white font-semibold">Registered Users</h3>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-slate-400 border-b border-slate-700">
-                  <th className="text-left p-4 font-medium">Name</th>
-                  <th className="text-left p-4 font-medium">Email</th>
-                  <th className="text-left p-4 font-medium">Location</th>
-                  <th className="text-center p-4 font-medium">Trips</th>
-                  <th className="text-left p-4 font-medium">Joined</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map(u => (
-                  <tr key={u.id} className="border-b border-slate-800 hover:bg-white/[0.02]">
-                    <td className="p-4 text-white font-medium">{u.full_name}</td>
-                    <td className="p-4 text-slate-400">{u.email}</td>
-                    <td className="p-4 text-slate-400">{u.city ? `${u.city}, ${u.country}` : '-'}</td>
-                    <td className="p-4 text-center"><span className="badge badge-upcoming">{u.trip_count}</span></td>
-                    <td className="p-4 text-slate-500 text-xs">{u.created_at ? new Date(u.created_at).toLocaleDateString() : '-'}</td>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Users Table */}
+          <div className="lg:col-span-2 glass rounded-2xl overflow-hidden">
+            <div className="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 px-6 py-4">
+              <h3 className="text-white font-semibold">Registered Users</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-slate-400 border-b border-slate-700">
+                    <th className="text-left p-4 font-medium">Name</th>
+                    <th className="text-left p-4 font-medium">Email</th>
+                    <th className="text-left p-4 font-medium">Location</th>
+                    <th className="text-center p-4 font-medium">Trips</th>
+                    <th className="text-left p-4 font-medium">Joined</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {users.map(u => (
+                    <tr key={u.id} className="border-b border-slate-800 hover:bg-white/[0.02]">
+                      <td className="p-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold">
+                            {u.full_name?.[0]?.toUpperCase() || '?'}
+                          </div>
+                          <span className="text-white font-medium">{u.full_name}</span>
+                        </div>
+                      </td>
+                      <td className="p-4 text-slate-400">{u.email}</td>
+                      <td className="p-4 text-slate-400">{u.city ? `${u.city}, ${u.country}` : '-'}</td>
+                      <td className="p-4 text-center"><span className="badge badge-upcoming">{u.trip_count}</span></td>
+                      <td className="p-4 text-slate-500 text-xs">{u.created_at ? new Date(u.created_at).toLocaleDateString() : '-'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Activity Feed */}
+          <div className="glass rounded-2xl overflow-hidden">
+            <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 px-6 py-4">
+              <h3 className="text-white font-semibold flex items-center gap-2"><Clock size={16} /> Recent Activity</h3>
+            </div>
+            <div className="p-4 space-y-1">
+              {activityFeed.map((a, i) => (
+                <div key={a.id} className="flex items-start gap-3 p-3 rounded-xl hover:bg-white/[0.02] transition-colors animate-fadeInUp" style={{animationDelay: `${i * 0.1}s`}}>
+                  <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${a.iconColor} flex items-center justify-center text-white shrink-0 mt-0.5`}>
+                    {a.icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-slate-300 text-sm">{a.text}</p>
+                    <p className="text-slate-600 text-xs mt-0.5">{a.time}</p>
+                  </div>
+                </div>
+              ))}
+              {activityFeed.length === 0 && (
+                <div className="text-center py-8 text-slate-500 text-sm">No recent activity</div>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getTrips } from '../../services/api';
-import { Search, Plus, Calendar, DollarSign, MapPin, Loader2, Filter } from 'lucide-react';
+import { Search, Plus, Calendar, DollarSign, MapPin, Filter, Plane, Globe } from 'lucide-react';
+import { CardSkeleton } from '../../components/common/Skeletons';
 
 export default function TripList() {
   const [trips, setTrips] = useState([]);
@@ -51,12 +52,16 @@ export default function TripList() {
       </div>
 
       {loading ? (
-        <div className="flex justify-center py-20"><Loader2 size={32} className="animate-spin text-indigo-400" /></div>
+        <CardSkeleton count={6} />
       ) : trips.length === 0 ? (
-        <div className="text-center py-20">
-          <MapPin size={48} className="mx-auto text-slate-600 mb-4" />
-          <h3 className="text-xl text-slate-400 mb-2">No trips found</h3>
-          <Link to="/trips/new" className="btn-primary mt-4"><Plus size={18} /> Plan Your First Trip</Link>
+        <div className="text-center py-20 animate-fadeInUp">
+          <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center mx-auto mb-6">
+            <Globe size={40} className="text-indigo-400/60" />
+          </div>
+          <h3 className="text-2xl font-bold text-white mb-2">Your adventure awaits!</h3>
+          <p className="text-slate-400 mb-2 max-w-md mx-auto">You haven't planned any trips yet. Start by exploring popular destinations like Paris, Tokyo, or Bali.</p>
+          <p className="text-slate-500 text-sm mb-6">Build itineraries, track budgets, and pack smarter.</p>
+          <Link to="/trips/new" className="btn-primary text-lg py-3 px-8"><Plane size={20} /> Plan Your First Trip</Link>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
