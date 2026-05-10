@@ -29,9 +29,6 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Globe size={20} className="text-white" />
-            </div>
             <span className="text-xl font-bold gradient-text">Traveloop</span>
           </Link>
 

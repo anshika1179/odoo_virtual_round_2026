@@ -29,30 +29,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden">
-      {/* Navigation Bar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-amber-700/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center gap-2 group">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Globe size={20} className="text-white" />
-              </div>
-              <span className="text-xl font-bold gradient-text">Traveloop</span>
-            </Link>
-            
-            <div className="flex items-center gap-3">
-              <Link to="/login" className="text-amber-700 hover:text-amber-900 font-medium transition-colors">
-                Sign In
-              </Link>
-              <Link to="/register" className="btn-primary text-sm">
-                Sign Up
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+    <div className="min-h-screen relative overflow-hidden">
       {/* Geometric Background Design */}
       <div className="fixed inset-0 overflow-hidden">
         {/* Base gradient layer */}
@@ -97,15 +74,10 @@ export default function Login() {
       </div>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex items-center justify-center px-4 py-8 mt-16">
-        <div className="w-full max-w-md animate-fadeInUp relative z-10">
+      <main className="flex items-center justify-center min-h-screen px-4 py-8">
+        <div className="w-full max-w-lg animate-fadeInUp relative z-10">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-600 to-orange-700 shadow-lg shadow-amber-600/30 mb-4 animate-gentle-float">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
-            <h1 className="text-3xl font-bold gradient-text mb-2">Welcome Back</h1>
+            <h1 className="text-4xl font-bold gradient-text mb-2">Welcome Back</h1>
             <p className="text-amber-700">Sign in to continue your journey</p>
           </div>
 
@@ -131,11 +103,8 @@ export default function Login() {
 
             <div className="w-full">
               <label className="block text-sm font-medium text-amber-800 mb-2">Password</label>
-              <div className="relative w-full">
-                <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-amber-600" />
-                <input type="password" className="input-glass pl-12 w-full" placeholder="••••••••"
-                  value={form.password} onChange={e => setForm({...form, password: e.target.value})} required />
-              </div>
+              <input type="password" className="input-glass w-full" placeholder="••••••••"
+                value={form.password} onChange={e => setForm({...form, password: e.target.value})} required />
             </div>
 
             <button type="submit" disabled={loading}
