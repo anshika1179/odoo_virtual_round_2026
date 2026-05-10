@@ -40,12 +40,12 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-5xl animate-fadeInUp">
-        <div className="glass rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row min-h-[520px]">
+    <div className="login-page">
+      <div className="w-full animate-fadeInUp flex justify-center">
+        <div className="login-card glass shadow-2xl">
 
           {/* Left — Image Panel */}
-          <div className="hidden md:block md:w-1/2 relative">
+          <div className="login-image relative">
             <img src="/images/auth-bg.jpg" alt="Travel lounge" className="absolute inset-0 w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-amber-900/60 via-amber-900/20 to-transparent" />
             <div className="absolute bottom-8 left-8 right-8">
@@ -55,8 +55,8 @@ export default function ForgotPassword() {
           </div>
 
           {/* Right — Form Panel */}
-          <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-            <div className="mb-6">
+          <div className="login-form-section">
+            <div>
               <h1 className="text-3xl font-bold text-amber-900 md:hidden brand-font mb-1">Traveloop</h1>
               <div className="flex items-center gap-3 mb-1">
                 <KeyRound size={24} className="text-amber-700" />

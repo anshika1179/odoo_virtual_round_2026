@@ -33,12 +33,12 @@ export default function Register() {
   const set = (key) => (e) => setForm({...form, [key]: e.target.value});
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-5xl animate-fadeInUp">
-        <div className="glass rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row min-h-[640px]">
+    <div className="login-page">
+      <div className="w-full animate-fadeInUp flex justify-center">
+        <div className="login-card glass shadow-2xl">
 
           {/* Left — Image Panel */}
-          <div className="hidden md:block md:w-5/12 relative">
+          <div className="login-image relative">
             <img
               src="/images/auth-bg.jpg"
               alt="Travel lounge"
@@ -52,8 +52,8 @@ export default function Register() {
           </div>
 
           {/* Right — Form Panel */}
-          <div className="w-full md:w-7/12 p-6 md:p-10 flex flex-col justify-center">
-            <div className="mb-6">
+          <div className="login-form-section">
+            <div>
               <h1 className="text-3xl font-bold text-amber-900 md:hidden brand-font mb-1">Traveloop</h1>
               <h2 className="text-2xl font-bold text-amber-900">Create your account</h2>
               <p className="text-amber-700/70 mt-1 text-sm">Start planning your next adventure</p>
@@ -118,7 +118,7 @@ export default function Register() {
                 <textarea className="input-glass" rows={2} placeholder="Tell us about yourself..." value={form.additional_info} onChange={set('additional_info')} />
               </div>
 
-              <button type="submit" disabled={loading} className="btn-primary w-full justify-center text-base py-3 rounded-xl mt-1">
+              <button type="submit" disabled={loading} className="btn-primary signin-btn">
                 {loading ? <Loader2 size={20} className="animate-spin" /> : <><span>Create Account</span> <ArrowRight size={18} /></>}
               </button>
             </form>
