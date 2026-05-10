@@ -42,7 +42,7 @@ export default function Landing() {
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-6">
                 <span className="gradient-text">Plan, Explore</span>
                 <br />
-                <span className="text-white">& Travel</span>
+                <span className="text-amber-800">& </span><span className="brand-font gradient-text">Travel</span>
                 <br />
                 <span className="text-amber-700">Together</span>
               </h1>
@@ -62,8 +62,8 @@ export default function Landing() {
               </div>
 
               <div className="flex items-center gap-8 text-amber-600 text-sm">
-                <div className="flex items-center gap-2"><Globe size={16} className="text-amber-700" /> 50+ Cities</div>
-                <div className="flex items-center gap-2"><MapPin size={16} className="text-orange-600" /> 75+ Activities</div>
+                <div className="flex items-center gap-2"><Globe size={16} className="text-amber-700" /> 105+ Cities</div>
+                <div className="flex items-center gap-2"><MapPin size={16} className="text-orange-600" /> 165+ Activities</div>
                 <div className="flex items-center gap-2"><TrendingUp size={16} className="text-yellow-600" /> Budget Tracking</div>
               </div>
             </div>
