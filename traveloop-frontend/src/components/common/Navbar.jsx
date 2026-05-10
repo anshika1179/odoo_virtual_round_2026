@@ -39,8 +39,8 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-1">
             {user && navLinks.map(link => (
               <Link key={link.to} to={link.to}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
-                  ${isActive(link.to) ? 'bg-indigo-500/20 text-indigo-300' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
+                className={`nav-link flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
+                  ${isActive(link.to) ? 'active bg-indigo-500/20 text-indigo-300' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
                 {link.icon} {link.label}
               </Link>
             ))}
