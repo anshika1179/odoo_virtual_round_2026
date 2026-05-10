@@ -372,3 +372,59 @@ footer {
   flex-wrap: wrap;
   justify-content: center;
 }
+
+/* Community Page Adjustments */
+.community-page {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 64px 32px 80px;
+}
+.community-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 32px;
+  margin-bottom: 80px;
+  flex-wrap: wrap;
+}
+.community-header-left {
+  max-width: 520px;
+}
+.community-header-left h1 {
+  margin-bottom: 12px;
+}
+.community-header-left p {
+  margin-bottom: 24px;
+}
+.community-search {
+  width: 100%;
+  max-width: 480px;
+}
+.community-header-right {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+.community-empty-state {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.community-empty-state h2 {
+  margin-top: 28px;
+  margin-bottom: 20px;
+}
+.community-empty-state p {
+  max-width: 620px;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.community-empty-state button {
+  margin-top: 24px;
+}
