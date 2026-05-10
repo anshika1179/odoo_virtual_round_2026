@@ -45,7 +45,7 @@ export default function CreateTrip() {
   ];
 
   return (
-    <div className="pt-20 pb-12 max-w-5xl mx-auto px-4">
+    <div className="page-container">
       <div className="animate-fadeInUp">
         <div className="flex items-center gap-3 mb-8">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center">
@@ -57,8 +57,8 @@ export default function CreateTrip() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
+        <div className="trip-layout">
+          <div className="trip-form">
             <div className="glass rounded-2xl p-8">
               {error && <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">{error}</div>}
 
@@ -124,7 +124,7 @@ export default function CreateTrip() {
           </div>
 
           {/* Suggestion Cards */}
-          <div>
+          <div className="trip-suggestions">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles size={18} className="text-amber-400" />
               <h3 className="text-lg font-semibold text-amber-900">Suggestions</h3>

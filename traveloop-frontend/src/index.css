@@ -209,3 +209,54 @@ body {
     padding: 0 32px;
   }
 }
+
+/* Hero Header Section */
+.hero-section {
+  max-width: 700px;
+  margin: 0 auto 48px auto;
+  text-align: center;
+}
+.hero-section h1, .hero-section h2 {
+  font-size: clamp(3rem, 5vw, 4rem);
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.hero-section p {
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Feature Cards Grid */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 280px));
+  justify-content: center;
+  gap: 32px;
+  width: 100%;
+}
+
+/* Plan a New Trip Layout */
+.trip-layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 32px;
+  flex-wrap: wrap;
+}
+.trip-form {
+  flex: 1;
+  min-width: 420px;
+  max-width: 620px;
+}
+.trip-suggestions {
+  width: 320px;
+}
+
+@media (max-width: 768px) {
+  .trip-form { min-width: 100%; max-width: 100%; }
+  .trip-suggestions { width: 100%; }
+}
