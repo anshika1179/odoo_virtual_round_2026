@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { searchCities, searchActivities } from '../../services/api';
-import { Search, MapPin, Filter, DollarSign, Clock, Star, Globe } from 'lucide-react';
+import { Search, MapPin, Filter, DollarSign, Clock, Star, Globe, Plus, Eye } from 'lucide-react';
+import { CardSkeleton, RowSkeleton } from '../../components/common/Skeletons';
+import { Link } from 'react-router-dom';
 
 export default function CitySearch() {
   const [mode, setMode] = useState('cities');
@@ -8,7 +10,7 @@ export default function CitySearch() {
   const [cities, setCities] = useState([]);
   const [activities, setActivities] = useState([]);
   const [filters, setFilters] = useState({ country: '', region: '', type: '', max_cost: '' });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
@@ -69,12 +71,14 @@ export default function CitySearch() {
         </div>
 
         {/* Results */}
-        {mode === 'cities' ? (
+        {loading ? (
+          mode === 'cities' ? <CardSkeleton count={9} /> : <RowSkeleton count={6} />
+        ) : mode === 'cities' ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {cities.map((city, i) => (
-              <div key={city.id} className="trip-card animate-fadeInUp" style={{animationDelay: `${i * 0.05}s`}}>
+              <div key={city.id} className="trip-card group animate-fadeInUp relative" style={{animationDelay: `${i * 0.05}s`}}>
                 <div className="h-44 relative overflow-hidden">
-                  <img src={city.image_url} alt={city.name} className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                  <img src={city.image_url} alt={city.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     onError={e => { e.target.src = `https://via.placeholder.com/400x300/1e293b/6366f1?text=${city.name}`; }} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent" />
                   <div className="absolute bottom-4 left-4">
@@ -82,6 +86,13 @@ export default function CitySearch() {
                     <p className="text-slate-300 text-sm">{city.country} • {city.region}</p>
                   </div>
                   <div className="absolute top-3 right-3 badge badge-upcoming">Score: {city.popularity_score}</div>
+
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-3">
+                    <Link to="/trips/new" className="btn-primary text-xs py-2 px-4 transform scale-90 group-hover:scale-100 transition-transform">
+                      <Plus size={14} /> Add to Trip
+                    </Link>
+                  </div>
                 </div>
                 <div className="p-4">
                   <p className="text-slate-400 text-sm line-clamp-2 mb-3">{city.description}</p>

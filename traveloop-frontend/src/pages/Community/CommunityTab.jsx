@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { getCommunityPosts, createCommunityPost, likePost } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
-import { Search, Heart, MessageCircle, Plus, Send, Loader2, Users, Globe } from 'lucide-react';
+import { useToast } from '../../context/ToastContext';
+import { Search, Heart, MessageCircle, Plus, Send, Users, Globe, Camera, Sparkles } from 'lucide-react';
+import { FeedSkeleton } from '../../components/common/Skeletons';
 
 export default function CommunityTab() {
   const { user } = useAuth();
+  const toast = useToast();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -21,6 +24,7 @@ export default function CommunityTab() {
     await createCommunityPost(newPost);
     setNewPost({ title: '', experience_text: '', image_url: '' });
     setShowCreate(false);
+    toast.success('Experience shared with the community!');
     loadPosts();
   };
 
@@ -66,7 +70,7 @@ export default function CommunityTab() {
 
         {/* Posts Feed */}
         {loading ? (
-          <div className="flex justify-center py-20"><Loader2 size={32} className="animate-spin text-indigo-400" /></div>
+          <FeedSkeleton count={3} />
         ) : (
           <div className="space-y-6">
             {posts.map((post, i) => (
@@ -102,9 +106,20 @@ export default function CommunityTab() {
         )}
 
         {!loading && posts.length === 0 && (
-          <div className="text-center py-16 text-slate-500">
-            <Users size={48} className="mx-auto mb-4 text-slate-600" />
-            <p>No community posts yet. Be the first to share!</p>
+          <div className="text-center py-20 animate-fadeInUp">
+            <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mx-auto mb-6">
+              <Camera size={40} className="text-purple-400/60" />
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-2">Share your travel stories</h3>
+            <p className="text-slate-400 mb-2 max-w-md mx-auto">Be the first to share! Post your travel experiences, tips, and photos to inspire fellow travelers.</p>
+            <p className="text-slate-500 text-sm mb-6 flex items-center justify-center gap-2">
+              <Sparkles size={14} className="text-amber-400" /> Your story could inspire someone's next adventure
+            </p>
+            {user && (
+              <button onClick={() => setShowCreate(true)} className="btn-primary text-lg py-3 px-8">
+                <Plus size={20} /> Share Your First Experience
+              </button>
+            )}
           </div>
         )}
       </div>
