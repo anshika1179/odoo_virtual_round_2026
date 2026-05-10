@@ -1,8 +1,30 @@
-import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { getProfile, updateProfile, getTrips, uploadProfilePhoto, deleteProfilePhoto } from '../../services/api';
-import { User, Mail, Phone, MapPin, Save, Loader2, Calendar, Eye, Edit3, Camera, Trash2, CheckCircle } from 'lucide-react';
+import { useState, useEffect, useRef, useMemo } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { useToast } from "../../context/ToastContext";
+import {
+  getProfile,
+  updateProfile,
+  getTrips,
+  uploadProfilePhoto,
+  deleteProfilePhoto,
+} from "../../services/api";
+import {
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Save,
+  Loader2,
+  Calendar,
+  Eye,
+  Edit3,
+  Camera,
+  Trash2,
+  CheckCircle,
+  Plane,
+  Globe,
+} from "lucide-react";
 
 export default function UserProfile() {
   const { user, setUser } = useAuth();
@@ -14,15 +36,27 @@ export default function UserProfile() {
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [uploadMsg, setUploadMsg] = useState('');
+  const [uploadMsg, setUploadMsg] = useState("");
   const fileRef = useRef(null);
 
   useEffect(() => {
     if (user) {
-      setForm({ full_name: user.full_name, phone: user.phone || '', city: user.city || '', country: user.country || '', additional_info: user.additional_info || '' });
-      getTrips({ status: 'UPCOMING' }).then(r => setTrips(r.data.slice(0, 4))).catch(() => {});
-      getTrips({ status: 'COMPLETED' }).then(r => setPrevTrips(r.data.slice(0, 4))).catch(() => {});
-      getTrips({}).then(r => setAllTrips(r.data)).catch(() => {});
+      setForm({
+        full_name: user.full_name,
+        phone: user.phone || "",
+        city: user.city || "",
+        country: user.country || "",
+        additional_info: user.additional_info || "",
+      });
+      getTrips({ status: "UPCOMING" })
+        .then((r) => setTrips(r.data.slice(0, 4)))
+        .catch(() => {});
+      getTrips({ status: "COMPLETED" })
+        .then((r) => setPrevTrips(r.data.slice(0, 4)))
+        .catch(() => {});
+      getTrips({})
+        .then((r) => setAllTrips(r.data))
+        .catch(() => {});
     }
   }, [user]);
 
@@ -32,10 +66,12 @@ export default function UserProfile() {
       const res = await updateProfile(form);
       setUser(res.data);
       setEditing(false);
-      toast.success('Profile updated successfully!');
+      toast.success("Profile updated successfully!");
     } catch {
-      toast.error('Failed to update profile');
-    } finally { setSaving(false); }
+      toast.error("Failed to update profile");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handlePhotoSelect = async (e) => {
@@ -43,31 +79,31 @@ export default function UserProfile() {
     if (!file) return;
 
     // Client-side validation
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    const validTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
     if (!validTypes.includes(file.type)) {
-      setUploadMsg('Please select a valid image (JPG, PNG, GIF, WEBP)');
-      setTimeout(() => setUploadMsg(''), 3000);
+      setUploadMsg("Please select a valid image (JPG, PNG, GIF, WEBP)");
+      setTimeout(() => setUploadMsg(""), 3000);
       return;
     }
     if (file.size > 5 * 1024 * 1024) {
-      setUploadMsg('Image must be under 5 MB');
-      setTimeout(() => setUploadMsg(''), 3000);
+      setUploadMsg("Image must be under 5 MB");
+      setTimeout(() => setUploadMsg(""), 3000);
       return;
     }
 
     setUploading(true);
-    setUploadMsg('');
+    setUploadMsg("");
     try {
       const res = await uploadProfilePhoto(file);
       setUser(res.data);
-      setUploadMsg('Photo updated!');
-      setTimeout(() => setUploadMsg(''), 3000);
+      setUploadMsg("Photo updated!");
+      setTimeout(() => setUploadMsg(""), 3000);
     } catch (err) {
-      setUploadMsg(err.response?.data?.detail || 'Upload failed');
-      setTimeout(() => setUploadMsg(''), 4000);
+      setUploadMsg(err.response?.data?.detail || "Upload failed");
+      setTimeout(() => setUploadMsg(""), 4000);
     } finally {
       setUploading(false);
-      if (fileRef.current) fileRef.current.value = '';
+      if (fileRef.current) fileRef.current.value = "";
     }
   };
 
@@ -77,15 +113,51 @@ export default function UserProfile() {
     try {
       const res = await deleteProfilePhoto();
       setUser(res.data);
-      setUploadMsg('Photo removed');
-      setTimeout(() => setUploadMsg(''), 3000);
-    } catch {} finally { setUploading(false); }
+      setUploadMsg("Photo removed");
+      setTimeout(() => setUploadMsg(""), 3000);
+    } catch {
+    } finally {
+      setUploading(false);
+    }
   };
 
-  const set = (key) => (e) => setForm({...form, [key]: e.target.value});
+  const set = (key) => (e) => setForm({ ...form, [key]: e.target.value });
 
   // Photo URL — served via Vite's /static proxy to the backend
   const photoSrc = user?.profile_photo_url || null;
+
+  const stats = useMemo(() => {
+    const total = allTrips.length;
+    const upcoming = allTrips.filter((t) => t.status === "UPCOMING").length;
+    const completed = allTrips.filter((t) => t.status === "COMPLETED").length;
+    const ongoing = allTrips.filter((t) => t.status === "ONGOING").length;
+    return [
+      {
+        label: "Total Trips",
+        value: total,
+        icon: <Plane size={20} />,
+        color: "from-amber-700 to-amber-900",
+      },
+      {
+        label: "Upcoming",
+        value: upcoming,
+        icon: <Calendar size={20} />,
+        color: "from-emerald-500 to-green-600",
+      },
+      {
+        label: "Completed",
+        value: completed,
+        icon: <CheckCircle size={20} />,
+        color: "from-amber-500 to-orange-600",
+      },
+      {
+        label: "Ongoing",
+        value: ongoing,
+        icon: <Globe size={20} />,
+        color: "from-orange-600 to-yellow-600",
+      },
+    ];
+  }, [allTrips]);
 
   return (
     <div className="pt-20 pb-12 max-w-5xl mx-auto px-4">
@@ -100,14 +172,17 @@ export default function UserProfile() {
                   src={photoSrc}
                   alt={user?.full_name}
                   className="w-24 h-24 rounded-2xl object-cover border-2 border-amber-700/30"
-                  onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                    e.target.nextSibling.style.display = "flex";
+                  }}
                 />
               ) : null}
               <div
                 className="w-24 h-24 rounded-2xl bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center text-amber-900 text-3xl font-bold"
-                style={{ display: photoSrc ? 'none' : 'flex' }}
+                style={{ display: photoSrc ? "none" : "flex" }}
               >
-                {user?.full_name?.[0]?.toUpperCase() || '?'}
+                {user?.full_name?.[0]?.toUpperCase() || "?"}
               </div>
 
               {/* Camera overlay */}
@@ -144,18 +219,35 @@ export default function UserProfile() {
 
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-1">
-                <h1 className="text-3xl font-bold text-amber-900">{user?.full_name}</h1>
-                <button onClick={() => setEditing(!editing)} className="p-2 rounded-lg text-amber-700 hover:text-amber-700 hover:bg-amber-700/10 transition-all">
+                <h1 className="text-3xl font-bold text-amber-900">
+                  {user?.full_name}
+                </h1>
+                <button
+                  onClick={() => setEditing(!editing)}
+                  className="p-2 rounded-lg text-amber-700 hover:text-amber-700 hover:bg-amber-700/10 transition-all"
+                >
                   <Edit3 size={18} />
                 </button>
               </div>
-              <p className="text-amber-700 flex items-center gap-2"><Mail size={16} /> {user?.email}</p>
-              {user?.city && <p className="text-amber-600 text-sm flex items-center gap-2 mt-1"><MapPin size={14} /> {user.city}, {user.country}</p>}
+              <p className="text-amber-700 flex items-center gap-2">
+                <Mail size={16} /> {user?.email}
+              </p>
+              {user?.city && (
+                <p className="text-amber-600 text-sm flex items-center gap-2 mt-1">
+                  <MapPin size={14} /> {user.city}, {user.country}
+                </p>
+              )}
 
               {/* Upload status message */}
               {uploadMsg && (
-                <p className={`text-sm mt-2 flex items-center gap-1 ${uploadMsg.includes('failed') || uploadMsg.includes('Please') || uploadMsg.includes('must') ? 'text-red-400' : 'text-emerald-600'}`}>
-                  {uploadMsg.includes('failed') || uploadMsg.includes('Please') || uploadMsg.includes('must') ? null : <CheckCircle size={14} />}
+                <p
+                  className={`text-sm mt-2 flex items-center gap-1 ${uploadMsg.includes("failed") || uploadMsg.includes("Please") || uploadMsg.includes("must") ? "text-red-400" : "text-emerald-600"}`}
+                >
+                  {uploadMsg.includes("failed") ||
+                  uploadMsg.includes("Please") ||
+                  uploadMsg.includes("must") ? null : (
+                    <CheckCircle size={14} />
+                  )}
                   {uploadMsg}
                 </p>
               )}
@@ -166,28 +258,68 @@ export default function UserProfile() {
             <div className="mt-6 pt-6 border-t border-amber-200 space-y-4 animate-fadeInUp">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm text-amber-800 mb-1.5">Full Name</label>
-                  <input className="input-glass" value={form.full_name} onChange={set('full_name')} />
+                  <label className="block text-sm text-amber-800 mb-1.5">
+                    Full Name
+                  </label>
+                  <input
+                    className="input-glass"
+                    value={form.full_name}
+                    onChange={set("full_name")}
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm text-amber-800 mb-1.5">Phone</label>
-                  <input className="input-glass" value={form.phone} onChange={set('phone')} />
+                  <label className="block text-sm text-amber-800 mb-1.5">
+                    Phone
+                  </label>
+                  <input
+                    className="input-glass"
+                    value={form.phone}
+                    onChange={set("phone")}
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm text-amber-800 mb-1.5">City</label>
-                  <input className="input-glass" value={form.city} onChange={set('city')} />
+                  <label className="block text-sm text-amber-800 mb-1.5">
+                    City
+                  </label>
+                  <input
+                    className="input-glass"
+                    value={form.city}
+                    onChange={set("city")}
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm text-amber-800 mb-1.5">Country</label>
-                  <input className="input-glass" value={form.country} onChange={set('country')} />
+                  <label className="block text-sm text-amber-800 mb-1.5">
+                    Country
+                  </label>
+                  <input
+                    className="input-glass"
+                    value={form.country}
+                    onChange={set("country")}
+                  />
                 </div>
               </div>
               <div>
-                <label className="block text-sm text-amber-800 mb-1.5">About</label>
-                <textarea className="input-glass" rows={3} value={form.additional_info} onChange={set('additional_info')} />
+                <label className="block text-sm text-amber-800 mb-1.5">
+                  About
+                </label>
+                <textarea
+                  className="input-glass"
+                  rows={3}
+                  value={form.additional_info}
+                  onChange={set("additional_info")}
+                />
               </div>
-              <button onClick={handleSave} disabled={saving} className="btn-primary">
-                {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />} Save Changes
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="btn-primary"
+              >
+                {saving ? (
+                  <Loader2 size={18} className="animate-spin" />
+                ) : (
+                  <Save size={18} />
+                )}{" "}
+                Save Changes
               </button>
             </div>
           )}
@@ -196,8 +328,16 @@ export default function UserProfile() {
         {/* Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {stats.map((s, i) => (
-            <div key={i} className="glass rounded-2xl p-5 glass-hover animate-fadeInUp" style={{animationDelay: `${i * 0.1}s`}}>
-              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-amber-900 mb-3`}>{s.icon}</div>
+            <div
+              key={i}
+              className="glass rounded-2xl p-5 glass-hover animate-fadeInUp"
+              style={{ animationDelay: `${i * 0.1}s` }}
+            >
+              <div
+                className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-amber-900 mb-3`}
+              >
+                {s.icon}
+              </div>
               <p className="text-2xl font-bold text-amber-900">{s.value}</p>
               <p className="text-amber-700 text-sm">{s.label}</p>
             </div>
@@ -207,16 +347,29 @@ export default function UserProfile() {
         {/* Trips Sections */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div>
-            <h2 className="text-xl font-bold text-amber-900 mb-4">Upcoming Trips</h2>
+            <h2 className="text-xl font-bold text-amber-900 mb-4">
+              Upcoming Trips
+            </h2>
             {trips.length > 0 ? (
               <div className="space-y-3">
-                {trips.map(t => (
-                  <div key={t.id} className="glass rounded-xl p-4 flex items-center justify-between glass-hover">
+                {trips.map((t) => (
+                  <div
+                    key={t.id}
+                    className="glass rounded-xl p-4 flex items-center justify-between glass-hover"
+                  >
                     <div>
                       <h3 className="text-amber-900 font-medium">{t.title}</h3>
-                      <p className="text-amber-600 text-xs flex items-center gap-1"><Calendar size={12} /> {new Date(t.start_date).toLocaleDateString()}</p>
+                      <p className="text-amber-600 text-xs flex items-center gap-1">
+                        <Calendar size={12} />{" "}
+                        {new Date(t.start_date).toLocaleDateString()}
+                      </p>
                     </div>
-                    <Link to={`/trips/${t.id}/view`} className="btn-secondary text-xs py-1.5 px-3"><Eye size={14} /> View</Link>
+                    <Link
+                      to={`/trips/${t.id}/view`}
+                      className="btn-secondary text-xs py-1.5 px-3"
+                    >
+                      <Eye size={14} /> View
+                    </Link>
                   </div>
                 ))}
               </div>
@@ -224,22 +377,40 @@ export default function UserProfile() {
               <div className="glass rounded-xl p-8 text-center">
                 <Plane size={32} className="mx-auto text-amber-500 mb-3" />
                 <p className="text-amber-600">No upcoming trips</p>
-                <Link to="/trips/new" className="text-amber-700 text-sm hover:text-amber-600 mt-2 inline-block">Plan one →</Link>
+                <Link
+                  to="/trips/new"
+                  className="text-amber-700 text-sm hover:text-amber-600 mt-2 inline-block"
+                >
+                  Plan one →
+                </Link>
               </div>
             )}
           </div>
 
           <div>
-            <h2 className="text-xl font-bold text-amber-900 mb-4">Previous Trips</h2>
+            <h2 className="text-xl font-bold text-amber-900 mb-4">
+              Previous Trips
+            </h2>
             {prevTrips.length > 0 ? (
               <div className="space-y-3">
-                {prevTrips.map(t => (
-                  <div key={t.id} className="glass rounded-xl p-4 flex items-center justify-between glass-hover">
+                {prevTrips.map((t) => (
+                  <div
+                    key={t.id}
+                    className="glass rounded-xl p-4 flex items-center justify-between glass-hover"
+                  >
                     <div>
                       <h3 className="text-amber-900 font-medium">{t.title}</h3>
-                      <p className="text-amber-600 text-xs flex items-center gap-1"><Calendar size={12} /> {new Date(t.start_date).toLocaleDateString()}</p>
+                      <p className="text-amber-600 text-xs flex items-center gap-1">
+                        <Calendar size={12} />{" "}
+                        {new Date(t.start_date).toLocaleDateString()}
+                      </p>
                     </div>
-                    <Link to={`/trips/${t.id}/view`} className="btn-secondary text-xs py-1.5 px-3"><Eye size={14} /> View</Link>
+                    <Link
+                      to={`/trips/${t.id}/view`}
+                      className="btn-secondary text-xs py-1.5 px-3"
+                    >
+                      <Eye size={14} /> View
+                    </Link>
                   </div>
                 ))}
               </div>
@@ -247,7 +418,9 @@ export default function UserProfile() {
               <div className="glass rounded-xl p-8 text-center">
                 <Globe size={32} className="mx-auto text-amber-500 mb-3" />
                 <p className="text-amber-600">No completed trips yet</p>
-                <p className="text-amber-500 text-xs mt-1">Your travel history will appear here</p>
+                <p className="text-amber-500 text-xs mt-1">
+                  Your travel history will appear here
+                </p>
               </div>
             )}
           </div>
