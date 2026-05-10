@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 from database import get_db
 from models.trip import Trip
@@ -6,6 +7,7 @@ from models.budget import TripBudget, ExpenseItem
 from models.user import User
 from schemas.trip_schema import BudgetUpdate, BudgetResponse, ExpenseCreate, ExpenseUpdate, ExpenseResponse
 from middleware.auth_middleware import get_current_user
+from services.pdf_service import generate_invoice_pdf
 
 router = APIRouter(prefix="/api", tags=["Budget & Expenses"])
 
@@ -127,3 +129,64 @@ def get_invoice(trip_id: int, db: Session = Depends(get_db), current_user: User 
         },
         "category_breakdown": categories
     }
+
+
+@router.get("/trips/{trip_id}/invoice/pdf")
+def get_invoice_pdf(trip_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    """Generate and return a real PDF invoice file using ReportLab."""
+    trip = db.query(Trip).filter(Trip.id == trip_id, Trip.user_id == current_user.id).first()
+    if not trip:
+        raise HTTPException(status_code=404, detail="Trip not found")
+
+    expenses = db.query(ExpenseItem).filter(ExpenseItem.trip_id == trip_id).all()
+    budget = db.query(TripBudget).filter(TripBudget.trip_id == trip_id).first()
+
+    # Build category breakdown
+    categories = {}
+    for e in expenses:
+        categories[e.category] = categories.get(e.category, 0) + e.total_amount
+    total_spent = sum(e.total_amount for e in expenses)
+    total_budget = (budget.total_estimated if budget else trip.total_budget) or 0
+
+    # Prepare data dicts for the PDF service
+    trip_data = {
+        "id": trip.id,
+        "title": trip.title,
+        "start_date": str(trip.start_date),
+        "end_date": str(trip.end_date),
+    }
+    expense_data = [
+        {
+            "category": e.category,
+            "description": e.description,
+            "quantity": e.quantity,
+            "unit_cost": e.unit_cost,
+            "total_amount": e.total_amount,
+        }
+        for e in expenses
+    ]
+    budget_data = {
+        "total_budget": total_budget,
+        "total_spent": total_spent,
+        "remaining": total_budget - total_spent,
+    }
+
+    # Generate the PDF bytes
+    pdf_bytes = generate_invoice_pdf(
+        trip=trip_data,
+        expenses=expense_data,
+        budget_summary=budget_data,
+        category_breakdown=categories,
+        user_name=current_user.full_name,
+    )
+
+    safe_title = trip.title.replace(" ", "_").replace("/", "-")[:50]
+    filename = f"Traveloop_Invoice_{safe_title}.pdf"
+
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"',
+        },
+    )
