@@ -92,52 +92,76 @@ export default function Landing() {
       </section>
 
       {/* Feature Cards Section */}
-      <section className="mx-auto" style={{ maxWidth: '1440px', padding: '0 64px', marginTop: '140px' }}>
-        <div className="text-left animate-fadeInUp" style={{ marginBottom: '48px' }}>
-          <h2 className="text-amber-950 font-bold" style={{ fontSize: '32px' }}>Travel Smart</h2>
+      <section className="w-full mx-auto" style={{ maxWidth: '1400px', padding: '120px 64px', boxSizing: 'border-box' }}>
+        <div className="text-center animate-fadeInUp" style={{ marginBottom: '72px' }}>
+          <h2 className="text-amber-950 font-bold" style={{ fontSize: '56px', lineHeight: 1.1 }}>Travel Smart</h2>
+          <p className="text-amber-900/75 mx-auto" style={{ maxWidth: '720px', marginTop: '16px', fontSize: '18px', lineHeight: 1.7 }}>
+            Build day-by-day itineraries, track your travel expenses, and manage your packing lists all in one beautiful place.
+          </p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
+        
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'stretch', gap: '32px', flexWrap: 'wrap', width: 'fit-content', marginLeft: 'auto', marginRight: 'auto' }}>
           {features.map((f, i) => (
-            <div key={i} className="bg-white/60 backdrop-blur-xl border border-amber-900/5 group transition-all duration-300 animate-fadeInUp" 
-                 style={{ padding: '32px', borderRadius: '28px', minHeight: '240px', boxShadow: '0 8px 30px rgba(120,90,60,0.06)', animationDelay: `${i * 0.15}s` }}
-                 onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(120,90,60,0.12)'; }}
-                 onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(120,90,60,0.06)'; }}>
-              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${f.color} flex items-center justify-center text-white mb-6 shadow-sm group-hover:-translate-y-1 transition-transform`}>
-                {f.icon}
+            <div key={i} className="group transition-transform duration-400 animate-fadeInUp backdrop-blur-md flex flex-col justify-start" 
+                 style={{ 
+                   width: '280px',
+                   minHeight: '320px', 
+                   borderRadius: '32px', 
+                   padding: '32px', 
+                   backgroundColor: 'rgba(255,255,255,0.58)', 
+                   boxShadow: '0 12px 40px rgba(80,50,20,0.08)', 
+                   gap: '18px',
+                   animationDelay: `${i * 0.1}s` 
+                 }}
+                 onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-6px)'; }}
+                 onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}>
+              
+              <div className={`w-[58px] h-[58px] rounded-[18px] bg-gradient-to-br ${f.color} flex items-center justify-center text-white shadow-sm transition-transform duration-300 group-hover:scale-105`} style={{ marginBottom: '12px' }}>
+                <div style={{ transform: 'scale(1.1)' }}>{f.icon}</div>
               </div>
-              <h3 className="text-amber-950 font-bold text-xl mb-3">{f.title}</h3>
-              <p className="text-amber-900/70 text-sm leading-relaxed">{f.desc}</p>
+              
+              <h3 className="text-amber-950 font-bold" style={{ fontSize: '28px', lineHeight: 1.3 }}>{f.title}</h3>
+              <p className="text-amber-900/75" style={{ fontSize: '17px', lineHeight: 1.8 }}>{f.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* Top Regional Selections */}
-      <section className="mx-auto" style={{ maxWidth: '1440px', padding: '0 64px', marginTop: '120px' }}>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
-
+      <section className="mx-auto px-4 sm:px-6" style={{ maxWidth: '1280px', marginTop: '120px' }}>
+        <div className="flex items-end justify-between mb-10">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-amber-900">Top Destinations</h2>
-            <p className="text-amber-700 mt-1 text-sm md:text-base">Popular places loved by travelers worldwide</p>
+            <h2 className="text-amber-950 font-bold" style={{ fontSize: '36px' }}>Top Destinations</h2>
+            <p className="text-amber-900/60 mt-2" style={{ fontSize: '16px' }}>Explore the world's most sought-after locations</p>
           </div>
-          <Link to="/search/cities" className="btn-secondary text-sm">
-            View All <ChevronRight size={16} />
+          <Link to="/search/cities" className="text-amber-900/70 hover:text-amber-950 font-medium text-sm flex items-center gap-1 transition-colors">
+            View All Destinations <ChevronRight size={16} />
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
-          {cities.filter(c => !search || c.name.toLowerCase().includes(search.toLowerCase())).slice(0, 12).map((city, i) => (
+        <div className="hidden lg:grid" style={{ gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '28px' }}>
+          {cities.filter(c => !search || c.name.toLowerCase().includes(search.toLowerCase())).slice(0, 8).map((city, i) => (
             <Link to={`/search/cities`} key={city.id}
-              className="trip-card group cursor-pointer" style={{animationDelay: `${i * 0.05}s`}}>
-              <div className="aspect-[4/3] relative overflow-hidden">
-                <img src={city.image_url} alt={city.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => { e.target.src = `https://via.placeholder.com/400x300/1e293b/6366f1?text=${city.name}`; }} />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent" />
-                <div className="absolute bottom-2 left-2 md:bottom-3 md:left-3">
-                  <h3 className="text-amber-900 font-semibold text-xs md:text-sm">{city.name}</h3>
-                  <p className="text-amber-700 text-xs">{city.country}</p>
-                </div>
+              className="group cursor-pointer rounded-3xl overflow-hidden relative shadow-sm" style={{ height: '260px', animationDelay: `${i * 0.05}s` }}>
+              <img src={city.image_url} alt={city.name}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                onError={(e) => { e.target.src = `https://via.placeholder.com/400x300/1e293b/6366f1?text=${city.name}`; }} />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent transition-opacity duration-500 group-hover:opacity-80" />
+              <div className="absolute bottom-6 left-6">
+                <h3 className="text-white font-bold" style={{ fontSize: '20px', letterSpacing: '0.02em' }}>{city.name}</h3>
+                <p className="text-white/80 font-medium text-sm mt-0.5">{city.country}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+        {/* Mobile Fallback Grid */}
+        <div className="grid lg:hidden grid-cols-2 sm:grid-cols-3 gap-4">
+          {cities.filter(c => !search || c.name.toLowerCase().includes(search.toLowerCase())).slice(0, 6).map((city, i) => (
+            <Link to={`/search/cities`} key={city.id} className="group cursor-pointer rounded-2xl overflow-hidden relative aspect-square shadow-sm">
+              <img src={city.image_url} alt={city.name} className="w-full h-full object-cover" onError={(e) => { e.target.src = `https://via.placeholder.com/400x300/1e293b/6366f1?text=${city.name}`; }} />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <div className="absolute bottom-4 left-4">
+                <h3 className="text-white font-semibold text-sm">{city.name}</h3>
               </div>
             </Link>
           ))}
@@ -168,19 +192,7 @@ export default function Landing() {
         </section>
       )}
 
-      {/* CTA */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16 mb-6 md:mb-8">
-        <div className="glass rounded-2xl md:rounded-3xl p-8 md:p-12 text-center relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-amber-700/5 to-orange-600/5" />
-          <div className="relative z-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-amber-900 mb-4">Ready to Plan Your Next Trip?</h2>
-            <p className="text-amber-700 text-base md:text-lg mb-6 md:mb-8 max-w-md mx-auto">Create detailed itineraries, manage budgets, and share your adventures with the community.</p>
-            <Link to="/trips/new" className="btn-primary text-base md:text-lg py-3 md:py-4 px-8 md:px-10">
-              <Plane size={18} /> Start Planning Now
-            </Link>
-          </div>
-        </div>
-      </section>
+
     </div>
   );
 }
