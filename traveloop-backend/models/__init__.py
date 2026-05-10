@@ -6,10 +6,10 @@ from models.stop import TripStop
 from models.budget import TripActivity, TripBudget, ExpenseItem
 from models.checklist import PackingChecklist
 from models.note import TripNote
-from models.community import CommunityPost, SharedItinerary
+from models.community import CommunityPost, PostLike, SharedItinerary
 
 __all__ = [
     "User", "Trip", "TripStatus", "City", "Activity", "ActivityType",
     "TripStop", "TripActivity", "TripBudget", "ExpenseItem",
-    "PackingChecklist", "TripNote", "CommunityPost", "SharedItinerary"
+    "PackingChecklist", "TripNote", "CommunityPost", "PostLike", "SharedItinerary"
 ]

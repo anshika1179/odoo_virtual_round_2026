@@ -20,6 +20,7 @@ import CommunityTab from './pages/Community/CommunityTab';
 import UserProfile from './pages/Profile/UserProfile';
 import PublicItinerary from './pages/Share/PublicItinerary';
 import AdminDashboard from './pages/Admin/AdminDashboard';
+import ForgotPassword from './pages/Auth/ForgotPassword';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
                   {/* Public Routes */}
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
                   <Route path="/share/:token" element={<PublicItinerary />} />
 
                   {/* Protected Routes */}
@@ -49,7 +51,7 @@ function App() {
                   <Route path="/search/activities" element={<PrivateRoute><CitySearch /></PrivateRoute>} />
                   <Route path="/community" element={<PrivateRoute><CommunityTab /></PrivateRoute>} />
                   <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
-                  <Route path="/admin" element={<PrivateRoute><AdminDashboard /></PrivateRoute>} />
+                  <Route path="/admin" element={<PrivateRoute adminOnly><AdminDashboard /></PrivateRoute>} />
                 </Routes>
               </PageTransition>
             </main>
