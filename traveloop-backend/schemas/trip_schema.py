@@ -49,6 +49,8 @@ class StopResponse(BaseModel):
     trip_id: int
     city_id: Optional[int] = None
     city_name: Optional[str] = None
+    city_lat: Optional[float] = None
+    city_lng: Optional[float] = None
     section_title: str
     description: Optional[str] = None
     arrival_date: Optional[datetime] = None
@@ -280,6 +282,8 @@ class CityResponse(BaseModel):
     popularity_score: float
     description: Optional[str] = None
     image_url: Optional[str] = None
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
 
     class Config:
         from_attributes = True

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getTrip, getStops, getStopActivities, shareTrip } from '../../services/api';
-import { Calendar, DollarSign, MapPin, Loader2, Edit, CheckSquare, StickyNote, Clock, Share2, Copy, Check, X } from 'lucide-react';
+import { Calendar, DollarSign, MapPin, Loader2, Edit, CheckSquare, StickyNote, Clock, Share2, Copy, Check, X, Map } from 'lucide-react';
+import TripRouteMap from '../../components/maps/TripRouteMap';
 
 export default function ItineraryView() {
   const { id } = useParams();
@@ -142,9 +143,25 @@ export default function ItineraryView() {
           </div>
         </div>
 
+        {/* Trip Route Map */}
+        <div className="mb-16">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-extrabold text-amber-950 flex items-center gap-3">
+              <Map className="text-amber-600" size={32} />
+              Trip Route
+            </h2>
+          </div>
+          <div style={{ height: '400px' }}>
+            <TripRouteMap stops={stops} />
+          </div>
+        </div>
+
         {/* Day-wise Itinerary */}
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-extrabold text-amber-950">Itinerary</h2>
+          <h2 className="text-3xl font-extrabold text-amber-950 flex items-center gap-3">
+            <Calendar className="text-amber-600" size={32} />
+            Itinerary
+          </h2>
         </div>
 
         {stops.length === 0 ? (

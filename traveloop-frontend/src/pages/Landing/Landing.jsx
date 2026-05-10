@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getPopularCities, getTrips } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
-import { Search, MapPin, Plane, Calendar, TrendingUp, ChevronRight, Globe, Sparkles, DollarSign, CheckSquare, Users, StickyNote } from 'lucide-react';
+import { Search, MapPin, Plane, Calendar, TrendingUp, ChevronRight, Globe, Sparkles, DollarSign, CheckSquare, Users, StickyNote, Map } from 'lucide-react';
+import WorldMap from '../../components/maps/WorldMap';
 
 export default function Landing() {
   const { user } = useAuth();
@@ -164,6 +165,24 @@ export default function Landing() {
               </div>
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* World Map Interactive Section */}
+      <section className="container" style={{ marginTop: '120px' }}>
+        <div className="flex items-end justify-between mb-10">
+          <div>
+            <h2 className="text-amber-950 font-bold flex items-center gap-3" style={{ fontSize: '36px' }}>
+              <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-amber-600 shadow-sm shrink-0">
+                <Map size={24} />
+              </div>
+              Explore The Map
+            </h2>
+            <p className="text-amber-900/60 mt-2" style={{ fontSize: '16px' }}>Interactive view of popular travel destinations around the world</p>
+          </div>
+        </div>
+        <div style={{ height: '500px' }} className="animate-fadeInUp">
+          <WorldMap popularCities={cities} />
         </div>
       </section>
 

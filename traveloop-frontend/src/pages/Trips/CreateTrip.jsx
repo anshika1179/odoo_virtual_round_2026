@@ -16,7 +16,9 @@ import {
   Image,
   Upload,
   X,
+  Map,
 } from "lucide-react";
+import CityPreviewMap from "../../components/maps/CityPreviewMap";
 
 export default function CreateTrip() {
   const [form, setForm] = useState({
@@ -29,6 +31,7 @@ export default function CreateTrip() {
   });
   const [cities, setCities] = useState([]);
   const [citySearch, setCitySearch] = useState("");
+  const [selectedCity, setSelectedCity] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -235,6 +238,7 @@ export default function CreateTrip() {
                               ...form,
                               title: form.title || `Trip to ${c.name}`,
                             });
+                            setSelectedCity(c);
                             setCitySearch("");
                             setCities([]);
                           }}
@@ -402,8 +406,34 @@ export default function CreateTrip() {
             </div>
           </div>
 
-          {/* Suggestion Cards */}
+          {/* Selected City Map or Suggestion Cards */}
           <div>
+            {selectedCity && (
+              <div
+                className="glass mb-8 animate-fadeInUp"
+                style={{
+                  borderRadius: "24px",
+                  padding: "32px",
+                  border: "1px solid rgba(120,90,60,0.08)",
+                }}
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                    <MapPin size={20} className="text-amber-500" />
+                  </div>
+                  <h3 className="text-xl font-bold text-amber-950">
+                    {selectedCity.name}
+                  </h3>
+                </div>
+                <div style={{ height: "200px" }}>
+                  <CityPreviewMap 
+                    lat={selectedCity.latitude} 
+                    lng={selectedCity.longitude} 
+                    cityName={selectedCity.name} 
+                  />
+                </div>
+              </div>
+            )}
             <div
               className="glass"
               style={{
@@ -426,9 +456,10 @@ export default function CreateTrip() {
                 {suggestions.map((s, i) => (
                   <button
                     key={s.name}
-                    onClick={() =>
-                      setForm({ ...form, title: `Trip to ${s.name}` })
-                    }
+                    onClick={() => {
+                      setForm({ ...form, title: `Trip to ${s.name}` });
+                      setSelectedCity(s);
+                    }}
                     className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-white/60 transition-all duration-300 hover:shadow-soft group text-left border border-transparent hover:border-amber-900/10"
                     style={{ animationDelay: `${i * 0.1}s` }}
                   >

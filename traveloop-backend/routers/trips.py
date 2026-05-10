@@ -31,6 +31,8 @@ def trip_to_response(trip: Trip) -> dict:
             trip_id=s.trip_id,
             city_id=s.city_id,
             city_name=s.city.name if s.city else None,
+            city_lat=s.city.latitude if s.city else None,
+            city_lng=s.city.longitude if s.city else None,
             section_title=s.section_title,
             description=s.description,
             arrival_date=s.arrival_date,
