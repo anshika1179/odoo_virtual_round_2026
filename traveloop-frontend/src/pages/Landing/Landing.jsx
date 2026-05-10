@@ -25,97 +25,66 @@ export default function Landing() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative min-h-[85vh] flex items-center pt-20 pb-16 overflow-hidden">
-        {/* Minimalist Background Gradients instead of noisy blobs */}
+      <section className="relative overflow-hidden" style={{ paddingTop: '80px', paddingBottom: '120px' }}>
+        {/* Minimalist Background Gradients */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-[20%] -right-[10%] w-[70%] h-[70%] bg-gradient-to-br from-amber-100/40 via-orange-50/20 to-transparent rounded-full blur-3xl opacity-60" />
           <div className="absolute -bottom-[20%] -left-[10%] w-[60%] h-[60%] bg-gradient-to-tr from-orange-100/30 via-yellow-50/10 to-transparent rounded-full blur-3xl opacity-50" />
         </div>
 
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 w-full relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        <div className="mx-auto w-full relative z-10" style={{ maxWidth: '1440px', padding: '0 64px' }}>
+          <div className="flex flex-col lg:flex-row items-center" style={{ gap: '72px' }}>
             
-            {/* Left — Text Content (5 cols) */}
-            <div className="lg:col-span-5 animate-fadeInUp">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-900/5 text-amber-950 text-xs font-semibold tracking-wide uppercase mb-6 shadow-sm border border-amber-900/10">
-                <Sparkles size={14} className="text-amber-600" /> Premium Travel Planner
-              </div>
-              
-              <h1 className="text-5xl md:text-[4rem] lg:text-[4.5rem] font-bold tracking-tight leading-[1.1] text-amber-950 mb-6">
-                Travel <span className="text-amber-700 font-serif italic font-normal">beautifully.</span>
-                <br />
+            {/* Left — Text Content */}
+            <div className="animate-fadeInUp" style={{ width: '48%' }}>
+              <h1 className="text-amber-950" style={{ fontSize: '72px', lineHeight: 1.05, fontWeight: 700, marginBottom: '28px' }}>
+                <div style={{ marginBottom: '10px' }}>
+                  <span className="text-amber-700 font-serif italic" style={{ fontSize: '64px', fontWeight: 400 }}>Travel beautifully.</span>
+                </div>
                 Plan simply.
               </h1>
               
-              <p className="text-lg md:text-xl text-amber-900/70 mb-10 max-w-lg leading-relaxed font-light">
+              <p className="text-amber-900" style={{ maxWidth: '520px', fontSize: '20px', lineHeight: 1.8, marginBottom: '36px', opacity: 0.85 }}>
                 Curate stunning itineraries, manage your budgets, and explore the world with an elegant platform designed for modern wanderers.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                <div className="relative flex-1">
+              <div className="flex items-center" style={{ gap: '18px', marginTop: '12px' }}>
+                <div className="relative">
                   <Search size={20} strokeWidth={1.5} className="absolute left-5 top-1/2 -translate-y-1/2 text-amber-900/40" />
-                  <input className="input-glass pl-14 py-4 text-base shadow-soft" placeholder="Search destinations..."
+                  <input className="input-glass outline-none transition-colors" placeholder="Search destinations..."
+                    style={{ height: '58px', width: '360px', borderRadius: '18px', padding: '0 22px 0 52px', border: '1px solid rgba(120,90,60,0.12)', fontSize: '16px' }}
                     value={search} onChange={e => setSearch(e.target.value)} />
                 </div>
-                <Link to="/trips/new" className="btn-primary py-4 px-8 text-base shadow-soft shrink-0">
-                  <Plane size={18} strokeWidth={1.5} /> Start Planning
+                <Link to="/trips/new" className="btn-primary flex items-center justify-center shrink-0" 
+                  style={{ height: '58px', padding: '0 32px', borderRadius: '18px', fontSize: '18px', fontWeight: 600, gap: '8px' }}>
+                  <Plane size={18} strokeWidth={2} /> Start Planning
                 </Link>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-6 text-amber-900/60 text-sm font-medium">
-                <div className="flex items-center gap-2"><Globe size={16} strokeWidth={1.5} /> 105+ Cities</div>
-                <div className="flex items-center gap-2"><MapPin size={16} strokeWidth={1.5} /> Expert Guides</div>
-                <div className="flex items-center gap-2"><TrendingUp size={16} strokeWidth={1.5} /> Smart Budgets</div>
               </div>
             </div>
 
-            {/* Right — Hero Visual (7 cols) */}
-            <div className="hidden lg:flex lg:col-span-7 justify-end animate-fadeInUp" style={{animationDelay: '0.2s'}}>
-              <div className="relative w-full max-w-2xl">
-                {/* Single Elegant Glass Card */}
-                <div className="glass rounded-[2rem] p-6 shadow-soft border border-white/60 bg-white/40 backdrop-blur-2xl relative overflow-hidden">
-                  
-                  {/* Card Header */}
-                  <div className="flex justify-between items-center mb-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-2xl bg-amber-900/5 flex items-center justify-center text-amber-900">
-                        <MapPin size={20} strokeWidth={1.5} />
-                      </div>
-                      <div>
-                        <h3 className="text-amber-950 font-semibold text-lg leading-tight">Amalfi Coast Escape</h3>
-                        <p className="text-amber-900/60 text-sm">7 Days • Italy</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs font-semibold border border-green-200/50">
-                        <CheckSquare size={12} /> On Track
-                      </div>
-                      <p className="text-amber-950 font-bold mt-1 text-sm">$3,200 / $4,000</p>
-                    </div>
-                  </div>
+            {/* Right — Hero Visual */}
+            <div className="hidden lg:flex justify-end animate-fadeInUp" style={{ width: '52%', animationDelay: '0.2s' }}>
+              <div className="relative group" 
+                   style={{ width: '620px', height: '420px', borderRadius: '32px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(80,50,20,0.12)', transform: 'translateY(0)', transition: 'transform 0.3s ease' }}
+                   onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
+                   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+                
+                <img src="https://images.unsplash.com/photo-1534113414509-0eec2bfb493f?w=800" alt="Amalfi Coast" 
+                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                
+                <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
 
-                  {/* Visual Image Area */}
-                  <div className="w-full h-64 md:h-80 rounded-2xl overflow-hidden relative group">
-                    <img src="https://images.unsplash.com/photo-1534113414509-0eec2bfb493f?w=800" alt="Amalfi Coast" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-80" />
-                    
-                    {/* Floating mini stats inside image */}
-                    <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-                      <div className="flex gap-2">
-                        <div className="bg-white/20 backdrop-blur-md border border-white/20 text-white px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 shadow-sm">
-                          <Calendar size={12} /> Jun 12 - Jun 19
-                        </div>
-                      </div>
-                      <div className="flex -space-x-2">
-                        <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://i.pravatar.cc/100?img=1" alt="Traveler" />
-                        <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://i.pravatar.cc/100?img=2" alt="Traveler" />
-                      </div>
-                    </div>
+                {/* Card Header Overlay */}
+                <div className="absolute top-0 left-0 w-full flex justify-between items-start" style={{ padding: '20px 24px' }}>
+                  <div className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl shadow-sm border border-white/50">
+                    <h3 className="text-amber-950 font-bold text-lg">Amalfi Coast</h3>
+                    <p className="text-amber-900/70 text-xs font-medium">Italy</p>
+                  </div>
+                  <div className="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-sm border border-white/50 flex items-center gap-1.5">
+                    <Calendar size={14} className="text-amber-700" />
+                    <span className="text-amber-950 text-xs font-bold">7 Days</span>
                   </div>
                 </div>
-
-                {/* Decorative Accents */}
-                <div className="absolute -z-10 top-1/2 right-0 w-64 h-64 bg-amber-400/10 rounded-full blur-3xl" />
               </div>
             </div>
           </div>
@@ -123,27 +92,28 @@ export default function Landing() {
       </section>
 
       {/* Feature Cards Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16">
-        <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-amber-900 mb-3">Everything You Need to Travel Smart</h2>
-          <p className="text-amber-700 max-w-2xl mx-auto text-sm md:text-base">Traveloop brings together all the tools modern travelers need — from planning to budgeting to sharing.</p>
+      <section className="mx-auto" style={{ maxWidth: '1440px', padding: '0 64px', marginTop: '80px' }}>
+        <div className="text-left" style={{ marginBottom: '18px' }}>
+          <h2 className="text-amber-950 font-bold" style={{ fontSize: '32px' }}>Travel Smart</h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" style={{ gap: '28px', paddingTop: '24px' }}>
           {features.map((f, i) => (
-            <div key={i} className="glass rounded-2xl p-4 md:p-6 glass-hover group animate-fadeInUp" style={{animationDelay: `${i * 0.1}s`}}>
-              <div className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br ${f.color} flex items-center justify-center text-white mb-3 md:mb-4 group-hover:scale-110 transition-transform`}>
+            <div key={i} className="bg-white/60 backdrop-blur-xl border border-amber-900/5 group hover:shadow-soft transition-all duration-300 animate-fadeInUp" 
+                 style={{ padding: '28px', borderRadius: '24px', minHeight: '220px', animationDelay: `${i * 0.1}s` }}>
+              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${f.color} flex items-center justify-center text-white mb-6 shadow-sm group-hover:-translate-y-1 transition-transform`}>
                 {f.icon}
               </div>
-              <h3 className="text-amber-900 font-semibold text-base md:text-lg mb-2">{f.title}</h3>
-              <p className="text-amber-700 text-xs md:text-sm leading-relaxed">{f.desc}</p>
+              <h3 className="text-amber-950 font-bold text-xl mb-3">{f.title}</h3>
+              <p className="text-amber-900/70 text-sm leading-relaxed">{f.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* Top Regional Selections */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 md:mb-8 gap-4">
+      <section className="mx-auto" style={{ maxWidth: '1440px', padding: '0 64px', marginTop: '120px' }}>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
+
           <div>
             <h2 className="text-2xl md:text-3xl font-bold text-amber-900">Top Destinations</h2>
             <p className="text-amber-700 mt-1 text-sm md:text-base">Popular places loved by travelers worldwide</p>
