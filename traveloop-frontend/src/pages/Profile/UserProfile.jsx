@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import {
@@ -8,6 +8,7 @@ import {
   getTrips,
   uploadProfilePhoto,
   deleteProfilePhoto,
+  deleteAccount,
 } from "../../services/api";
 import {
   User,
@@ -25,10 +26,13 @@ import {
   Plane,
   Globe,
   Plus,
+  AlertTriangle,
+  X,
 } from "lucide-react";
 
 export default function UserProfile() {
-  const { user, setUser } = useAuth();
+  const { user, setUser, logout } = useAuth();
+  const navigate = useNavigate();
   const toast = useToast();
   const [form, setForm] = useState({});
   const [trips, setTrips] = useState([]);
@@ -474,6 +478,29 @@ export default function UserProfile() {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Danger Zone */}
+        <div className="glass shadow-soft mt-10" style={{ borderRadius: '32px', border: '1px solid rgba(239,68,68,0.15)', padding: '32px' }}>
+          <h2 className="text-xl font-bold text-red-700 flex items-center gap-3 mb-4">
+            <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center text-red-500"><AlertTriangle size={16} /></div>
+            Danger Zone
+          </h2>
+          <p className="text-amber-900/60 text-sm mb-6">Once you delete your account, there is no going back. All your trips, notes, and data will be permanently removed.</p>
+          <button
+            onClick={() => {
+              if (window.confirm('Are you absolutely sure you want to delete your account? This cannot be undone.')) {
+                deleteAccount().then(() => {
+                  toast.success('Account deleted successfully');
+                  logout();
+                  navigate('/login');
+                }).catch(() => toast.error('Failed to delete account'));
+              }
+            }}
+            className="flex items-center gap-2 text-red-600 font-semibold text-sm px-6 py-3 rounded-xl border border-red-200 hover:bg-red-50 transition-colors"
+          >
+            <AlertTriangle size={16} /> Delete My Account
+          </button>
         </div>
       </div>
     </div>

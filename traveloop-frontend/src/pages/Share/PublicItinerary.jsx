@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { getShared } from '../../services/api';
-import { Calendar, DollarSign, MapPin, Loader2, Eye, Clock } from 'lucide-react';
+import { useParams, Link } from 'react-router-dom';
+import { getShared, createTrip } from '../../services/api';
+import { Calendar, DollarSign, MapPin, Loader2, Eye, Clock, Copy, Check, Share2 } from 'lucide-react';
 
 export default function PublicItinerary() {
   const { token } = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [copied, setCopied] = useState(false);
+  const [copying, setCopying] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
 
   useEffect(() => {
     getShared(token).then(r => { setData(r.data); setLoading(false); })
@@ -75,6 +78,43 @@ export default function PublicItinerary() {
             </div>
           </div>
           <p className="text-amber-500 text-sm mt-3">Shared by {data?.owner}</p>
+
+          {/* Action Buttons */}
+          <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
+            <button
+              onClick={() => { navigator.clipboard.writeText(window.location.href); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
+              className="btn-secondary flex items-center gap-2"
+              style={{ height: '44px', borderRadius: '14px', padding: '0 20px', fontSize: '14px', fontWeight: 600 }}
+            >
+              {copied ? <><Check size={16} /> Copied!</> : <><Copy size={16} /> Copy Link</>}
+            </button>
+            <button
+              onClick={async () => {
+                const token = localStorage.getItem('token');
+                if (!token) { alert('Please log in to copy this trip'); return; }
+                setCopying(true);
+                try {
+                  await createTrip({ title: `${trip.title} (Copy)`, description: trip.description, start_date: trip.start_date, end_date: trip.end_date, total_budget: trip.total_budget });
+                  setCopySuccess(true);
+                  setTimeout(() => setCopySuccess(false), 3000);
+                } catch { alert('Failed to copy trip. Please log in first.'); }
+                finally { setCopying(false); }
+              }}
+              disabled={copying}
+              className="btn-primary flex items-center gap-2"
+              style={{ height: '44px', borderRadius: '14px', padding: '0 20px', fontSize: '14px', fontWeight: 600 }}
+            >
+              {copySuccess ? <><Check size={16} /> Trip Copied!</> : copying ? <Loader2 size={16} className="animate-spin" /> : <><Copy size={16} /> Copy This Trip</>}
+            </button>
+            <a href={`https://twitter.com/intent/tweet?text=Check out this trip: ${trip?.title}&url=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noopener noreferrer"
+              className="px-4 py-2.5 rounded-xl bg-sky-50 text-sky-700 font-semibold text-sm hover:bg-sky-100 transition-colors border border-sky-200">
+              Twitter
+            </a>
+            <a href={`https://api.whatsapp.com/send?text=Check out this trip "${trip?.title}": ${encodeURIComponent(window.location.href)}`} target="_blank" rel="noopener noreferrer"
+              className="px-4 py-2.5 rounded-xl bg-emerald-50 text-emerald-700 font-semibold text-sm hover:bg-emerald-100 transition-colors border border-emerald-200">
+              WhatsApp
+            </a>
+          </div>
         </div>
 
         {/* Day-wise View */}

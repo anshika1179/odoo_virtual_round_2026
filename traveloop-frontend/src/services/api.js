@@ -85,6 +85,7 @@ export const uploadProfilePhoto = (file) => {
   return API.post('/profile/photo', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
 };
 export const deleteProfilePhoto = () => API.delete('/profile/photo');
+export const deleteAccount = () => API.delete('/profile');
 
 // Admin
 export const getAdminStats = () => API.get('/admin/stats');
