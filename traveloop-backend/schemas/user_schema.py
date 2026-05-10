@@ -1,6 +1,7 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_validator
 from typing import Optional
 from datetime import datetime
+import re
 
 
 class UserRegister(BaseModel):
@@ -11,6 +12,34 @@ class UserRegister(BaseModel):
     city: Optional[str] = None
     country: Optional[str] = None
     additional_info: Optional[str] = None
+
+    @field_validator("full_name")
+    @classmethod
+    def validate_name(cls, v):
+        if not v or len(v.strip()) < 2:
+            raise ValueError("Full name must be at least 2 characters")
+        if len(v) > 200:
+            raise ValueError("Full name must be under 200 characters")
+        return v.strip()
+
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, v):
+        if len(v) < 6:
+            raise ValueError("Password must be at least 6 characters")
+        if len(v) > 128:
+            raise ValueError("Password must be under 128 characters")
+        return v
+
+    @field_validator("phone")
+    @classmethod
+    def validate_phone(cls, v):
+        if v is None:
+            return v
+        cleaned = re.sub(r"[\s\-\(\)]", "", v)
+        if not re.match(r"^\+?\d{7,15}$", cleaned):
+            raise ValueError("Invalid phone number format (expected 7-15 digits, optional + prefix)")
+        return v
 
 
 class UserLogin(BaseModel):
@@ -42,6 +71,23 @@ class UserUpdate(BaseModel):
     country: Optional[str] = None
     additional_info: Optional[str] = None
     profile_photo_url: Optional[str] = None
+
+    @field_validator("full_name")
+    @classmethod
+    def validate_name(cls, v):
+        if v is not None and len(v.strip()) < 2:
+            raise ValueError("Full name must be at least 2 characters")
+        return v.strip() if v else v
+
+    @field_validator("phone")
+    @classmethod
+    def validate_phone(cls, v):
+        if v is None or v == "":
+            return v
+        cleaned = re.sub(r"[\s\-\(\)]", "", v)
+        if not re.match(r"^\+?\d{7,15}$", cleaned):
+            raise ValueError("Invalid phone number format")
+        return v
 
 
 class TokenResponse(BaseModel):

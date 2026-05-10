@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator, model_validator
 from typing import Optional, List
 from datetime import datetime
 
@@ -11,6 +11,26 @@ class TripCreate(BaseModel):
     end_date: datetime
     cover_photo_url: Optional[str] = None
     total_budget: Optional[float] = 0.0
+
+    @field_validator("title")
+    @classmethod
+    def validate_title(cls, v):
+        if not v or len(v.strip()) < 2:
+            raise ValueError("Trip title must be at least 2 characters")
+        return v.strip()
+
+    @field_validator("total_budget")
+    @classmethod
+    def validate_budget(cls, v):
+        if v is not None and v < 0:
+            raise ValueError("Budget cannot be negative")
+        return v
+
+    @model_validator(mode="after")
+    def validate_dates(self):
+        if self.start_date and self.end_date and self.end_date < self.start_date:
+            raise ValueError("End date must be after start date")
+        return self
 
 
 class TripUpdate(BaseModel):
@@ -244,6 +264,7 @@ class CommunityPostResponse(BaseModel):
     likes_count: int
     is_published: bool
     created_at: Optional[datetime] = None
+    user_liked: bool = False
 
     class Config:
         from_attributes = True

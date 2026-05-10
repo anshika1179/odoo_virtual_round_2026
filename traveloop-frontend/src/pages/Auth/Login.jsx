@@ -67,6 +67,9 @@ export default function Login() {
                 <input type="password" className="input-glass pl-10" placeholder="••••••••"
                   value={form.password} onChange={e => setForm({...form, password: e.target.value})} required />
               </div>
+              <div className="text-right mt-1.5">
+                <Link to="/forgot-password" className="text-xs text-indigo-400 hover:text-indigo-300">Forgot password?</Link>
+              </div>
             </div>
 
             <button type="submit" disabled={loading}

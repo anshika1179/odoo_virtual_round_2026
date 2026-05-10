@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text, Boolean
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text, Boolean, UniqueConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from database import Base
@@ -21,6 +21,24 @@ class CommunityPost(Base):
     # Relationships
     user = relationship("User", back_populates="community_posts")
     trip = relationship("Trip", back_populates="community_posts")
+    likes = relationship("PostLike", back_populates="post", cascade="all, delete-orphan")
+
+
+class PostLike(Base):
+    """Tracks which users liked which posts — prevents duplicate likes."""
+    __tablename__ = "post_likes"
+    __table_args__ = (
+        UniqueConstraint("user_id", "post_id", name="uq_user_post_like"),
+    )
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    post_id = Column(Integer, ForeignKey("community_posts.id", ondelete="CASCADE"), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relationships
+    post = relationship("CommunityPost", back_populates="likes")
+    user = relationship("User")
 
 
 class SharedItinerary(Base):
