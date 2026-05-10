@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { login as loginApi } from '../../services/api';
-import { Globe, Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -29,59 +29,74 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      {/* Background decoration */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
-      </div>
+    <div className="min-h-screen flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-5xl animate-fadeInUp">
+        <div className="glass rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row min-h-[560px]">
 
-      <div className="w-full max-w-md animate-fadeInUp relative">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mx-auto mb-4 animate-float">
-            <Globe size={32} className="text-white" />
+          {/* Left — Image Panel */}
+          <div className="hidden md:block md:w-1/2 relative">
+            <img
+              src="/images/auth-bg.jpg"
+              alt="Travel lounge"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-amber-900/60 via-amber-900/20 to-transparent" />
+            <div className="absolute bottom-8 left-8 right-8">
+              <h2 className="text-5xl brand-font text-white drop-shadow-lg mb-2">Traveloop</h2>
+              <p className="text-amber-100/90 text-sm">Plan. Explore. Share your journey.</p>
+            </div>
           </div>
-          <h1 className="text-3xl font-bold gradient-text">Welcome Back</h1>
-          <p className="text-slate-400 mt-2">Sign in to continue your journey</p>
-        </div>
 
-        <div className="glass rounded-2xl p-8">
-          {error && (
-            <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">{error}</div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Email</label>
-              <div className="relative">
-                <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-                <input type="email" className="input-glass pl-10" placeholder="you@example.com"
-                  value={form.email} onChange={e => setForm({...form, email: e.target.value})} required />
-              </div>
+          {/* Right — Form Panel */}
+          <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-amber-900 md:hidden brand-font mb-1">Traveloop</h1>
+              <h2 className="text-2xl font-bold text-amber-900">Welcome back</h2>
+              <p className="text-amber-700/70 mt-1 text-sm">Please enter your details</p>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Password</label>
-              <div className="relative">
-                <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-                <input type="password" className="input-glass pl-10" placeholder="••••••••"
-                  value={form.password} onChange={e => setForm({...form, password: e.target.value})} required />
-              </div>
-              <div className="text-right mt-1.5">
-                <Link to="/forgot-password" className="text-xs text-indigo-400 hover:text-indigo-300">Forgot password?</Link>
-              </div>
-            </div>
+            {error && (
+              <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-600 text-sm">{error}</div>
+            )}
 
-            <button type="submit" disabled={loading}
-              className="btn-primary w-full justify-center text-base py-3">
-              {loading ? <Loader2 size={20} className="animate-spin" /> : <><span>Sign In</span> <ArrowRight size={18} /></>}
-            </button>
-          </form>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label className="block text-sm font-medium text-amber-800 mb-1.5">Email</label>
+                <div className="relative">
+                  <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600/50" />
+                  <input type="email" className="input-glass pl-10" placeholder="you@example.com"
+                    value={form.email} onChange={e => setForm({...form, email: e.target.value})} required />
+                </div>
+              </div>
 
-          <p className="text-center text-slate-400 text-sm mt-6">
-            Don't have an account?{' '}
-            <Link to="/register" className="text-indigo-400 hover:text-indigo-300 font-medium">Create one</Link>
-          </p>
+              <div>
+                <label className="block text-sm font-medium text-amber-800 mb-1.5">Password</label>
+                <div className="relative">
+                  <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600/50" />
+                  <input type="password" className="input-glass pl-10" placeholder="••••••••"
+                    value={form.password} onChange={e => setForm({...form, password: e.target.value})} required />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-sm">
+                <label className="flex items-center gap-2 text-amber-700 cursor-pointer">
+                  <input type="checkbox" className="rounded border-amber-300 accent-amber-700" />
+                  Remember me
+                </label>
+                <Link to="/forgot-password" className="text-amber-800 hover:text-amber-600 font-medium">Forgot Password?</Link>
+              </div>
+
+              <button type="submit" disabled={loading}
+                className="btn-primary w-full justify-center text-base py-3 rounded-xl">
+                {loading ? <Loader2 size={20} className="animate-spin" /> : <><span>Sign In</span> <ArrowRight size={18} /></>}
+              </button>
+            </form>
+
+            <p className="text-center text-amber-700/70 text-sm mt-6">
+              Don't have an account?{' '}
+              <Link to="/register" className="text-amber-800 hover:text-amber-600 font-semibold">Sign up</Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>

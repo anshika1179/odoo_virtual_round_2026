@@ -32,7 +32,7 @@ export default function Navbar() {
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center group-hover:scale-110 transition-transform">
               <Globe size={20} className="text-white" />
             </div>
-            <span className="text-xl font-bold gradient-text">Traveloop</span>
+            <span className="text-2xl brand-font gradient-text">Traveloop</span>
           </Link>
 
           {/* Desktop Nav */}
