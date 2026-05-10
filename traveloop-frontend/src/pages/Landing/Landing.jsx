@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getPopularCities, getTrips } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
-import { Search, MapPin, Plane, Calendar, TrendingUp, ChevronRight, Globe, Sparkles } from 'lucide-react';
+import { Search, MapPin, Plane, Calendar, TrendingUp, ChevronRight, Globe, Sparkles, DollarSign, CheckSquare, Users, StickyNote } from 'lucide-react';
 
 export default function Landing() {
   const { user } = useAuth();
@@ -15,6 +15,13 @@ export default function Landing() {
     if (user) getTrips({ status: 'COMPLETED' }).then(r => setPrevTrips(r.data.slice(0, 4))).catch(() => {});
   }, [user]);
 
+  const features = [
+    { icon: <Plane size={24} />, title: 'Smart Itineraries', desc: 'Build day-by-day travel plans with city search and drag & drop stops.', color: 'from-indigo-500 to-blue-600' },
+    { icon: <DollarSign size={24} />, title: 'Budget Tracking', desc: 'Track expenses by category with visual charts and invoice exports.', color: 'from-emerald-500 to-green-600' },
+    { icon: <CheckSquare size={24} />, title: 'Packing Checklists', desc: 'Category-based packing lists with progress tracking. Never forget essentials.', color: 'from-amber-500 to-orange-600' },
+    { icon: <Users size={24} />, title: 'Community Hub', desc: 'Share travel stories, get inspired, and connect with fellow travelers.', color: 'from-purple-500 to-pink-600' },
+  ];
+
   return (
     <div className="pt-16">
       {/* Hero Section */}
@@ -26,38 +33,123 @@ export default function Landing() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full relative z-10">
-          <div className="max-w-3xl animate-fadeInUp">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-sm font-medium mb-6">
-              <Sparkles size={16} /> Your Journey Starts Here
-            </div>
-            <h1 className="text-5xl sm:text-7xl font-black leading-tight mb-6">
-              <span className="gradient-text">Plan, Explore</span>
-              <br />
-              <span className="text-white">& Travel</span>
-              <br />
-              <span className="text-slate-400">Together</span>
-            </h1>
-            <p className="text-xl text-slate-400 mb-8 max-w-xl">
-              Build itineraries, track budgets, share experiences — all in one beautiful platform designed for modern travelers.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 mb-8">
-              <div className="relative flex-1 max-w-md">
-                <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
-                <input className="input-glass pl-12 py-4 text-lg" placeholder="Where do you want to go?"
-                  value={search} onChange={e => setSearch(e.target.value)} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            {/* Left — Text Content */}
+            <div className="animate-fadeInUp">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-sm font-medium mb-6">
+                <Sparkles size={16} /> Your Journey Starts Here
               </div>
-              <Link to="/trips/new" className="btn-primary py-4 px-8 text-lg">
-                <Plane size={20} /> Plan a Trip
-              </Link>
+              <h1 className="text-5xl sm:text-7xl font-black leading-tight mb-6">
+                <span className="gradient-text">Plan, Explore</span>
+                <br />
+                <span className="text-white">& Travel</span>
+                <br />
+                <span className="text-slate-400">Together</span>
+              </h1>
+              <p className="text-xl text-slate-400 mb-8 max-w-xl">
+                Build itineraries, track budgets, share experiences — all in one beautiful platform designed for modern travelers.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                <div className="relative flex-1 max-w-md">
+                  <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                  <input className="input-glass pl-12 py-4 text-lg" placeholder="Where do you want to go?"
+                    value={search} onChange={e => setSearch(e.target.value)} />
+                </div>
+                <Link to="/trips/new" className="btn-primary py-4 px-8 text-lg">
+                  <Plane size={20} /> Plan a Trip
+                </Link>
+              </div>
+
+              <div className="flex items-center gap-8 text-slate-500 text-sm">
+                <div className="flex items-center gap-2"><Globe size={16} className="text-indigo-400" /> 50+ Cities</div>
+                <div className="flex items-center gap-2"><MapPin size={16} className="text-purple-400" /> 75+ Activities</div>
+                <div className="flex items-center gap-2"><TrendingUp size={16} className="text-amber-400" /> Budget Tracking</div>
+              </div>
             </div>
 
-            <div className="flex items-center gap-8 text-slate-500 text-sm">
-              <div className="flex items-center gap-2"><Globe size={16} className="text-indigo-400" /> 50+ Cities</div>
-              <div className="flex items-center gap-2"><MapPin size={16} className="text-purple-400" /> 75+ Activities</div>
-              <div className="flex items-center gap-2"><TrendingUp size={16} className="text-amber-400" /> Budget Tracking</div>
+            {/* Right — Hero Visual */}
+            <div className="hidden md:flex justify-center items-center animate-fadeInUp" style={{animationDelay: '0.2s'}}>
+              <div className="relative w-full max-w-md">
+                {/* Floating Cards */}
+                <div className="absolute -top-4 -left-4 glass rounded-2xl p-4 animate-float z-10 shadow-xl" style={{animationDelay: '0s'}}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                      <Plane size={18} className="text-white" />
+                    </div>
+                    <div>
+                      <p className="text-white font-semibold text-sm">Trip to Paris</p>
+                      <p className="text-slate-400 text-xs">5 days • $2,400</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="absolute -bottom-4 -right-4 glass rounded-2xl p-4 animate-float z-10 shadow-xl" style={{animationDelay: '1s'}}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center">
+                      <DollarSign size={18} className="text-white" />
+                    </div>
+                    <div>
+                      <p className="text-white font-semibold text-sm">Budget: On Track</p>
+                      <p className="text-green-400 text-xs">$1,200 remaining</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="absolute top-1/2 -right-8 glass rounded-2xl p-3 animate-float z-10 shadow-xl" style={{animationDelay: '0.5s'}}>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+                      <CheckSquare size={14} className="text-white" />
+                    </div>
+                    <div>
+                      <p className="text-white text-xs font-medium">Packed 12/15</p>
+                      <div className="w-20 h-1.5 rounded-full bg-slate-700 mt-1">
+                        <div className="w-4/5 h-full rounded-full bg-gradient-to-r from-amber-400 to-orange-400" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Center Globe/Map Visual */}
+                <div className="glass rounded-3xl p-8 border border-indigo-500/20">
+                  <div className="aspect-square rounded-2xl bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-amber-500/10 flex items-center justify-center relative overflow-hidden">
+                    {/* Animated rings */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-48 h-48 rounded-full border border-indigo-500/20 absolute" style={{animation: 'pulse-glow 3s ease-in-out infinite'}} />
+                      <div className="w-32 h-32 rounded-full border border-purple-500/30 absolute" style={{animation: 'pulse-glow 3s ease-in-out infinite 1s'}} />
+                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center absolute shadow-xl shadow-indigo-500/30">
+                        <Globe size={32} className="text-white" />
+                      </div>
+                    </div>
+                    {/* Route dots */}
+                    <div className="absolute top-8 left-12 w-3 h-3 rounded-full bg-indigo-400 animate-float" style={{animationDelay: '0s'}} />
+                    <div className="absolute top-16 right-10 w-2 h-2 rounded-full bg-purple-400 animate-float" style={{animationDelay: '0.3s'}} />
+                    <div className="absolute bottom-12 left-8 w-2.5 h-2.5 rounded-full bg-amber-400 animate-float" style={{animationDelay: '0.6s'}} />
+                    <div className="absolute bottom-8 right-16 w-2 h-2 rounded-full bg-green-400 animate-float" style={{animationDelay: '0.9s'}} />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Feature Cards Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-white mb-3">Everything You Need to Travel Smart</h2>
+          <p className="text-slate-400 max-w-2xl mx-auto">Traveloop brings together all the tools modern travelers need — from planning to budgeting to sharing.</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {features.map((f, i) => (
+            <div key={i} className="glass rounded-2xl p-6 glass-hover group animate-fadeInUp" style={{animationDelay: `${i * 0.1}s`}}>
+              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${f.color} flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform`}>
+                {f.icon}
+              </div>
+              <h3 className="text-white font-semibold text-lg mb-2">{f.title}</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">{f.desc}</p>
+            </div>
+          ))}
         </div>
       </section>
 

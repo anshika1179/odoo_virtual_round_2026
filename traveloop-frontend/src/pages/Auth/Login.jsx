@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
 import { login as loginApi } from '../../services/api';
 import { Globe, Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
 
@@ -9,6 +10,7 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { loginUser } = useAuth();
+  const toast = useToast();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -18,9 +20,11 @@ export default function Login() {
     try {
       const res = await loginApi(form);
       loginUser(res.data.access_token, res.data.user);
+      toast.success(`Welcome back, ${res.data.user.full_name?.split(' ')[0] || 'traveler'}!`);
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.detail || 'Login failed');
+      toast.error('Login failed. Please check your credentials.');
     } finally { setLoading(false); }
   };
 
