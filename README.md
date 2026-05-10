@@ -59,18 +59,55 @@ We carefully selected a modern, high-performance tech stack to ensure smooth sca
 
 ---
 
+## 📱 Application Screens Overview
+
+Traveloop has been designed with an intuitive, user-first workflow. Here is a detailed breakdown of the core screens:
+
+### 1. Authentication (Login/Signup/Forgot Password)
+The gateway to the platform. Features a split-screen design with engaging travel imagery. Employs real-time field validation, secure JWT token handling, and a complete forgot-password flow allowing users to safely recover their accounts.
+
+### 2. The Dashboard
+The central command hub. Features a personalized greeting and summarizes the user's travel life. It prominently displays the "Plan New Trip" CTA alongside a dynamically generated carousel of "Popular Destinations" pulled from the database to inspire travelers.
+
+### 3. Trip Management (My Trips)
+A beautifully organized grid displaying all trips (Upcoming, Ongoing, Completed). Users can instantly see the status, destination count, and budget of each trip. Hovering over a trip card reveals quick-action buttons to **Edit** or **Delete** the trip seamlessly.
+
+### 4. The Itinerary Builder (The Engine)
+The most powerful screen in the app. A drag-and-drop interface where users add "Stops" (cities) and then assign local "Activities" to those stops. The builder handles complex date logic and seamlessly associates expenses with the overarching trip budget.
+
+### 5. Timeline View (The Output)
+Once a trip is built, this screen generates a chronological, day-by-day roadmap of the entire journey. It clearly displays city transitions, scheduled activities, and daily cost breakdowns in an elegant, responsive vertical timeline.
+
+### 6. The Budget & Checklist Dashboards
+**Budget:** A financial overview featuring dynamic Recharts pie charts breaking down expenses by category (Transport, Meals, Activities). Users can also generate and download a professional PDF invoice of their trip.
+**Checklist:** A categorized, interactive packing list with a dynamic progress bar ensuring travelers are fully prepared.
+
+### 7. Public Shared View
+A read-only, public-facing version of the itinerary timeline. It includes one-click social sharing buttons (Twitter, WhatsApp) and a powerful **"Copy This Trip"** button that allows viewers to clone the exact itinerary into their own account.
+
+---
+
 ## 🏗️ Architecture & Database Design
 
-The application utilizes a highly normalized, relational database architecture to maintain data integrity:
+Traveloop was built using a **highly normalized, relational database architecture** to maintain strict data integrity and enable complex queries without redundancy. 
 
-* `Users` (1:N) `Trips`
-* `Trips` (1:N) `Stops` (Cities)
-* `Stops` (1:N) `StopActivities` (Experiences)
-* `Trips` (1:N) `Expenses` (Budget tracking)
-* `Trips` (1:N) `ChecklistItems`
-* `Trips` (1:N) `Notes`
+### Backend Architecture (FastAPI + SQLAlchemy)
+The backend follows a strict Service-Oriented Architecture (SOA):
+- **Routers:** Handle HTTP requests and input validation (Pydantic).
+- **Services:** Contain the core business logic (e.g., calculating total trip budgets, handling file uploads, generating PDFs).
+- **Models:** Map directly to the SQLite database via SQLAlchemy.
 
-This structured approach ensures that when a user deletes a stop, all cascading activities are handled correctly, and the total trip budget is re-calculated in real-time.
+### Relational Entity Mapping
+The database is structured to support cascading updates and deletions:
+* **`User`** ↔️ Has many **`Trips`**
+* **`Trip`** ↔️ Has many **`Stops`** (Represents a city visit during specific dates)
+* **`Stop`** ↔️ Has many **`StopActivities`** (Specific things to do in that city)
+* **`Trip`** ↔️ Has many **`Expenses`**, **`ChecklistItems`**, and **`Notes`**
+
+**Why this matters:** If a user deletes a specific "Stop" (e.g., they decide not to visit Paris), the database automatically cascades that deletion to remove all Paris-related activities, which instantly recalculates and lowers the total Trip Budget.
+
+### Frontend Architecture (React + Context API)
+The React frontend avoids prop-drilling by utilizing the **Context API** for global state management (Authentication and Toast Notifications). It employs Axios interceptors to automatically attach JWT tokens to every outgoing API request, ensuring secure and seamless data fetching.
 
 ---
 
@@ -125,3 +162,10 @@ Designed, developed, and delivered by:
 <div align="center">
   <p><i>Made with ❤️ for the Odoo Hackathon 2026</i></p>
 </div>
+
+---
+
+## 🎥 Submission Video
+
+> **[Insert Link to Your 8-Minute Demo Video Here]**  
+> *Note to Judges: Please watch the comprehensive video above for a full walkthrough of the application's features, architecture, and UI/UX design in action.*
