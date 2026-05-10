@@ -29,81 +29,111 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
-      {/* Multi-layered Background Design */}
+    <div className="min-h-screen flex flex-col relative overflow-hidden">
+      {/* Navigation Bar */}
+      <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-amber-700/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between h-16">
+            <Link to="/" className="flex items-center gap-2 group">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Globe size={20} className="text-white" />
+              </div>
+              <span className="text-xl font-bold gradient-text">Traveloop</span>
+            </Link>
+            
+            <div className="flex items-center gap-3">
+              <Link to="/login" className="text-amber-700 hover:text-amber-900 font-medium transition-colors">
+                Sign In
+              </Link>
+              <Link to="/register" className="btn-primary text-sm">
+                Sign Up
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Geometric Background Design */}
       <div className="fixed inset-0 overflow-hidden">
         {/* Base gradient layer */}
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50" />
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-100 via-orange-100 to-amber-200" />
         
-        {/* Pattern overlay */}
-        <div className="absolute inset-0 opacity-30">
+        {/* Geometric triangles and trapezoids */}
+        <div className="absolute inset-0">
+          {/* Large triangle top-left */}
+          <div className="absolute top-0 left-0 w-0 h-0 border-l-[400px] border-l-transparent border-r-[200px] border-r-transparent border-b-[350px] border-b-amber-600/20" />
+          <div className="absolute top-10 left-10 w-0 h-0 border-l-[300px] border-l-transparent border-r-[150px] border-r-transparent border-b-[250px] border-b-orange-600/15" />
+          
+          {/* Triangle top-right */}
+          <div className="absolute top-0 right-0 w-0 h-0 border-l-[200px] border-l-transparent border-r-[400px] border-r-transparent border-b-[300px] border-b-amber-700/15" />
+          
+          {/* Trapezoid bottom-left */}
+          <div className="absolute bottom-0 left-0 w-0 h-0 border-l-[350px] border-l-transparent border-r-[200px] border-r-transparent border-t-[250px] border-t-orange-600/20" />
+          
+          {/* Triangle bottom-right */}
+          <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[200px] border-l-transparent border-r-[350px] border-r-transparent border-t-[300px] border-t-amber-600/18" />
+          
+          {/* Medium geometric shapes */}
+          <div className="absolute top-1/4 left-1/4 w-0 h-0 border-l-[150px] border-l-transparent border-r-[100px] border-r-transparent border-b-[120px] border-b-yellow-600/12" />
+          <div className="absolute top-1/3 right-1/3 w-0 h-0 border-l-[100px] border-l-transparent border-r-[150px] border-r-transparent border-b-[100px] border-b-amber-500/10" />
+          <div className="absolute bottom-1/4 left-1/3 w-0 h-0 border-l-[120px] border-l-transparent border-r-[80px] border-r-transparent border-t-[100px] border-t-orange-500/12" />
+          
+          {/* Small decorative triangles */}
+          <div className="absolute top-20 right-40 w-0 h-0 border-l-[60px] border-l-transparent border-r-[40px] border-r-transparent border-b-[50px] border-b-amber-700/15" />
+          <div className="absolute bottom-32 left-20 w-0 h-0 border-l-[50px] border-l-transparent border-r-[30px] border-r-transparent border-t-[40px] border-t-yellow-600/10" />
+          <div className="absolute top-1/2 right-20 w-0 h-0 border-l-[40px] border-l-transparent border-r-[60px] border-r-transparent border-b-[35px] border-b-orange-600/12" />
+        </div>
+        
+        {/* Overlay pattern for texture */}
+        <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
-            backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(146, 64, 14, 0.05) 35px, rgba(146, 64, 14, 0.05) 70px),
-                             repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(245, 158, 11, 0.03) 35px, rgba(245, 158, 11, 0.03) 70px)`
+            backgroundImage: `repeating-linear-gradient(60deg, transparent, transparent 40px, rgba(146, 64, 14, 0.08) 40px, rgba(146, 64, 14, 0.08) 80px),
+                             repeating-linear-gradient(-60deg, transparent, transparent 40px, rgba(245, 158, 11, 0.05) 40px, rgba(245, 158, 11, 0.05) 80px)`
           }} />
         </div>
         
-        {/* Floating gradient orbs */}
-        <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-amber-400/20 to-orange-500/15 rounded-full blur-3xl animate-float" />
-        <div className="absolute top-1/4 right-1/4 w-80 h-80 bg-gradient-to-br from-orange-500/15 to-yellow-600/10 rounded-full blur-3xl animate-float" style={{animationDelay: '1s'}} />
-        <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-gradient-to-br from-yellow-500/12 to-amber-600/8 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}} />
-        <div className="absolute bottom-0 right-0 w-64 h-64 bg-gradient-to-br from-amber-600/15 to-orange-700/10 rounded-full blur-3xl animate-float" style={{animationDelay: '3s'}} />
-        
-        {/* Decorative circles */}
-        <div className="absolute top-20 right-20 w-4 h-4 bg-amber-600/40 rounded-full animate-pulse" />
-        <div className="absolute top-32 right-32 w-3 h-3 bg-orange-500/30 rounded-full animate-pulse" style={{animationDelay: '0.5s'}} />
-        <div className="absolute bottom-20 left-20 w-4 h-4 bg-yellow-600/35 rounded-full animate-pulse" style={{animationDelay: '1s'}} />
-        <div className="absolute bottom-32 left-32 w-3 h-3 bg-amber-500/25 rounded-full animate-pulse" style={{animationDelay: '1.5s'}} />
-        
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="h-full w-full" style={{
-            backgroundImage: `linear-gradient(rgba(146, 64, 14, 0.1) 1px, transparent 1px),
-                             linear-gradient(90deg, rgba(146, 64, 14, 0.1) 1px, transparent 1px)`,
-            backgroundSize: '50px 50px'
-          }} />
-        </div>
-        
-        {/* Radial gradient overlay for depth */}
-        <div className="absolute inset-0 bg-gradient-to-t from-amber-900/5 via-transparent to-orange-900/5" />
+        {/* Depth overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-amber-900/10 via-transparent to-orange-900/5" />
       </div>
 
-      <div className="w-full max-w-md animate-fadeInUp relative z-10">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-600 to-orange-700 shadow-lg shadow-amber-600/30 mb-4 animate-gentle-float">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
+      {/* Main Content Area */}
+      <main className="flex-1 flex items-center justify-center px-4 py-8 mt-16">
+        <div className="w-full max-w-md animate-fadeInUp relative z-10">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-600 to-orange-700 shadow-lg shadow-amber-600/30 mb-4 animate-gentle-float">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <h1 className="text-3xl font-bold gradient-text mb-2">Welcome Back</h1>
+            <p className="text-amber-700">Sign in to continue your journey</p>
           </div>
-          <h1 className="text-3xl font-bold gradient-text mb-2">Welcome Back</h1>
-          <p className="text-amber-700">Sign in to continue your journey</p>
-        </div>
 
-        <div className="glass rounded-2xl p-8 shadow-2xl shadow-amber-900/20 border border-amber-700/30 backdrop-blur-xl relative overflow-hidden">
-          {/* Subtle shimmer effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-1000" style={{
-            backgroundSize: '200% 100%',
-            animation: 'shimmer-bg 3s ease-in-out infinite'
-          }} />
+          <div className="glass rounded-2xl p-8 shadow-2xl shadow-amber-900/20 border border-amber-700/30 backdrop-blur-xl relative overflow-hidden max-w-full">
+            {/* Subtle shimmer effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-1000" style={{
+              backgroundSize: '200% 100%',
+              animation: 'shimmer-bg 3s ease-in-out infinite'
+            }} />
           {error && (
-            <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">{error}</div>
+            <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm relative z-10">{error}</div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
+          <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
+            <div className="w-full">
               <label className="block text-sm font-medium text-amber-800 mb-2">Email</label>
-              <div className="relative">
+              <div className="relative w-full">
                 <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600" />
-                <input type="email" className="input-glass pl-10" placeholder="you@example.com"
+                <input type="email" className="input-glass pl-10 w-full" placeholder="you@example.com"
                   value={form.email} onChange={e => setForm({...form, email: e.target.value})} required />
               </div>
             </div>
 
-            <div>
+            <div className="w-full">
               <label className="block text-sm font-medium text-amber-800 mb-2">Password</label>
-              <div className="relative">
+              <div className="relative w-full">
                 <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-amber-600" />
-                <input type="password" className="input-glass pl-12" placeholder="••••••••"
+                <input type="password" className="input-glass pl-12 w-full" placeholder="••••••••"
                   value={form.password} onChange={e => setForm({...form, password: e.target.value})} required />
               </div>
             </div>
@@ -115,12 +145,13 @@ export default function Login() {
             </button>
           </form>
 
-          <p className="text-center text-amber-700 text-sm mt-6">
+          <p className="text-center text-amber-700 text-sm mt-6 relative z-10">
             Don't have an account?{' '}
             <Link to="/register" className="text-amber-800 hover:text-amber-900 font-medium transition-colors duration-200">Create one</Link>
           </p>
         </div>
       </div>
+      </main>
     </div>
   );
 }
