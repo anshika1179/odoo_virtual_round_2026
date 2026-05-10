@@ -32,17 +32,14 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center px-4">
       {/* Background decoration */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-700/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-600/10 rounded-full blur-3xl" />
       </div>
 
       <div className="w-full max-w-md animate-fadeInUp relative">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mx-auto mb-4 animate-float">
-            <Globe size={32} className="text-white" />
-          </div>
           <h1 className="text-3xl font-bold gradient-text">Welcome Back</h1>
-          <p className="text-slate-400 mt-2">Sign in to continue your journey</p>
+          <p className="text-amber-700 mt-2">Sign in to continue your journey</p>
         </div>
 
         <div className="glass rounded-2xl p-8">
@@ -52,19 +49,19 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Email</label>
+              <label className="block text-sm font-medium text-amber-800 mb-2">Email</label>
               <div className="relative">
-                <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600" />
                 <input type="email" className="input-glass pl-10" placeholder="you@example.com"
                   value={form.email} onChange={e => setForm({...form, email: e.target.value})} required />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Password</label>
+              <label className="block text-sm font-medium text-amber-800 mb-2">Password</label>
               <div className="relative">
-                <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-                <input type="password" className="input-glass pl-10" placeholder="••••••••"
+                <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-amber-600" />
+                <input type="password" className="input-glass pl-12" placeholder="••••••••"
                   value={form.password} onChange={e => setForm({...form, password: e.target.value})} required />
               </div>
             </div>
@@ -77,7 +74,7 @@ export default function Login() {
 
           <p className="text-center text-slate-400 text-sm mt-6">
             Don't have an account?{' '}
-            <Link to="/register" className="text-indigo-400 hover:text-indigo-300 font-medium">Create one</Link>
+            <Link to="/register" className="text-amber-700 hover:text-amber-900 font-medium">Create one</Link>
           </p>
         </div>
       </div>

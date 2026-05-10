@@ -120,6 +120,7 @@ body {
   font-size: 0.95rem;
   transition: all 0.3s;
 }
+.input-glass.pl-10 { padding-left: 2.75rem; }
 .input-glass:focus { border-color: #92400e; box-shadow: 0 0 0 3px rgba(146, 64, 14, 0.15); }
 .input-glass::placeholder { color: #92400e; opacity: 0.6; }
 
