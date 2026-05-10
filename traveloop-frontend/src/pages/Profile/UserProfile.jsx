@@ -6,9 +6,11 @@ import { User, Mail, Phone, MapPin, Save, Loader2, Calendar, Eye, Edit3, Camera,
 
 export default function UserProfile() {
   const { user, setUser } = useAuth();
+  const toast = useToast();
   const [form, setForm] = useState({});
   const [trips, setTrips] = useState([]);
   const [prevTrips, setPrevTrips] = useState([]);
+  const [allTrips, setAllTrips] = useState([]);
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -20,6 +22,7 @@ export default function UserProfile() {
       setForm({ full_name: user.full_name, phone: user.phone || '', city: user.city || '', country: user.country || '', additional_info: user.additional_info || '' });
       getTrips({ status: 'UPCOMING' }).then(r => setTrips(r.data.slice(0, 4))).catch(() => {});
       getTrips({ status: 'COMPLETED' }).then(r => setPrevTrips(r.data.slice(0, 4))).catch(() => {});
+      getTrips({}).then(r => setAllTrips(r.data)).catch(() => {});
     }
   }, [user]);
 
@@ -29,7 +32,10 @@ export default function UserProfile() {
       const res = await updateProfile(form);
       setUser(res.data);
       setEditing(false);
-    } catch {} finally { setSaving(false); }
+      toast.success('Profile updated successfully!');
+    } catch {
+      toast.error('Failed to update profile');
+    } finally { setSaving(false); }
   };
 
   const handlePhotoSelect = async (e) => {
@@ -187,6 +193,17 @@ export default function UserProfile() {
           )}
         </div>
 
+        {/* Stats Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {stats.map((s, i) => (
+            <div key={i} className="glass rounded-2xl p-5 glass-hover animate-fadeInUp" style={{animationDelay: `${i * 0.1}s`}}>
+              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-white mb-3`}>{s.icon}</div>
+              <p className="text-2xl font-bold text-white">{s.value}</p>
+              <p className="text-slate-400 text-sm">{s.label}</p>
+            </div>
+          ))}
+        </div>
+
         {/* Trips Sections */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div>
@@ -203,7 +220,13 @@ export default function UserProfile() {
                   </div>
                 ))}
               </div>
-            ) : <div className="glass rounded-xl p-8 text-center text-slate-500">No upcoming trips</div>}
+            ) : (
+              <div className="glass rounded-xl p-8 text-center">
+                <Plane size={32} className="mx-auto text-slate-600 mb-3" />
+                <p className="text-slate-500">No upcoming trips</p>
+                <Link to="/trips/new" className="text-indigo-400 text-sm hover:text-indigo-300 mt-2 inline-block">Plan one →</Link>
+              </div>
+            )}
           </div>
 
           <div>
@@ -220,7 +243,13 @@ export default function UserProfile() {
                   </div>
                 ))}
               </div>
-            ) : <div className="glass rounded-xl p-8 text-center text-slate-500">No previous trips</div>}
+            ) : (
+              <div className="glass rounded-xl p-8 text-center">
+                <Globe size={32} className="mx-auto text-slate-600 mb-3" />
+                <p className="text-slate-500">No completed trips yet</p>
+                <p className="text-slate-600 text-xs mt-1">Your travel history will appear here</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
