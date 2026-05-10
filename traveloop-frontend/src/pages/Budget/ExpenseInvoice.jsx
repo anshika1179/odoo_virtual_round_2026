@@ -92,17 +92,38 @@ export default function ExpenseInvoice() {
   const isOverBudget = (invoice?.budget_summary?.remaining || 0) < 0;
 
   return (
-    <div className="pt-20 pb-12 max-w-6xl mx-auto px-4">
-      <div className="animate-fadeInUp">
-        <div className="flex items-center justify-between mb-8">
+    <div
+      className="mx-auto flex flex-col items-center"
+      style={{ maxWidth: "1440px", padding: "120px 64px 80px 64px" }}
+    >
+      <div className="animate-fadeInUp w-full" style={{ maxWidth: "1200px" }}>
+        <div className="flex flex-col sm:flex-row items-center justify-between mb-10 gap-4 text-center sm:text-left">
           <div>
-            <h1 className="text-3xl font-bold text-amber-900">Expense Invoice</h1>
-            <p className="text-amber-700">{trip?.title}</p>
+            <h1
+              className="text-amber-950 font-bold flex items-center justify-center sm:justify-start gap-3"
+              style={{ fontSize: "36px" }}
+            >
+              Expense Invoice
+            </h1>
+            <p className="text-amber-900/70 mt-2 text-lg">
+              {trip?.title}
+            </p>
           </div>
-          <div className="flex gap-2">
-            <button onClick={handleDownload} className="btn-secondary text-sm"><Download size={16} /> Download TXT</button>
-            <button onClick={handleExportPdf} disabled={pdfLoading} className="btn-primary text-sm">
-              {pdfLoading ? <><Loader2 size={16} className="animate-spin" /> Generating...</> : pdfSuccess ? <><CheckCircle size={16} /> Downloaded!</> : <><FileText size={16} /> Export as PDF</>}
+          <div className="flex gap-3">
+            <button 
+              onClick={handleDownload} 
+              className="btn-secondary flex items-center gap-2"
+              style={{ height: "48px", borderRadius: "14px", padding: "0 20px", fontWeight: 600 }}
+            >
+              <Download size={18} /> Download TXT
+            </button>
+            <button 
+              onClick={handleExportPdf} 
+              disabled={pdfLoading} 
+              className="btn-primary flex items-center gap-2"
+              style={{ height: "48px", borderRadius: "14px", padding: "0 20px", fontWeight: 600 }}
+            >
+              {pdfLoading ? <><Loader2 size={18} className="animate-spin" /> Generating...</> : pdfSuccess ? <><CheckCircle size={18} /> Downloaded!</> : <><FileText size={18} /> Export PDF</>}
             </button>
           </div>
         </div>
@@ -110,23 +131,63 @@ export default function ExpenseInvoice() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Expense Table */}
           <div className="lg:col-span-2">
-            <div className="glass rounded-2xl overflow-hidden">
-              <div className="bg-gradient-to-r from-amber-700/15 to-orange-600/15 px-6 py-4 flex items-center justify-between">
-                <h2 className="text-amber-900 font-semibold">Line Items</h2>
-                <button onClick={() => setShowAdd(!showAdd)} className="btn-primary text-xs py-1.5 px-3"><Plus size={14} /> Add</button>
+            <div 
+              className="glass shadow-soft overflow-hidden"
+              style={{ borderRadius: "24px", border: "1px solid rgba(120,90,60,0.08)" }}
+            >
+              <div className="bg-gradient-to-r from-amber-700/10 to-orange-600/10 px-8 py-5 flex items-center justify-between border-b border-amber-900/10">
+                <h2 className="text-amber-950 font-bold text-xl">Line Items</h2>
+                <button 
+                  onClick={() => setShowAdd(!showAdd)} 
+                  className="btn-primary flex items-center gap-2"
+                  style={{ height: "36px", borderRadius: "10px", padding: "0 16px", fontSize: "14px", fontWeight: 600 }}
+                >
+                  <Plus size={16} /> Add Expense
+                </button>
               </div>
 
               {showAdd && (
-                <div className="p-4 border-b border-amber-200/50 bg-slate-800/30">
-                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                    <select className="input-glass text-sm" value={newExp.category} onChange={e => setNewExp({...newExp, category: e.target.value})}>
+                <div className="p-6 border-b border-amber-900/10 bg-amber-900/5">
+                  <div className="grid grid-cols-2 sm:grid-cols-6 gap-3">
+                    <select 
+                      className="input-glass col-span-1 sm:col-span-1" 
+                      value={newExp.category} 
+                      onChange={e => setNewExp({...newExp, category: e.target.value})}
+                      style={{ height: "48px", borderRadius: "12px", padding: "0 12px", border: "1px solid rgba(120,90,60,0.12)", fontSize: "14px", outline: "none", backgroundColor: "rgba(255,255,255,0.5)" }}
+                    >
                       {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
-                    <input className="input-glass text-sm col-span-1 sm:col-span-2" placeholder="Description" value={newExp.description} onChange={e => setNewExp({...newExp, description: e.target.value})} />
-                    <input type="number" className="input-glass text-sm" placeholder="Qty" value={newExp.quantity} onChange={e => setNewExp({...newExp, quantity: e.target.value})} />
-                    <div className="flex gap-1">
-                      <input type="number" className="input-glass text-sm flex-1" placeholder="Cost" value={newExp.unit_cost} onChange={e => setNewExp({...newExp, unit_cost: e.target.value})} />
-                      <button onClick={handleAdd} className="btn-primary text-xs px-3 shrink-0"><Plus size={14} /></button>
+                    <input 
+                      className="input-glass col-span-1 sm:col-span-2" 
+                      placeholder="Description" 
+                      value={newExp.description} 
+                      onChange={e => setNewExp({...newExp, description: e.target.value})} 
+                      style={{ height: "48px", borderRadius: "12px", padding: "0 16px", border: "1px solid rgba(120,90,60,0.12)", fontSize: "14px", outline: "none" }}
+                    />
+                    <input 
+                      type="number" 
+                      className="input-glass col-span-1 sm:col-span-1" 
+                      placeholder="Qty" 
+                      value={newExp.quantity} 
+                      onChange={e => setNewExp({...newExp, quantity: e.target.value})} 
+                      style={{ height: "48px", borderRadius: "12px", padding: "0 16px", border: "1px solid rgba(120,90,60,0.12)", fontSize: "14px", outline: "none" }}
+                    />
+                    <div className="flex gap-2 col-span-1 sm:col-span-2">
+                      <input 
+                        type="number" 
+                        className="input-glass flex-1" 
+                        placeholder="Cost" 
+                        value={newExp.unit_cost} 
+                        onChange={e => setNewExp({...newExp, unit_cost: e.target.value})} 
+                        style={{ height: "48px", borderRadius: "12px", padding: "0 16px", border: "1px solid rgba(120,90,60,0.12)", fontSize: "14px", outline: "none" }}
+                      />
+                      <button 
+                        onClick={handleAdd} 
+                        className="btn-primary flex items-center justify-center shrink-0"
+                        style={{ height: "48px", width: "48px", borderRadius: "12px" }}
+                      >
+                        <Plus size={20} />
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -135,30 +196,32 @@ export default function ExpenseInvoice() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-amber-700 border-b border-amber-200">
-                      <th className="text-left p-4 font-medium">Category</th>
-                      <th className="text-left p-4 font-medium">Description</th>
-                      <th className="text-center p-4 font-medium">Qty</th>
-                      <th className="text-right p-4 font-medium">Unit Cost</th>
-                      <th className="text-right p-4 font-medium">Amount</th>
-                      <th className="p-4"></th>
+                    <tr className="text-amber-900/60 uppercase tracking-wider text-xs border-b border-amber-900/10 bg-amber-900/[0.02]">
+                      <th className="text-left p-5 font-bold">Category</th>
+                      <th className="text-left p-5 font-bold">Description</th>
+                      <th className="text-center p-5 font-bold">Qty</th>
+                      <th className="text-right p-5 font-bold">Unit Cost</th>
+                      <th className="text-right p-5 font-bold">Amount</th>
+                      <th className="p-5"></th>
                     </tr>
                   </thead>
                   <tbody>
                     {invoice?.expenses?.map(exp => (
-                      <tr key={exp.id} className="border-b border-amber-100 hover:bg-white/[0.02] transition-colors">
-                        <td className="p-4"><span className="badge badge-upcoming text-xs">{exp.category}</span></td>
-                        <td className="p-4 text-amber-800">{exp.description}</td>
-                        <td className="p-4 text-center text-amber-700">{exp.quantity}</td>
-                        <td className="p-4 text-right text-amber-700">${exp.unit_cost}</td>
-                        <td className="p-4 text-right text-emerald-600 font-semibold">${exp.total_amount}</td>
-                        <td className="p-4">
-                          <button onClick={() => handleDelete(exp.id)} className="p-1 rounded text-amber-600 hover:text-red-400 transition-colors"><Trash2 size={14} /></button>
+                      <tr key={exp.id} className="border-b border-amber-900/5 hover:bg-white/40 transition-colors">
+                        <td className="p-5"><span className="badge bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold px-2 py-1">{exp.category}</span></td>
+                        <td className="p-5 text-amber-950 font-medium">{exp.description}</td>
+                        <td className="p-5 text-center text-amber-900/70 font-medium">{exp.quantity}</td>
+                        <td className="p-5 text-right text-amber-900/70 font-medium">${exp.unit_cost}</td>
+                        <td className="p-5 text-right text-emerald-700 font-bold">${exp.total_amount}</td>
+                        <td className="p-5 text-right">
+                          <button onClick={() => handleDelete(exp.id)} className="p-2 rounded-lg text-amber-900/40 hover:text-red-500 hover:bg-red-50 transition-colors">
+                            <Trash2 size={16} />
+                          </button>
                         </td>
                       </tr>
                     ))}
                     {(!invoice?.expenses || invoice.expenses.length === 0) && (
-                      <tr><td colSpan={6} className="p-8 text-center text-amber-600">No expenses added yet</td></tr>
+                      <tr><td colSpan={6} className="p-12 text-center text-amber-900/50 font-medium text-base">No expenses added yet</td></tr>
                     )}
                   </tbody>
                 </table>
@@ -169,42 +232,54 @@ export default function ExpenseInvoice() {
           {/* Budget Summary Sidebar */}
           <div className="space-y-6">
             {isOverBudget && (
-              <div className="glass rounded-2xl p-4 border border-red-500/30 bg-red-500/5">
-                <div className="flex items-center gap-2 text-red-400 font-semibold text-sm"><AlertTriangle size={18} /> Over Budget!</div>
-                <p className="text-red-300/70 text-xs mt-1">You've exceeded your budget by ${Math.abs(invoice.budget_summary.remaining).toFixed(2)}</p>
+              <div 
+                className="glass shadow-soft animate-fadeInUp"
+                style={{ borderRadius: "24px", padding: "24px", border: "1px solid rgba(239,68,68,0.2)", backgroundColor: "rgba(254,226,226,0.5)" }}
+              >
+                <div className="flex items-center gap-2 text-red-600 font-bold text-lg mb-1"><AlertTriangle size={20} /> Over Budget!</div>
+                <p className="text-red-800/70 text-sm font-medium">You've exceeded your budget by <span className="font-bold text-red-600">${Math.abs(invoice.budget_summary.remaining).toFixed(2)}</span></p>
               </div>
             )}
 
-            <div className="glass rounded-2xl p-6">
-              <h3 className="text-amber-900 font-semibold mb-4">Budget Summary</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between"><span className="text-amber-700">Total Budget</span><span className="text-amber-900 font-semibold">${invoice?.budget_summary?.total_budget || 0}</span></div>
-                <div className="flex justify-between"><span className="text-amber-700">Total Spent</span><span className="text-amber-400 font-semibold">${invoice?.budget_summary?.total_spent?.toFixed(2) || 0}</span></div>
-                <div className="h-px bg-slate-700" />
-                <div className="flex justify-between"><span className="text-amber-700">Remaining</span><span className={`font-bold ${isOverBudget ? 'text-red-400' : 'text-emerald-600'}`}>${invoice?.budget_summary?.remaining?.toFixed(2) || 0}</span></div>
+            <div 
+              className="glass shadow-soft"
+              style={{ borderRadius: "24px", padding: "32px", border: "1px solid rgba(120,90,60,0.08)" }}
+            >
+              <h3 className="text-amber-950 font-bold text-xl mb-6">Budget Summary</h3>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center"><span className="text-amber-900/70 font-medium">Total Budget</span><span className="text-amber-950 font-bold text-lg">${invoice?.budget_summary?.total_budget || 0}</span></div>
+                <div className="flex justify-between items-center"><span className="text-amber-900/70 font-medium">Total Spent</span><span className="text-orange-600 font-bold text-lg">${invoice?.budget_summary?.total_spent?.toFixed(2) || 0}</span></div>
+                <div className="h-px bg-amber-900/10 my-2" />
+                <div className="flex justify-between items-center"><span className="text-amber-900/70 font-medium">Remaining</span><span className={`font-black text-xl ${isOverBudget ? 'text-red-600' : 'text-emerald-600'}`}>${invoice?.budget_summary?.remaining?.toFixed(2) || 0}</span></div>
               </div>
 
               {/* Progress bar */}
-              <div className="mt-4">
-                <div className="h-3 rounded-full bg-slate-700 overflow-hidden">
-                  <div className={`h-full rounded-full transition-all duration-500 ${isOverBudget ? 'bg-gradient-to-r from-red-500 to-red-400' : 'bg-gradient-to-r from-amber-700 to-orange-500'}`}
+              <div className="mt-8">
+                <div className="flex justify-between mb-2">
+                  <span className="text-xs font-bold text-amber-900/60 uppercase tracking-wider">Usage</span>
+                  <span className="text-xs font-bold text-amber-900/60">{((invoice?.budget_summary?.total_spent || 0) / (invoice?.budget_summary?.total_budget || 1) * 100).toFixed(0)}%</span>
+                </div>
+                <div className="h-3 rounded-full bg-amber-900/10 overflow-hidden shadow-inner">
+                  <div className={`h-full rounded-full transition-all duration-1000 ease-out ${isOverBudget ? 'bg-gradient-to-r from-red-500 to-red-400' : 'bg-gradient-to-r from-amber-500 to-emerald-400'}`}
                     style={{ width: `${Math.min(100, ((invoice?.budget_summary?.total_spent || 0) / (invoice?.budget_summary?.total_budget || 1)) * 100)}%` }} />
                 </div>
-                <p className="text-xs text-amber-600 mt-1 text-right">{((invoice?.budget_summary?.total_spent || 0) / (invoice?.budget_summary?.total_budget || 1) * 100).toFixed(0)}% used</p>
               </div>
             </div>
 
             {/* Pie Chart */}
             {pieData.length > 0 && (
-              <div className="glass rounded-2xl p-6">
-                <h3 className="text-amber-900 font-semibold mb-4">Expense Breakdown</h3>
-                <ResponsiveContainer width="100%" height={220}>
+              <div 
+                className="glass shadow-soft"
+                style={{ borderRadius: "24px", padding: "32px", border: "1px solid rgba(120,90,60,0.08)" }}
+              >
+                <h3 className="text-amber-950 font-bold text-xl mb-6">Expense Breakdown</h3>
+                <ResponsiveContainer width="100%" height={240}>
                   <PieChart>
-                    <Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={3} dataKey="value">
+                    <Pie data={pieData} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={4} dataKey="value" stroke="none">
                       {pieData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                     </Pie>
-                    <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '12px', color: '#e2e8f0' }} />
-                    <Legend wrapperStyle={{ color: '#94a3b8', fontSize: '12px' }} />
+                    <Tooltip contentStyle={{ background: '#FAF7F2', border: '1px solid rgba(120,90,60,0.1)', borderRadius: '16px', color: '#451a03', boxShadow: '0 10px 25px -5px rgba(120,90,60,0.1)' }} itemStyle={{ color: '#78350f', fontWeight: '600' }} />
+                    <Legend wrapperStyle={{ color: '#78350f', fontSize: '13px', fontWeight: '500' }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
