@@ -4,6 +4,7 @@
   <p><strong>A Premium, Full-Stack Multi-City Travel Planning Ecosystem</strong></p>
   
   <h3>Team Leader: <strong>Anshika</strong></h3>
+  <h4>Team Members: <strong>Khushi Patel, Atul Upadhyay, Satyam Kumar Singh</strong></h4>
   <p><i>Built for the Odoo × Parul University Virtual Round 2026</i></p>
 </div>
 
