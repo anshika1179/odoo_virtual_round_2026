@@ -78,31 +78,29 @@ export default function CitySearch() {
         </div>
 
         {/* Search + Filters */}
-        <div className="glass shadow-soft" style={{ borderRadius: '24px', padding: '24px', marginBottom: '48px', border: '1px solid rgba(120,90,60,0.08)' }}>
-          <div className="flex flex-col sm:flex-row items-center" style={{ gap: '24px' }}>
-            <div className="relative flex-1 w-full">
-              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-amber-900/40" />
-              <input className="input-glass outline-none transition-colors w-full" placeholder={mode === 'cities' ? 'Search cities...' : 'Search activities...'}
-                style={{ height: '56px', borderRadius: '18px', padding: '0 20px 0 44px', border: '1px solid rgba(120,90,60,0.12)', fontSize: '15px' }}
+        <div className="explore-filters-card glass shadow-soft" style={{ borderRadius: '24px', marginBottom: '48px', border: '1px solid rgba(120,90,60,0.08)' }}>
+          <div className="filters-container">
+            <div className="search-wrapper">
+              <Search className="search-icon" />
+              <input type="text" placeholder={mode === 'cities' ? 'Search cities...' : 'Search activities...'}
                 value={query} onChange={e => setQuery(e.target.value)} />
             </div>
             {mode === 'cities' ? (
-              <select className="input-glass w-full sm:w-auto" style={{ height: '56px', borderRadius: '18px', padding: '0 24px', border: '1px solid rgba(120,90,60,0.12)' }} 
+              <select className="region-select" 
                       value={filters.region} onChange={e => setFilters({...filters, region: e.target.value})}>
                 <option value="">All Regions</option>
                 {regions.map(r => <option key={r} value={r}>{r}</option>)}
               </select>
             ) : (
-              <div className="flex items-center gap-4 w-full sm:w-auto">
-                <select className="input-glass" style={{ height: '56px', borderRadius: '18px', padding: '0 24px', border: '1px solid rgba(120,90,60,0.12)' }} 
+              <>
+                <select className="region-select" 
                         value={filters.type} onChange={e => setFilters({...filters, type: e.target.value})}>
                   <option value="">All Types</option>
                   {actTypes.map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
-                <input type="number" className="input-glass" placeholder="Max cost $"
-                  style={{ height: '56px', width: '140px', borderRadius: '18px', padding: '0 20px', border: '1px solid rgba(120,90,60,0.12)' }}
+                <input type="number" className="region-select" placeholder="Max cost $"
                   value={filters.max_cost} onChange={e => setFilters({...filters, max_cost: e.target.value})} />
-              </div>
+              </>
             )}
           </div>
         </div>
