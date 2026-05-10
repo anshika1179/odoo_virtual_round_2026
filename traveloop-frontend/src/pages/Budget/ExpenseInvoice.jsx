@@ -86,7 +86,7 @@ export default function ExpenseInvoice() {
     return text;
   };
 
-  if (loading) return <div className="pt-20 flex justify-center"><Loader2 size={32} className="animate-spin text-indigo-400" /></div>;
+  if (loading) return <div className="pt-20 flex justify-center"><Loader2 size={32} className="animate-spin text-amber-700" /></div>;
 
   const pieData = invoice?.category_breakdown ? Object.entries(invoice.category_breakdown).map(([name, value]) => ({ name, value })) : [];
   const isOverBudget = (invoice?.budget_summary?.remaining || 0) < 0;
@@ -96,8 +96,8 @@ export default function ExpenseInvoice() {
       <div className="animate-fadeInUp">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-white">Expense Invoice</h1>
-            <p className="text-slate-400">{trip?.title}</p>
+            <h1 className="text-3xl font-bold text-amber-900">Expense Invoice</h1>
+            <p className="text-amber-700">{trip?.title}</p>
           </div>
           <div className="flex gap-2">
             <button onClick={handleDownload} className="btn-secondary text-sm"><Download size={16} /> Download TXT</button>
@@ -111,13 +111,13 @@ export default function ExpenseInvoice() {
           {/* Expense Table */}
           <div className="lg:col-span-2">
             <div className="glass rounded-2xl overflow-hidden">
-              <div className="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 px-6 py-4 flex items-center justify-between">
-                <h2 className="text-white font-semibold">Line Items</h2>
+              <div className="bg-gradient-to-r from-amber-700/15 to-orange-600/15 px-6 py-4 flex items-center justify-between">
+                <h2 className="text-amber-900 font-semibold">Line Items</h2>
                 <button onClick={() => setShowAdd(!showAdd)} className="btn-primary text-xs py-1.5 px-3"><Plus size={14} /> Add</button>
               </div>
 
               {showAdd && (
-                <div className="p-4 border-b border-slate-700/50 bg-slate-800/30">
+                <div className="p-4 border-b border-amber-200/50 bg-slate-800/30">
                   <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                     <select className="input-glass text-sm" value={newExp.category} onChange={e => setNewExp({...newExp, category: e.target.value})}>
                       {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
@@ -135,7 +135,7 @@ export default function ExpenseInvoice() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="text-slate-400 border-b border-slate-700">
+                    <tr className="text-amber-700 border-b border-amber-200">
                       <th className="text-left p-4 font-medium">Category</th>
                       <th className="text-left p-4 font-medium">Description</th>
                       <th className="text-center p-4 font-medium">Qty</th>
@@ -146,19 +146,19 @@ export default function ExpenseInvoice() {
                   </thead>
                   <tbody>
                     {invoice?.expenses?.map(exp => (
-                      <tr key={exp.id} className="border-b border-slate-800 hover:bg-white/[0.02] transition-colors">
+                      <tr key={exp.id} className="border-b border-amber-100 hover:bg-white/[0.02] transition-colors">
                         <td className="p-4"><span className="badge badge-upcoming text-xs">{exp.category}</span></td>
-                        <td className="p-4 text-slate-300">{exp.description}</td>
-                        <td className="p-4 text-center text-slate-400">{exp.quantity}</td>
-                        <td className="p-4 text-right text-slate-400">${exp.unit_cost}</td>
-                        <td className="p-4 text-right text-green-400 font-semibold">${exp.total_amount}</td>
+                        <td className="p-4 text-amber-800">{exp.description}</td>
+                        <td className="p-4 text-center text-amber-700">{exp.quantity}</td>
+                        <td className="p-4 text-right text-amber-700">${exp.unit_cost}</td>
+                        <td className="p-4 text-right text-emerald-600 font-semibold">${exp.total_amount}</td>
                         <td className="p-4">
-                          <button onClick={() => handleDelete(exp.id)} className="p-1 rounded text-slate-500 hover:text-red-400 transition-colors"><Trash2 size={14} /></button>
+                          <button onClick={() => handleDelete(exp.id)} className="p-1 rounded text-amber-600 hover:text-red-400 transition-colors"><Trash2 size={14} /></button>
                         </td>
                       </tr>
                     ))}
                     {(!invoice?.expenses || invoice.expenses.length === 0) && (
-                      <tr><td colSpan={6} className="p-8 text-center text-slate-500">No expenses added yet</td></tr>
+                      <tr><td colSpan={6} className="p-8 text-center text-amber-600">No expenses added yet</td></tr>
                     )}
                   </tbody>
                 </table>
@@ -176,28 +176,28 @@ export default function ExpenseInvoice() {
             )}
 
             <div className="glass rounded-2xl p-6">
-              <h3 className="text-white font-semibold mb-4">Budget Summary</h3>
+              <h3 className="text-amber-900 font-semibold mb-4">Budget Summary</h3>
               <div className="space-y-3">
-                <div className="flex justify-between"><span className="text-slate-400">Total Budget</span><span className="text-white font-semibold">${invoice?.budget_summary?.total_budget || 0}</span></div>
-                <div className="flex justify-between"><span className="text-slate-400">Total Spent</span><span className="text-amber-400 font-semibold">${invoice?.budget_summary?.total_spent?.toFixed(2) || 0}</span></div>
+                <div className="flex justify-between"><span className="text-amber-700">Total Budget</span><span className="text-amber-900 font-semibold">${invoice?.budget_summary?.total_budget || 0}</span></div>
+                <div className="flex justify-between"><span className="text-amber-700">Total Spent</span><span className="text-amber-400 font-semibold">${invoice?.budget_summary?.total_spent?.toFixed(2) || 0}</span></div>
                 <div className="h-px bg-slate-700" />
-                <div className="flex justify-between"><span className="text-slate-400">Remaining</span><span className={`font-bold ${isOverBudget ? 'text-red-400' : 'text-green-400'}`}>${invoice?.budget_summary?.remaining?.toFixed(2) || 0}</span></div>
+                <div className="flex justify-between"><span className="text-amber-700">Remaining</span><span className={`font-bold ${isOverBudget ? 'text-red-400' : 'text-emerald-600'}`}>${invoice?.budget_summary?.remaining?.toFixed(2) || 0}</span></div>
               </div>
 
               {/* Progress bar */}
               <div className="mt-4">
                 <div className="h-3 rounded-full bg-slate-700 overflow-hidden">
-                  <div className={`h-full rounded-full transition-all duration-500 ${isOverBudget ? 'bg-gradient-to-r from-red-500 to-red-400' : 'bg-gradient-to-r from-indigo-500 to-purple-500'}`}
+                  <div className={`h-full rounded-full transition-all duration-500 ${isOverBudget ? 'bg-gradient-to-r from-red-500 to-red-400' : 'bg-gradient-to-r from-amber-700 to-orange-500'}`}
                     style={{ width: `${Math.min(100, ((invoice?.budget_summary?.total_spent || 0) / (invoice?.budget_summary?.total_budget || 1)) * 100)}%` }} />
                 </div>
-                <p className="text-xs text-slate-500 mt-1 text-right">{((invoice?.budget_summary?.total_spent || 0) / (invoice?.budget_summary?.total_budget || 1) * 100).toFixed(0)}% used</p>
+                <p className="text-xs text-amber-600 mt-1 text-right">{((invoice?.budget_summary?.total_spent || 0) / (invoice?.budget_summary?.total_budget || 1) * 100).toFixed(0)}% used</p>
               </div>
             </div>
 
             {/* Pie Chart */}
             {pieData.length > 0 && (
               <div className="glass rounded-2xl p-6">
-                <h3 className="text-white font-semibold mb-4">Expense Breakdown</h3>
+                <h3 className="text-amber-900 font-semibold mb-4">Expense Breakdown</h3>
                 <ResponsiveContainer width="100%" height={220}>
                   <PieChart>
                     <Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={3} dataKey="value">

@@ -38,7 +38,7 @@ export function RowSkeleton({ count = 5 }) {
 export function TableSkeleton({ rows = 5, cols = 5 }) {
   return (
     <div className="glass rounded-2xl overflow-hidden">
-      <div className="bg-gradient-to-r from-indigo-500/20 to-purple-500/20 px-6 py-4">
+      <div className="bg-gradient-to-r from-amber-700/15 to-orange-600/15 px-6 py-4">
         <div className="h-5 skeleton rounded-lg w-40" />
       </div>
       <div className="p-4 space-y-3">

@@ -99,12 +99,12 @@ export default function UserProfile() {
                 <img
                   src={photoSrc}
                   alt={user?.full_name}
-                  className="w-24 h-24 rounded-2xl object-cover border-2 border-indigo-500/30"
+                  className="w-24 h-24 rounded-2xl object-cover border-2 border-amber-700/30"
                   onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
                 />
               ) : null}
               <div
-                className="w-24 h-24 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-3xl font-bold"
+                className="w-24 h-24 rounded-2xl bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center text-amber-900 text-3xl font-bold"
                 style={{ display: photoSrc ? 'none' : 'flex' }}
               >
                 {user?.full_name?.[0]?.toUpperCase() || '?'}
@@ -117,9 +117,9 @@ export default function UserProfile() {
                 className="absolute inset-0 rounded-2xl bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
               >
                 {uploading ? (
-                  <Loader2 size={24} className="text-white animate-spin" />
+                  <Loader2 size={24} className="text-amber-900 animate-spin" />
                 ) : (
-                  <Camera size={24} className="text-white" />
+                  <Camera size={24} className="text-amber-900" />
                 )}
               </button>
               <input
@@ -134,7 +134,7 @@ export default function UserProfile() {
               {photoSrc && !uploading && (
                 <button
                   onClick={handleRemovePhoto}
-                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-400"
+                  className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-amber-900 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-400"
                   title="Remove photo"
                 >
                   <Trash2 size={12} />
@@ -144,17 +144,17 @@ export default function UserProfile() {
 
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-1">
-                <h1 className="text-3xl font-bold text-white">{user?.full_name}</h1>
-                <button onClick={() => setEditing(!editing)} className="p-2 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-indigo-500/10 transition-all">
+                <h1 className="text-3xl font-bold text-amber-900">{user?.full_name}</h1>
+                <button onClick={() => setEditing(!editing)} className="p-2 rounded-lg text-amber-700 hover:text-amber-700 hover:bg-amber-700/10 transition-all">
                   <Edit3 size={18} />
                 </button>
               </div>
-              <p className="text-slate-400 flex items-center gap-2"><Mail size={16} /> {user?.email}</p>
-              {user?.city && <p className="text-slate-500 text-sm flex items-center gap-2 mt-1"><MapPin size={14} /> {user.city}, {user.country}</p>}
+              <p className="text-amber-700 flex items-center gap-2"><Mail size={16} /> {user?.email}</p>
+              {user?.city && <p className="text-amber-600 text-sm flex items-center gap-2 mt-1"><MapPin size={14} /> {user.city}, {user.country}</p>}
 
               {/* Upload status message */}
               {uploadMsg && (
-                <p className={`text-sm mt-2 flex items-center gap-1 ${uploadMsg.includes('failed') || uploadMsg.includes('Please') || uploadMsg.includes('must') ? 'text-red-400' : 'text-green-400'}`}>
+                <p className={`text-sm mt-2 flex items-center gap-1 ${uploadMsg.includes('failed') || uploadMsg.includes('Please') || uploadMsg.includes('must') ? 'text-red-400' : 'text-emerald-600'}`}>
                   {uploadMsg.includes('failed') || uploadMsg.includes('Please') || uploadMsg.includes('must') ? null : <CheckCircle size={14} />}
                   {uploadMsg}
                 </p>
@@ -163,27 +163,27 @@ export default function UserProfile() {
           </div>
 
           {editing && (
-            <div className="mt-6 pt-6 border-t border-slate-700 space-y-4 animate-fadeInUp">
+            <div className="mt-6 pt-6 border-t border-amber-200 space-y-4 animate-fadeInUp">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm text-slate-300 mb-1.5">Full Name</label>
+                  <label className="block text-sm text-amber-800 mb-1.5">Full Name</label>
                   <input className="input-glass" value={form.full_name} onChange={set('full_name')} />
                 </div>
                 <div>
-                  <label className="block text-sm text-slate-300 mb-1.5">Phone</label>
+                  <label className="block text-sm text-amber-800 mb-1.5">Phone</label>
                   <input className="input-glass" value={form.phone} onChange={set('phone')} />
                 </div>
                 <div>
-                  <label className="block text-sm text-slate-300 mb-1.5">City</label>
+                  <label className="block text-sm text-amber-800 mb-1.5">City</label>
                   <input className="input-glass" value={form.city} onChange={set('city')} />
                 </div>
                 <div>
-                  <label className="block text-sm text-slate-300 mb-1.5">Country</label>
+                  <label className="block text-sm text-amber-800 mb-1.5">Country</label>
                   <input className="input-glass" value={form.country} onChange={set('country')} />
                 </div>
               </div>
               <div>
-                <label className="block text-sm text-slate-300 mb-1.5">About</label>
+                <label className="block text-sm text-amber-800 mb-1.5">About</label>
                 <textarea className="input-glass" rows={3} value={form.additional_info} onChange={set('additional_info')} />
               </div>
               <button onClick={handleSave} disabled={saving} className="btn-primary">
@@ -197,9 +197,9 @@ export default function UserProfile() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {stats.map((s, i) => (
             <div key={i} className="glass rounded-2xl p-5 glass-hover animate-fadeInUp" style={{animationDelay: `${i * 0.1}s`}}>
-              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-white mb-3`}>{s.icon}</div>
-              <p className="text-2xl font-bold text-white">{s.value}</p>
-              <p className="text-slate-400 text-sm">{s.label}</p>
+              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-amber-900 mb-3`}>{s.icon}</div>
+              <p className="text-2xl font-bold text-amber-900">{s.value}</p>
+              <p className="text-amber-700 text-sm">{s.label}</p>
             </div>
           ))}
         </div>
@@ -207,14 +207,14 @@ export default function UserProfile() {
         {/* Trips Sections */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div>
-            <h2 className="text-xl font-bold text-white mb-4">Upcoming Trips</h2>
+            <h2 className="text-xl font-bold text-amber-900 mb-4">Upcoming Trips</h2>
             {trips.length > 0 ? (
               <div className="space-y-3">
                 {trips.map(t => (
                   <div key={t.id} className="glass rounded-xl p-4 flex items-center justify-between glass-hover">
                     <div>
-                      <h3 className="text-white font-medium">{t.title}</h3>
-                      <p className="text-slate-500 text-xs flex items-center gap-1"><Calendar size={12} /> {new Date(t.start_date).toLocaleDateString()}</p>
+                      <h3 className="text-amber-900 font-medium">{t.title}</h3>
+                      <p className="text-amber-600 text-xs flex items-center gap-1"><Calendar size={12} /> {new Date(t.start_date).toLocaleDateString()}</p>
                     </div>
                     <Link to={`/trips/${t.id}/view`} className="btn-secondary text-xs py-1.5 px-3"><Eye size={14} /> View</Link>
                   </div>
@@ -222,22 +222,22 @@ export default function UserProfile() {
               </div>
             ) : (
               <div className="glass rounded-xl p-8 text-center">
-                <Plane size={32} className="mx-auto text-slate-600 mb-3" />
-                <p className="text-slate-500">No upcoming trips</p>
-                <Link to="/trips/new" className="text-indigo-400 text-sm hover:text-indigo-300 mt-2 inline-block">Plan one →</Link>
+                <Plane size={32} className="mx-auto text-amber-500 mb-3" />
+                <p className="text-amber-600">No upcoming trips</p>
+                <Link to="/trips/new" className="text-amber-700 text-sm hover:text-amber-600 mt-2 inline-block">Plan one →</Link>
               </div>
             )}
           </div>
 
           <div>
-            <h2 className="text-xl font-bold text-white mb-4">Previous Trips</h2>
+            <h2 className="text-xl font-bold text-amber-900 mb-4">Previous Trips</h2>
             {prevTrips.length > 0 ? (
               <div className="space-y-3">
                 {prevTrips.map(t => (
                   <div key={t.id} className="glass rounded-xl p-4 flex items-center justify-between glass-hover">
                     <div>
-                      <h3 className="text-white font-medium">{t.title}</h3>
-                      <p className="text-slate-500 text-xs flex items-center gap-1"><Calendar size={12} /> {new Date(t.start_date).toLocaleDateString()}</p>
+                      <h3 className="text-amber-900 font-medium">{t.title}</h3>
+                      <p className="text-amber-600 text-xs flex items-center gap-1"><Calendar size={12} /> {new Date(t.start_date).toLocaleDateString()}</p>
                     </div>
                     <Link to={`/trips/${t.id}/view`} className="btn-secondary text-xs py-1.5 px-3"><Eye size={14} /> View</Link>
                   </div>
@@ -245,9 +245,9 @@ export default function UserProfile() {
               </div>
             ) : (
               <div className="glass rounded-xl p-8 text-center">
-                <Globe size={32} className="mx-auto text-slate-600 mb-3" />
-                <p className="text-slate-500">No completed trips yet</p>
-                <p className="text-slate-600 text-xs mt-1">Your travel history will appear here</p>
+                <Globe size={32} className="mx-auto text-amber-500 mb-3" />
+                <p className="text-amber-600">No completed trips yet</p>
+                <p className="text-amber-500 text-xs mt-1">Your travel history will appear here</p>
               </div>
             )}
           </div>
