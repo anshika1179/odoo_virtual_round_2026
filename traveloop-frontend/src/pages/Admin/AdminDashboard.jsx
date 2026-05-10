@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { getAdminStats, getAdminUsers } from '../../services/api';
+import { getAdminStats, getAdminUsers, getAdminGrowth } from '../../services/api';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Users, Map, Globe, TrendingUp, LayoutDashboard, Clock, UserPlus, Plane as PlaneIcon } from 'lucide-react';
 import { StatSkeleton, TableSkeleton } from '../../components/common/Skeletons';
@@ -38,11 +38,12 @@ function AnimatedStat({ card }) {
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState([]);
+  const [growthData, setGrowthData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([getAdminStats(), getAdminUsers()])
-      .then(([s, u]) => { setStats(s.data); setUsers(u.data); setLoading(false); })
+    Promise.all([getAdminStats(), getAdminUsers(), getAdminGrowth()])
+      .then(([s, u, g]) => { setStats(s.data); setUsers(u.data); setGrowthData(g.data); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
 
@@ -129,17 +130,20 @@ export default function AdminDashboard() {
           </div>
 
           <div className="glass rounded-2xl p-6">
-            <h3 className="text-white font-semibold mb-4">Growth Trend</h3>
+            <h3 className="text-white font-semibold mb-4">Growth Trend <span className="text-slate-500 text-xs font-normal">(last 12 months)</span></h3>
             <ResponsiveContainer width="100%" height={220}>
-              <LineChart data={[
-                { month: 'Jan', users: 10 }, { month: 'Feb', users: 25 }, { month: 'Mar', users: 40 },
-                { month: 'Apr', users: 65 }, { month: 'May', users: stats?.total_users || 80 },
-              ]}>
+              <LineChart data={growthData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                <XAxis dataKey="month" tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                <XAxis dataKey="label" tick={{ fill: '#94a3b8', fontSize: 11 }} interval={1} />
                 <YAxis tick={{ fill: '#94a3b8', fontSize: 12 }} />
-                <Tooltip contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '12px', color: '#e2e8f0' }} />
-                <Line type="monotone" dataKey="users" stroke="#6366f1" strokeWidth={3} dot={{ r: 5, fill: '#6366f1' }} />
+                <Tooltip
+                  contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '12px', color: '#e2e8f0' }}
+                  formatter={(value, name) => [value, name === 'cumulative_users' ? 'Users' : 'Trips']}
+                  labelFormatter={(label) => `Month: ${label}`}
+                />
+                <Legend wrapperStyle={{ color: '#94a3b8', fontSize: '12px' }} formatter={(val) => val === 'cumulative_users' ? 'Users' : 'Trips'} />
+                <Line type="monotone" dataKey="cumulative_users" stroke="#6366f1" strokeWidth={3} dot={{ r: 4, fill: '#6366f1' }} activeDot={{ r: 6 }} />
+                <Line type="monotone" dataKey="cumulative_trips" stroke="#10b981" strokeWidth={3} dot={{ r: 4, fill: '#10b981' }} activeDot={{ r: 6 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>

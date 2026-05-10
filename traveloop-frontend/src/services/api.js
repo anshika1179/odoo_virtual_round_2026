@@ -83,5 +83,6 @@ export const deleteProfilePhoto = () => API.delete('/profile/photo');
 // Admin
 export const getAdminStats = () => API.get('/admin/stats');
 export const getAdminUsers = () => API.get('/admin/users');
+export const getAdminGrowth = () => API.get('/admin/growth');
 
 export default API;
