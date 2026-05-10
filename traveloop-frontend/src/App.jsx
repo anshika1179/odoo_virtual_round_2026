@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import Navbar from './components/common/Navbar';
@@ -22,41 +22,52 @@ import PublicItinerary from './pages/Share/PublicItinerary';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import ForgotPassword from './pages/Auth/ForgotPassword';
 
+function AppLayout({ children }) {
+  const location = useLocation();
+  const isAuthPage = ['/login', '/register', '/forgot-password', '/reset-password'].includes(location.pathname);
+  
+  return (
+    <div className="flex flex-col min-h-screen">
+      {!isAuthPage && <Navbar />}
+      <main className={`flex-1 ${!isAuthPage ? 'main-content' : ''}`}>
+        {children}
+      </main>
+      {!isAuthPage && <Footer />}
+    </div>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <ToastProvider>
-          <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <main className="flex-1 main-content">
-              <PageTransition>
-                <Routes>
-                  {/* Public Routes */}
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/forgot-password" element={<ForgotPassword />} />
-                  <Route path="/share/:token" element={<PublicItinerary />} />
+          <AppLayout>
+            <PageTransition>
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/share/:token" element={<PublicItinerary />} />
 
-                  {/* Protected Routes */}
-                  <Route path="/" element={<PrivateRoute><Landing /></PrivateRoute>} />
-                  <Route path="/trips" element={<PrivateRoute><TripList /></PrivateRoute>} />
-                  <Route path="/trips/new" element={<PrivateRoute><CreateTrip /></PrivateRoute>} />
-                  <Route path="/trips/:id/builder" element={<PrivateRoute><ItineraryBuilder /></PrivateRoute>} />
-                  <Route path="/trips/:id/view" element={<PrivateRoute><ItineraryView /></PrivateRoute>} />
-                  <Route path="/trips/:id/budget" element={<PrivateRoute><ExpenseInvoice /></PrivateRoute>} />
-                  <Route path="/trips/:id/checklist" element={<PrivateRoute><PackingChecklist /></PrivateRoute>} />
-                  <Route path="/trips/:id/notes" element={<PrivateRoute><TripNotes /></PrivateRoute>} />
-                  <Route path="/search/cities" element={<PrivateRoute><CitySearch /></PrivateRoute>} />
-                  <Route path="/search/activities" element={<PrivateRoute><CitySearch /></PrivateRoute>} />
-                  <Route path="/community" element={<PrivateRoute><CommunityTab /></PrivateRoute>} />
-                  <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
-                  <Route path="/admin" element={<PrivateRoute adminOnly><AdminDashboard /></PrivateRoute>} />
-                </Routes>
-              </PageTransition>
-            </main>
-            <Footer />
-          </div>
+                {/* Protected Routes */}
+                <Route path="/" element={<PrivateRoute><Landing /></PrivateRoute>} />
+                <Route path="/trips" element={<PrivateRoute><TripList /></PrivateRoute>} />
+                <Route path="/trips/new" element={<PrivateRoute><CreateTrip /></PrivateRoute>} />
+                <Route path="/trips/:id/builder" element={<PrivateRoute><ItineraryBuilder /></PrivateRoute>} />
+                <Route path="/trips/:id/view" element={<PrivateRoute><ItineraryView /></PrivateRoute>} />
+                <Route path="/trips/:id/budget" element={<PrivateRoute><ExpenseInvoice /></PrivateRoute>} />
+                <Route path="/trips/:id/checklist" element={<PrivateRoute><PackingChecklist /></PrivateRoute>} />
+                <Route path="/trips/:id/notes" element={<PrivateRoute><TripNotes /></PrivateRoute>} />
+                <Route path="/search/cities" element={<PrivateRoute><CitySearch /></PrivateRoute>} />
+                <Route path="/search/activities" element={<PrivateRoute><CitySearch /></PrivateRoute>} />
+                <Route path="/community" element={<PrivateRoute><CommunityTab /></PrivateRoute>} />
+                <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
+                <Route path="/admin" element={<PrivateRoute adminOnly><AdminDashboard /></PrivateRoute>} />
+              </Routes>
+            </PageTransition>
+          </AppLayout>
         </ToastProvider>
       </AuthProvider>
     </BrowserRouter>
