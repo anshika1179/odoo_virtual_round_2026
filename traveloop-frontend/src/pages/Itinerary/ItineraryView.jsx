@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getTrip, getStops, getStopActivities } from '../../services/api';
-import { Calendar, DollarSign, MapPin, Loader2, Edit, CheckSquare, StickyNote, Clock } from 'lucide-react';
+import { getTrip, getStops, getStopActivities, shareTrip } from '../../services/api';
+import { Calendar, DollarSign, MapPin, Loader2, Edit, CheckSquare, StickyNote, Clock, Share2, Copy, Check, X } from 'lucide-react';
 
 export default function ItineraryView() {
   const { id } = useParams();
@@ -9,6 +9,30 @@ export default function ItineraryView() {
   const [stops, setStops] = useState([]);
   const [activitiesMap, setActivitiesMap] = useState({});
   const [loading, setLoading] = useState(true);
+  const [shareModal, setShareModal] = useState(false);
+  const [shareUrl, setShareUrl] = useState('');
+  const [sharing, setSharing] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = async () => {
+    setSharing(true);
+    try {
+      const res = await shareTrip(id);
+      const url = `${window.location.origin}${res.data.share_url}`;
+      setShareUrl(url);
+      setShareModal(true);
+    } catch (e) {
+      console.error('Share failed', e);
+    } finally {
+      setSharing(false);
+    }
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(shareUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   useEffect(() => { loadData(); }, [id]);
 
@@ -111,6 +135,9 @@ export default function ItineraryView() {
               <Link to={`/trips/${id}/notes`} className="btn-secondary flex items-center gap-2 justify-center" style={{ height: "48px", borderRadius: "14px", padding: "0 24px", fontWeight: 600 }}>
                 <StickyNote size={18} /> Notes
               </Link>
+              <button onClick={handleShare} disabled={sharing} className="btn-primary flex items-center gap-2 justify-center" style={{ height: "48px", borderRadius: "14px", padding: "0 24px", fontWeight: 600 }}>
+                {sharing ? <Loader2 size={18} className="animate-spin" /> : <Share2 size={18} />} Share
+              </button>
             </div>
           </div>
         </div>
@@ -210,6 +237,61 @@ export default function ItineraryView() {
           </div>
         )}
       </div>
+
+      {/* Share Modal */}
+      {shareModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeInUp" onClick={() => setShareModal(false)}>
+          <div className="glass shadow-soft w-full max-w-md mx-4" style={{ borderRadius: '32px', padding: '40px', border: '1px solid rgba(120,90,60,0.08)' }} onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-amber-950 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-600 to-orange-700 flex items-center justify-center text-white shadow-md">
+                  <Share2 size={20} />
+                </div>
+                Share Trip
+              </h3>
+              <button onClick={() => setShareModal(false)} className="w-10 h-10 rounded-xl bg-amber-50 text-amber-900/50 hover:text-amber-900 flex items-center justify-center transition-colors">
+                <X size={20} />
+              </button>
+            </div>
+            
+            <p className="text-amber-900/60 mb-6 text-sm">Anyone with this link can view your itinerary:</p>
+            
+            <div className="flex items-center gap-3 mb-6">
+              <input 
+                readOnly 
+                value={shareUrl} 
+                className="input-glass flex-1 text-amber-950 font-medium text-sm"
+                style={{ height: '52px', borderRadius: '14px', padding: '0 16px', border: '1px solid rgba(120,90,60,0.12)', outline: 'none' }}
+              />
+              <button onClick={copyToClipboard} className="btn-primary shrink-0 flex items-center justify-center" style={{ height: '52px', width: '52px', borderRadius: '14px' }}>
+                {copied ? <Check size={20} /> : <Copy size={20} />}
+              </button>
+            </div>
+
+            {copied && (
+              <p className="text-emerald-700 text-sm font-semibold text-center flex items-center justify-center gap-2">
+                <Check size={16} /> Link copied to clipboard!
+              </p>
+            )}
+
+            {/* Social sharing */}
+            <div className="flex items-center justify-center gap-3 mt-6 pt-6 border-t border-amber-900/10">
+              <a href={`https://twitter.com/intent/tweet?text=Check out my trip: ${trip?.title}&url=${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer"
+                className="px-5 py-2.5 rounded-xl bg-sky-50 text-sky-700 font-semibold text-sm hover:bg-sky-100 transition-colors border border-sky-200">
+                Twitter
+              </a>
+              <a href={`https://api.whatsapp.com/send?text=Check out my trip "${trip?.title}": ${encodeURIComponent(shareUrl)}`} target="_blank" rel="noopener noreferrer"
+                className="px-5 py-2.5 rounded-xl bg-emerald-50 text-emerald-700 font-semibold text-sm hover:bg-emerald-100 transition-colors border border-emerald-200">
+                WhatsApp
+              </a>
+              <a href={`mailto:?subject=Check out my trip: ${trip?.title}&body=View my itinerary: ${shareUrl}`}
+                className="px-5 py-2.5 rounded-xl bg-amber-50 text-amber-700 font-semibold text-sm hover:bg-amber-100 transition-colors border border-amber-200">
+                Email
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
