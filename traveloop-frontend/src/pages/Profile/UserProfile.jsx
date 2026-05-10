@@ -24,6 +24,7 @@ import {
   CheckCircle,
   Plane,
   Globe,
+  Plus,
 } from "lucide-react";
 
 export default function UserProfile() {
