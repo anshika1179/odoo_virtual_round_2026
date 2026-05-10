@@ -25,109 +25,97 @@ export default function Landing() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 left-10 w-48 h-48 md:w-72 md:h-72 bg-amber-700/15 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-20 right-10 w-64 h-64 md:w-96 md:h-96 bg-orange-600/10 rounded-full blur-3xl" style={{animation: 'float 4s ease-in-out infinite'}} />
-          <div className="absolute top-40 right-1/3 w-40 h-40 md:w-64 md:h-64 bg-yellow-600/8 rounded-full blur-3xl" style={{animation: 'float 5s ease-in-out infinite'}} />
+      <section className="relative min-h-[85vh] flex items-center pt-20 pb-16 overflow-hidden">
+        {/* Minimalist Background Gradients instead of noisy blobs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-[20%] -right-[10%] w-[70%] h-[70%] bg-gradient-to-br from-amber-100/40 via-orange-50/20 to-transparent rounded-full blur-3xl opacity-60" />
+          <div className="absolute -bottom-[20%] -left-[10%] w-[60%] h-[60%] bg-gradient-to-tr from-orange-100/30 via-yellow-50/10 to-transparent rounded-full blur-3xl opacity-50" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center min-h-[60vh]">
-            {/* Left — Text Content */}
-            <div className="animate-fadeInUp">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-700/10 border border-amber-700/20 text-amber-800 text-sm font-medium mb-6">
-                <Sparkles size={16} /> Your Journey Starts Here
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 w-full relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            
+            {/* Left — Text Content (5 cols) */}
+            <div className="lg:col-span-5 animate-fadeInUp">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-900/5 text-amber-950 text-xs font-semibold tracking-wide uppercase mb-6 shadow-sm border border-amber-900/10">
+                <Sparkles size={14} className="text-amber-600" /> Premium Travel Planner
               </div>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-6">
-                <span className="gradient-text">Plan, Explore</span>
+              
+              <h1 className="text-5xl md:text-[4rem] lg:text-[4.5rem] font-bold tracking-tight leading-[1.1] text-amber-950 mb-6">
+                Travel <span className="text-amber-700 font-serif italic font-normal">beautifully.</span>
                 <br />
-                <span className="text-amber-800">& </span><span className="brand-font gradient-text">Travel</span>
-                <br />
-                <span className="text-amber-700">Together</span>
+                Plan simply.
               </h1>
-              <p className="text-xl text-amber-700 mb-8 max-w-xl">
-                Build itineraries, track budgets, share experiences — all in one beautiful platform designed for modern travelers.
+              
+              <p className="text-lg md:text-xl text-amber-900/70 mb-10 max-w-lg leading-relaxed font-light">
+                Curate stunning itineraries, manage your budgets, and explore the world with an elegant platform designed for modern wanderers.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mb-6 md:mb-8">
-                <div className="relative flex-1 max-w-sm md:max-w-md">
-                  <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-amber-600" />
-                  <input className="input-glass pl-12 py-3 md:py-4 text-base md:text-lg" placeholder="Where do you want to go?"
+              <div className="flex flex-col sm:flex-row gap-4 mb-10">
+                <div className="relative flex-1">
+                  <Search size={20} strokeWidth={1.5} className="absolute left-5 top-1/2 -translate-y-1/2 text-amber-900/40" />
+                  <input className="input-glass pl-14 py-4 text-base shadow-soft" placeholder="Search destinations..."
                     value={search} onChange={e => setSearch(e.target.value)} />
                 </div>
-                <Link to="/trips/new" className="btn-primary py-3 md:py-4 px-6 md:px-8 text-base md:text-lg">
-                  <Plane size={18} /> Plan a Trip
+                <Link to="/trips/new" className="btn-primary py-4 px-8 text-base shadow-soft shrink-0">
+                  <Plane size={18} strokeWidth={1.5} /> Start Planning
                 </Link>
               </div>
 
-              <div className="flex items-center gap-8 text-amber-600 text-sm">
-                <div className="flex items-center gap-2"><Globe size={16} className="text-amber-700" /> 105+ Cities</div>
-                <div className="flex items-center gap-2"><MapPin size={16} className="text-orange-600" /> 165+ Activities</div>
-                <div className="flex items-center gap-2"><TrendingUp size={16} className="text-yellow-600" /> Budget Tracking</div>
+              <div className="flex flex-wrap items-center gap-6 text-amber-900/60 text-sm font-medium">
+                <div className="flex items-center gap-2"><Globe size={16} strokeWidth={1.5} /> 105+ Cities</div>
+                <div className="flex items-center gap-2"><MapPin size={16} strokeWidth={1.5} /> Expert Guides</div>
+                <div className="flex items-center gap-2"><TrendingUp size={16} strokeWidth={1.5} /> Smart Budgets</div>
               </div>
             </div>
 
-            {/* Right — Hero Visual */}
-            <div className="hidden lg:flex justify-center items-center animate-fadeInUp" style={{animationDelay: '0.2s'}}>
-              <div className="relative w-full max-w-sm md:max-w-md">
-                {/* Floating Cards */}
-                <div className="absolute -top-4 -left-4 glass rounded-2xl p-3 md:p-4 animate-float z-10 shadow-xl" style={{animationDelay: '0s'}}>
-                  <div className="flex items-center gap-2 md:gap-3">
-                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center">
-                      <Plane size={14} className="text-white" />
+            {/* Right — Hero Visual (7 cols) */}
+            <div className="hidden lg:flex lg:col-span-7 justify-end animate-fadeInUp" style={{animationDelay: '0.2s'}}>
+              <div className="relative w-full max-w-2xl">
+                {/* Single Elegant Glass Card */}
+                <div className="glass rounded-[2rem] p-6 shadow-soft border border-white/60 bg-white/40 backdrop-blur-2xl relative overflow-hidden">
+                  
+                  {/* Card Header */}
+                  <div className="flex justify-between items-center mb-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-2xl bg-amber-900/5 flex items-center justify-center text-amber-900">
+                        <MapPin size={20} strokeWidth={1.5} />
+                      </div>
+                      <div>
+                        <h3 className="text-amber-950 font-semibold text-lg leading-tight">Amalfi Coast Escape</h3>
+                        <p className="text-amber-900/60 text-sm">7 Days • Italy</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-amber-900 font-semibold text-xs md:text-sm">Trip to Paris</p>
-                      <p className="text-amber-600 text-xs">5 days • $2,400</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="absolute -bottom-4 -right-4 glass rounded-2xl p-3 md:p-4 animate-float z-10 shadow-xl" style={{animationDelay: '1s'}}>
-                  <div className="flex items-center gap-2 md:gap-3">
-                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center">
-                      <DollarSign size={14} className="text-white" />
-                    </div>
-                    <div>
-                      <p className="text-amber-900 font-semibold text-xs md:text-sm">Budget: On Track</p>
-                      <p className="text-green-400 text-xs">$1,200 remaining</p>
+                    <div className="text-right">
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs font-semibold border border-green-200/50">
+                        <CheckSquare size={12} /> On Track
+                      </div>
+                      <p className="text-amber-950 font-bold mt-1 text-sm">$3,200 / $4,000</p>
                     </div>
                   </div>
-                </div>
 
-                <div className="absolute top-1/2 -right-6 md:-right-8 glass rounded-2xl p-2 md:p-3 animate-float z-10 shadow-xl" style={{animationDelay: '0.5s'}}>
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
-                      <CheckSquare size={10} className="text-white" />
-                    </div>
-                    <div>
-                      <p className="text-amber-900 text-xs font-medium">Packed 12/15</p>
-                      <div className="w-16 md:w-20 h-1 md:h-1.5 rounded-full bg-amber-200 mt-1">
-                        <div className="w-4/5 h-full rounded-full bg-gradient-to-r from-amber-400 to-orange-400" />
+                  {/* Visual Image Area */}
+                  <div className="w-full h-64 md:h-80 rounded-2xl overflow-hidden relative group">
+                    <img src="https://images.unsplash.com/photo-1534113414509-0eec2bfb493f?w=800" alt="Amalfi Coast" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-80" />
+                    
+                    {/* Floating mini stats inside image */}
+                    <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                      <div className="flex gap-2">
+                        <div className="bg-white/20 backdrop-blur-md border border-white/20 text-white px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 shadow-sm">
+                          <Calendar size={12} /> Jun 12 - Jun 19
+                        </div>
+                      </div>
+                      <div className="flex -space-x-2">
+                        <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://i.pravatar.cc/100?img=1" alt="Traveler" />
+                        <img className="w-8 h-8 rounded-full border-2 border-white object-cover" src="https://i.pravatar.cc/100?img=2" alt="Traveler" />
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Center Globe/Map Visual */}
-                <div className="glass rounded-2xl md:rounded-3xl p-4 md:p-8 border border-amber-700/20">
-                  <div className="aspect-square rounded-xl md:rounded-2xl bg-gradient-to-br from-amber-700/10 via-orange-600/5 to-yellow-600/10 flex items-center justify-center relative overflow-hidden">
-                    {/* Animated rings */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-32 h-32 md:w-48 md:h-48 rounded-full border border-amber-700/20 absolute" style={{animation: 'pulse-glow 3s ease-in-out infinite'}} />
-                      <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border border-orange-600/30 absolute" style={{animation: 'pulse-glow 3s ease-in-out infinite 1s'}} />
-                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center absolute shadow-xl shadow-amber-700/30">
-                        <Globe size={20} className="text-white" />
-                      </div>
-                    </div>
-                    {/* Route dots */}
-                    <div className="absolute top-6 md:top-8 left-8 md:left-12 w-2 h-2 md:w-3 md:h-3 rounded-full bg-amber-600 animate-float" style={{animationDelay: '0s'}} />
-                    <div className="absolute top-12 md:top-16 right-8 md:right-10 w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-orange-600 animate-float" style={{animationDelay: '0.3s'}} />
-                    <div className="absolute bottom-8 md:bottom-12 left-6 md:left-8 w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-yellow-600 animate-float" style={{animationDelay: '0.6s'}} />
-                    <div className="absolute bottom-6 md:bottom-8 right-12 md:right-16 w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-green-400 animate-float" style={{animationDelay: '0.9s'}} />
-                  </div>
-                </div>
+                {/* Decorative Accents */}
+                <div className="absolute -z-10 top-1/2 right-0 w-64 h-64 bg-amber-400/10 rounded-full blur-3xl" />
               </div>
             </div>
           </div>
