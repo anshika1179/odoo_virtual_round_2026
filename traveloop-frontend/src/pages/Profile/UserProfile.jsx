@@ -160,7 +160,7 @@ export default function UserProfile() {
   }, [allTrips]);
 
   return (
-    <div className="pt-20 pb-12 max-w-5xl mx-auto px-4">
+    <div className="page-container">
       <div className="animate-fadeInUp">
         {/* Profile Header */}
         <div className="glass rounded-2xl p-8 mb-8">

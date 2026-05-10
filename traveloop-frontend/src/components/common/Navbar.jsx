@@ -27,33 +27,33 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 transition-all bg-white/90 backdrop-blur-md" 
          style={{ borderBottom: '1px solid rgba(120,90,60,0.08)' }}>
-      <div className="mx-auto flex items-center justify-between"
-           style={{ maxWidth: '1440px', padding: '0 64px', height: '76px' }}>
+      <div className="nav-container" style={{ height: '76px' }}>
 
-        {/* Left Section (25%) */}
-        <div className="flex items-center" style={{ width: '25%' }}>
+        {/* Left Group: Logo + Nav Links */}
+        <div className="flex items-center">
+          {/* Logo */}
           <Link to="/" className="flex items-center group shrink-0" style={{ gap: '10px' }}>
             <img src="/images/logo.png" alt="Traveloop" className="w-8 h-8 rounded-full object-cover group-hover:rotate-[360deg] transition-transform duration-700 ease-in-out" />
             <span className="brand-font text-amber-950 hidden sm:inline" style={{ fontSize: '28px', fontWeight: 700 }}>Traveloop.</span>
           </Link>
+
+          {/* Nav Links */}
+          <div className="hidden md:flex items-center" style={{ marginLeft: '48px', gap: '32px' }}>
+            {user && navLinks.map(link => (
+              <Link key={link.to} to={link.to}
+                className={`flex items-center gap-1.5 transition-all duration-300 relative py-2 ${isActive(link.to) ? 'text-amber-950 font-bold' : 'text-amber-900/60 hover:text-amber-950'}`}
+                style={{ fontSize: '15px' }}>
+                {link.icon} {link.label}
+                {isActive(link.to) && (
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-[2px] bg-amber-900 rounded-full" />
+                )}
+              </Link>
+            ))}
+          </div>
         </div>
 
-        {/* Center Section (50%) */}
-        <div className="hidden md:flex items-center justify-center" style={{ width: '50%', gap: '36px' }}>
-          {user && navLinks.map(link => (
-            <Link key={link.to} to={link.to}
-              className={`flex items-center gap-1.5 transition-all duration-300 relative py-2 ${isActive(link.to) ? 'text-amber-950 font-bold' : 'text-amber-900/60 hover:text-amber-950'}`}
-              style={{ fontSize: '15px' }}>
-              {link.icon} {link.label}
-              {isActive(link.to) && (
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-[2px] bg-amber-900 rounded-full" />
-              )}
-            </Link>
-          ))}
-        </div>
-
-        {/* Right Section (25%) */}
-        <div className="hidden md:flex items-center justify-end" style={{ width: '25%' }}>
+        {/* Right Group: Profile / Auth */}
+        <div className="hidden md:flex items-center ml-auto">
           {user ? (
             <div className="flex items-center">
               <Link to="/profile" className="flex items-center hover:opacity-80 transition-opacity" style={{ gap: '12px', paddingRight: '8px' }}>
@@ -86,7 +86,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile toggle */}
-        <button className="md:hidden p-2 text-amber-900/70 flex justify-end" style={{ width: '25%' }} onClick={() => setMobileOpen(!mobileOpen)}>
+        <button className="md:hidden p-2 text-amber-900/70 ml-auto" onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X size={24} strokeWidth={1.5} /> : <Menu size={24} strokeWidth={1.5} />}
         </button>
       </div>
