@@ -321,12 +321,22 @@ body {
 }
 
 /* Footer Adjustments */
+main,
+.page-container,
+.dashboard-container,
+.explore-container {
+  padding-bottom: 48px;
+}
+
 .footer-wrapper {
-  margin-top: 72px;
+  margin-top: 96px;
+  border-top: 1px solid rgba(139, 94, 60, 0.08);
 }
 footer {
-  padding-top: 48px;
-  padding-bottom: 28px;
+  padding-top: 56px;
+  padding-bottom: 40px;
+  background: #f8f3eb;
+  position: relative;
 }
 .footer-content {
   display: flex;
@@ -334,43 +344,34 @@ footer {
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 18px;
+  gap: 16px;
 }
-.footer-nav {
-  margin-top: 8px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 24px;
-}
-.footer-divider {
-  margin: 12px 0;
-  width: 100%;
-  max-width: 420px;
-  height: 1px;
-  background-color: rgb(69, 26, 3);
-  opacity: 0.08;
+.footer-logo {
+  margin-bottom: 12px;
 }
 .footer-hackathon {
-  margin-top: 6px;
   text-align: center;
-  line-height: 1.6;
-}
-.footer-hackathon-title {
-  font-weight: 600;
-  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   color: rgb(69, 26, 3);
 }
+
+.footer-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.footer-team-label {
+  font-size: 15px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
 .footer-team {
   font-size: 14px;
-  letter-spacing: 0.5px;
-  color: rgba(69, 26, 3, 0.7);
+  line-height: 1.8;
   opacity: 0.85;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
 }
 
 /* Community Page Adjustments */
