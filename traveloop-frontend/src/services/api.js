@@ -46,6 +46,7 @@ export const createExpense = (tripId, data) => API.post(`/trips/${tripId}/expens
 export const updateExpense = (id, data) => API.put(`/expenses/${id}`, data);
 export const deleteExpense = (id) => API.delete(`/expenses/${id}`);
 export const getInvoice = (tripId) => API.get(`/trips/${tripId}/invoice`);
+export const downloadInvoicePdf = (tripId) => API.get(`/trips/${tripId}/invoice/pdf`, { responseType: 'blob' });
 
 // Checklist
 export const getChecklist = (tripId) => API.get(`/trips/${tripId}/checklist`);

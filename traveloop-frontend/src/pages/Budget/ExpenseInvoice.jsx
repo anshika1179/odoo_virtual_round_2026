@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getInvoice, getTrip, createExpense, deleteExpense } from '../../services/api';
+import { getInvoice, getTrip, createExpense, deleteExpense, downloadInvoicePdf } from '../../services/api';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import { DollarSign, Download, FileText, Plus, Trash2, Loader2, AlertTriangle } from 'lucide-react';
+import { DollarSign, Download, FileText, Plus, Trash2, Loader2, AlertTriangle, CheckCircle } from 'lucide-react';
 
 const COLORS = ['#6366f1', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6', '#ec4899'];
 const CATEGORIES = ['HOTEL', 'FLIGHT', 'FOOD', 'ACTIVITY', 'TRANSPORT', 'MISC'];
@@ -14,6 +14,8 @@ export default function ExpenseInvoice() {
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [newExp, setNewExp] = useState({ category: 'FOOD', description: '', quantity: 1, unit_cost: '' });
+  const [pdfLoading, setPdfLoading] = useState(false);
+  const [pdfSuccess, setPdfSuccess] = useState(false);
 
   const loadData = async () => {
     try {
@@ -46,6 +48,30 @@ export default function ExpenseInvoice() {
     const a = document.createElement('a'); a.href = url; a.download = `invoice_${trip?.title || 'trip'}.txt`; a.click();
   };
 
+  const handleExportPdf = async () => {
+    setPdfLoading(true);
+    setPdfSuccess(false);
+    try {
+      const res = await downloadInvoicePdf(id);
+      const blob = new Blob([res.data], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Traveloop_Invoice_${trip?.title?.replace(/\s+/g, '_') || 'trip'}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setPdfSuccess(true);
+      setTimeout(() => setPdfSuccess(false), 3000);
+    } catch (err) {
+      console.error('PDF export failed:', err);
+      alert('Failed to generate PDF. Please try again.');
+    } finally {
+      setPdfLoading(false);
+    }
+  };
+
   const generateInvoiceText = () => {
     if (!invoice || !trip) return '';
     let text = `TRAVELOOP INVOICE\n${'='.repeat(50)}\n`;
@@ -74,8 +100,10 @@ export default function ExpenseInvoice() {
             <p className="text-slate-400">{trip?.title}</p>
           </div>
           <div className="flex gap-2">
-            <button onClick={handleDownload} className="btn-secondary text-sm"><Download size={16} /> Download Invoice</button>
-            <button onClick={handleDownload} className="btn-primary text-sm"><FileText size={16} /> Export as PDF</button>
+            <button onClick={handleDownload} className="btn-secondary text-sm"><Download size={16} /> Download TXT</button>
+            <button onClick={handleExportPdf} disabled={pdfLoading} className="btn-primary text-sm">
+              {pdfLoading ? <><Loader2 size={16} className="animate-spin" /> Generating...</> : pdfSuccess ? <><CheckCircle size={16} /> Downloaded!</> : <><FileText size={16} /> Export as PDF</>}
+            </button>
           </div>
         </div>
 
