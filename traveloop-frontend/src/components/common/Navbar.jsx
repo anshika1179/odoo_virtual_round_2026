@@ -25,11 +25,11 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-indigo-500/10">
+    <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-amber-700/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center group-hover:scale-110 transition-transform">
               <Globe size={20} className="text-white" />
             </div>
             <span className="text-xl font-bold gradient-text">Traveloop</span>
@@ -40,7 +40,7 @@ export default function Navbar() {
             {user && navLinks.map(link => (
               <Link key={link.to} to={link.to}
                 className={`nav-link flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all
-                  ${isActive(link.to) ? 'active bg-indigo-500/20 text-indigo-300' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
+                  ${isActive(link.to) ? 'active bg-amber-700/20 text-amber-800' : 'text-amber-700 hover:text-amber-900 hover:bg-amber-100/50'}`}>
                 {link.icon} {link.label}
               </Link>
             ))}
@@ -50,12 +50,12 @@ export default function Navbar() {
             {user ? (
               <>
                 <Link to="/profile" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/5 transition-all">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center">
                     <User size={16} className="text-white" />
                   </div>
-                  <span className="text-sm text-slate-300">{user.full_name?.split(' ')[0]}</span>
+                  <span className="text-sm text-amber-800">{user.full_name?.split(' ')[0]}</span>
                 </Link>
-                <button onClick={handleLogout} className="p-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all">
+                <button onClick={handleLogout} className="p-2 rounded-lg text-amber-700 hover:text-red-600 hover:bg-red-50 transition-all">
                   <LogOut size={18} />
                 </button>
               </>
@@ -68,7 +68,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile toggle */}
-          <button className="md:hidden p-2 text-slate-400" onClick={() => setMobileOpen(!mobileOpen)}>
+          <button className="md:hidden p-2 text-amber-700" onClick={() => setMobileOpen(!mobileOpen)}>
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
@@ -76,21 +76,21 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden glass border-t border-indigo-500/10 animate-fadeInUp">
+        <div className="md:hidden glass border-t border-amber-700/10 animate-fadeInUp">
           <div className="px-4 py-3 space-y-1">
             {user && navLinks.map(link => (
               <Link key={link.to} to={link.to} onClick={() => setMobileOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all
-                  ${isActive(link.to) ? 'bg-indigo-500/20 text-indigo-300' : 'text-slate-400 hover:text-white'}`}>
+                  ${isActive(link.to) ? 'bg-amber-700/20 text-amber-800' : 'text-amber-700 hover:text-amber-900'}`}>
                 {link.icon} {link.label}
               </Link>
             ))}
             {user && (
               <>
-                <Link to="/profile" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-slate-400 hover:text-white">
+                <Link to="/profile" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-amber-700 hover:text-amber-900">
                   <User size={18} /> Profile
                 </Link>
-                <button onClick={() => { handleLogout(); setMobileOpen(false); }} className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-red-400 w-full text-left">
+                <button onClick={() => { handleLogout(); setMobileOpen(false); }} className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-red-600 w-full text-left">
                   <LogOut size={18} /> Logout
                 </button>
               </>
