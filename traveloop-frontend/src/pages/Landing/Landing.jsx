@@ -169,24 +169,60 @@ export default function Landing() {
 
       {/* Previous Trips */}
       {prevTrips.length > 0 && (
-        <section className="container py-12 md:py-16">
-          <h2 className="text-2xl md:text-3xl font-bold text-amber-900 mb-2">Previous Trips</h2>
-          <p className="text-amber-700 mb-6 md:mb-8 text-sm md:text-base">Revisit your past adventures</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            {prevTrips.map(trip => (
-              <Link to={`/trips/${trip.id}/view`} key={trip.id} className="trip-card p-4 md:p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Calendar size={14} className="text-amber-700" />
-                  <span className="text-xs text-amber-600">{new Date(trip.start_date).toLocaleDateString()}</span>
+        <section className="container" style={{ marginTop: '120px', marginBottom: '40px' }}>
+          <div className="glass shadow-soft relative overflow-hidden" style={{ borderRadius: '32px', border: '1px solid rgba(120,90,60,0.08)' }}>
+            {/* Section gradient header */}
+            <div className="h-2 w-full bg-gradient-to-r from-amber-500 via-orange-400 to-amber-600 absolute top-0 left-0"></div>
+            
+            <div style={{ padding: '48px 40px' }}>
+              <div className="flex items-end justify-between mb-10">
+                <div>
+                  <h2 className="text-amber-950 font-bold flex items-center gap-3" style={{ fontSize: '32px' }}>
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-600 to-orange-700 flex items-center justify-center text-white shadow-md shrink-0">
+                      <Globe size={20} />
+                    </div>
+                    Previous Trips
+                  </h2>
+                  <p className="text-amber-900/60 mt-2 font-medium" style={{ fontSize: '16px' }}>Revisit your past adventures</p>
                 </div>
-                <h3 className="text-amber-900 font-semibold mb-1 text-sm md:text-base">{trip.title}</h3>
-                <p className="text-amber-700 text-xs md:text-sm line-clamp-2">{trip.description || 'No description'}</p>
-                <div className="mt-3 flex items-center justify-between">
-                  <span className="badge badge-completed text-xs">Completed</span>
-                  <span className="text-amber-700 text-xs font-medium">View →</span>
-                </div>
-              </Link>
-            ))}
+                <Link to="/trips" className="text-amber-900/70 hover:text-amber-950 font-semibold text-sm flex items-center gap-1 transition-colors">
+                  View All <ChevronRight size={16} />
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {prevTrips.map((trip, i) => (
+                  <Link to={`/trips/${trip.id}/view`} key={trip.id}
+                    className="group glass rounded-2xl flex flex-col transition-all duration-300 hover:shadow-lg"
+                    style={{ border: '1px solid rgba(120,90,60,0.08)', overflow: 'hidden', animationDelay: `${i * 0.1}s` }}>
+                    
+                    {/* Card top accent */}
+                    <div className="h-1.5 w-full bg-gradient-to-r from-emerald-400 to-green-500"></div>
+                    
+                    <div style={{ padding: '24px' }} className="flex flex-col flex-1">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600 shrink-0">
+                          <Calendar size={16} />
+                        </div>
+                        <span className="text-xs text-amber-900/60 font-semibold">
+                          {new Date(trip.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </span>
+                      </div>
+                      
+                      <h3 className="text-amber-950 font-bold text-lg mb-2 leading-tight group-hover:text-amber-700 transition-colors">{trip.title}</h3>
+                      <p className="text-amber-900/50 text-sm line-clamp-2 mb-5 flex-1">{trip.description || 'No description added'}</p>
+                      
+                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-amber-900/5">
+                        <span className="bg-emerald-100 text-emerald-800 border border-emerald-200 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide">Completed</span>
+                        <span className="text-amber-700 text-sm font-semibold group-hover:text-amber-950 transition-colors flex items-center gap-1">
+                          View <ChevronRight size={14} />
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
       )}
