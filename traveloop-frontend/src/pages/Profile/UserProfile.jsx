@@ -163,17 +163,17 @@ export default function UserProfile() {
   return (
     <div
       className="mx-auto flex flex-col items-center"
-      style={{ maxWidth: "1440px", padding: "120px 64px 80px 64px" }}
+      style={{ maxWidth: "1440px", padding: "120px 48px 80px 48px" }}
     >
-      <div className="animate-fadeInUp w-full" style={{ maxWidth: "1200px" }}>
+      <div className="animate-fadeInUp w-full" style={{ maxWidth: "960px" }}>
         {/* Profile Header */}
         <div 
-          className="glass shadow-soft mb-10 relative overflow-hidden"
+          className="glass shadow-soft mb-12 relative overflow-hidden"
           style={{ borderRadius: "32px", border: "1px solid rgba(120,90,60,0.08)" }}
         >
-          <div className="h-32 w-full bg-gradient-to-r from-amber-700/20 to-orange-500/20 absolute top-0 left-0"></div>
+          <div className="h-40 w-full bg-gradient-to-r from-amber-600/25 via-orange-400/20 to-amber-500/25 absolute top-0 left-0"></div>
           
-          <div className="p-8 sm:p-10 relative z-10 pt-16 flex flex-col sm:flex-row items-center sm:items-start gap-8 text-center sm:text-left">
+          <div className="px-10 pb-10 pt-20 relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-8 text-center sm:text-left">
             {/* Avatar with Upload */}
             <div className="relative group shrink-0">
               {photoSrc ? (
@@ -238,12 +238,12 @@ export default function UserProfile() {
                   <Edit3 size={20} />
                 </button>
               </div>
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 text-amber-900/70 font-medium">
-                <p className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-8 text-amber-900/70 font-medium mt-2">
+                <p className="flex items-center gap-2 text-base">
                   <Mail size={18} className="text-amber-500" /> {user?.email}
                 </p>
                 {user?.city && (
-                  <p className="flex items-center gap-2">
+                  <p className="flex items-center gap-2 text-base">
                     <MapPin size={18} className="text-amber-500" /> {user.city}, {user.country}
                   </p>
                 )}
@@ -353,29 +353,29 @@ export default function UserProfile() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
           {stats.map((s, i) => (
             <div
               key={i}
-              className="glass shadow-soft hover:shadow-lg transition-all duration-300 animate-fadeInUp flex flex-col p-6"
-              style={{ borderRadius: "24px", border: "1px solid rgba(120,90,60,0.08)", animationDelay: `${i * 0.1}s` }}
+              className="glass shadow-soft hover:shadow-lg transition-all duration-300 animate-fadeInUp flex flex-col"
+              style={{ borderRadius: "24px", border: "1px solid rgba(120,90,60,0.08)", animationDelay: `${i * 0.1}s`, padding: "24px" }}
             >
-              <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-center gap-3 mb-5">
                 <div
-                  className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${s.color} flex items-center justify-center text-white shadow-md`}
+                  className={`w-11 h-11 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-white shadow-md shrink-0`}
                 >
                   {s.icon}
                 </div>
-                <p className="text-sm font-bold text-amber-900/60 uppercase tracking-wider">{s.label}</p>
+                <p className="text-xs font-bold text-amber-900/60 uppercase tracking-wider leading-tight">{s.label}</p>
               </div>
-              <p className="text-4xl font-black text-amber-950 mt-auto">{s.value}</p>
+              <p className="text-3xl font-black text-amber-950 mt-auto">{s.value}</p>
             </div>
           ))}
         </div>
 
         {/* Trips Sections */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="glass shadow-soft p-8" style={{ borderRadius: "32px", border: "1px solid rgba(120,90,60,0.08)" }}>
+          <div className="glass shadow-soft" style={{ borderRadius: "32px", border: "1px solid rgba(120,90,60,0.08)", padding: "32px" }}>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-amber-950 flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600"><Plane size={16} /></div>
@@ -428,7 +428,7 @@ export default function UserProfile() {
             )}
           </div>
 
-          <div className="glass shadow-soft p-8" style={{ borderRadius: "32px", border: "1px solid rgba(120,90,60,0.08)" }}>
+          <div className="glass shadow-soft" style={{ borderRadius: "32px", border: "1px solid rgba(120,90,60,0.08)", padding: "32px" }}>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-amber-950 flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600"><Globe size={16} /></div>
