@@ -93,18 +93,17 @@ export default function Landing() {
 
       {/* Feature Cards Section */}
       <section className="container" style={{ paddingTop: '120px', paddingBottom: '120px' }}>
-        <div className="text-center animate-fadeInUp" style={{ marginBottom: '72px' }}>
-          <h2 className="text-amber-950 font-bold" style={{ fontSize: '56px', lineHeight: 1.1 }}>Travel Smart</h2>
-          <p className="text-amber-900/75 mx-auto" style={{ maxWidth: '720px', marginTop: '16px', fontSize: '18px', lineHeight: 1.7 }}>
+        <div className="hero-section animate-fadeInUp">
+          <h2 className="text-amber-950 font-bold">Travel Smart</h2>
+          <p className="text-amber-900/75">
             Build day-by-day itineraries, track your travel expenses, and manage your packing lists all in one beautiful place.
           </p>
         </div>
         
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'stretch', gap: '32px', flexWrap: 'wrap', width: 'fit-content', marginLeft: 'auto', marginRight: 'auto' }}>
+        <div className="features-grid">
           {features.map((f, i) => (
             <div key={i} className="group transition-transform duration-400 animate-fadeInUp backdrop-blur-md flex flex-col justify-start" 
                  style={{ 
-                   width: '280px',
                    minHeight: '320px', 
                    borderRadius: '32px', 
                    padding: '32px', 
