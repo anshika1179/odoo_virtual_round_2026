@@ -14,6 +14,12 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (form.password.length < 6) { setError('Password must be at least 6 characters'); return; }
+    
+    if (form.phone && form.phone.replace('+91', '').length !== 10) {
+      setError('Phone number must be exactly 10 digits');
+      return;
+    }
+
     setError('');
     setLoading(true);
     try {
@@ -82,9 +88,19 @@ export default function Register() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-amber-800 mb-1.5">Phone</label>
-                  <div className="relative">
-                    <Phone size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600/50" />
-                    <input className="input-glass pl-10" placeholder="+91 9876543210" value={form.phone} onChange={set('phone')} />
+                  <div className="relative flex items-center">
+                    <Phone size={18} className="absolute left-3 text-amber-600/50" />
+                    <span className="absolute left-10 text-amber-800 font-medium select-none">+91</span>
+                    <input 
+                      className="input-glass w-full" 
+                      style={{ paddingLeft: '4.5rem' }}
+                      placeholder="9876543210" 
+                      value={form.phone ? form.phone.replace('+91', '') : ''} 
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                        setForm({...form, phone: val ? `+91${val}` : ''});
+                      }} 
+                    />
                   </div>
                 </div>
                 <div>
