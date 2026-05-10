@@ -322,7 +322,7 @@ In the interest of transparency and MVP delivery timeframe:
 
 ## 🎥 Submission Video
 
-> **[Insert Link to Your 8-Minute Demo Video Here]**  
+> **[Watch the 8-Minute Traveloop Demo Video Here](https://drive.google.com/file/d/1dbhw88kvkFrWTOE57dp-DxbZWBufshcM/view?usp=drive_link)**  
 > *Note to Judges: Please watch the comprehensive 8-minute video above. It covers the complete user journey (1m), dynamic trip creation and architecture explanation (2m), the interactive itinerary builder in action (1.5m), the financial tracking and PDF export (1.5m), and concludes with community sharing, public links, and the admin dashboard (2m).*
 
 <div align="center">
