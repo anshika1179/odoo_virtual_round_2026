@@ -322,7 +322,7 @@ In the interest of transparency and MVP delivery timeframe:
 
 ## 🎥 Submission Video
 
-> **[Watch the Traveloop Demo Video Here](https://drive.google.com/file/d/1dbhw88kvkFrWTOE57dp-DxbZWBufshcM/view?usp=drive_link)**  
+> **[Watch the Traveloop Demo Video Here](https://youtu.be/tE8NQdWLolg)**  
 > *Note to Judges: Please watch the comprehensive demo video above. It covers the complete user journey, dynamic trip creation and architecture explanation, the interactive itinerary builder in action, the financial tracking and PDF export, and concludes with community sharing, public links, and the admin dashboard.*
 
 <div align="center">
