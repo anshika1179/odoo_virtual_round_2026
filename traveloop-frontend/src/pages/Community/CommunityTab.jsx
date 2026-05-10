@@ -38,24 +38,24 @@ export default function CommunityTab() {
       <div className="animate-fadeInUp">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-              <Users size={32} className="text-indigo-400" /> Community
+            <h1 className="text-3xl font-bold text-amber-900 flex items-center gap-3">
+              <Users size={32} className="text-amber-700" /> Community
             </h1>
-            <p className="text-slate-400 mt-1">Share experiences and get inspired by fellow travelers</p>
+            <p className="text-amber-700 mt-1">Share experiences and get inspired by fellow travelers</p>
           </div>
           {user && <button onClick={() => setShowCreate(!showCreate)} className="btn-primary"><Plus size={18} /> Share Experience</button>}
         </div>
 
         {/* Search */}
         <div className="relative mb-6">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600" />
           <input className="input-glass pl-10" placeholder="Search community posts..." value={search} onChange={e => setSearch(e.target.value)} />
         </div>
 
         {/* Create Post */}
         {showCreate && (
           <div className="glass rounded-2xl p-6 mb-6 animate-fadeInUp">
-            <h3 className="text-white font-semibold mb-4 flex items-center gap-2"><Globe size={18} className="text-indigo-400" /> Share Your Trip Experience</h3>
+            <h3 className="text-amber-900 font-semibold mb-4 flex items-center gap-2"><Globe size={18} className="text-amber-700" /> Share Your Trip Experience</h3>
             <div className="space-y-4">
               <input className="input-glass" placeholder="Title of your experience..." value={newPost.title} onChange={e => setNewPost({...newPost, title: e.target.value})} />
               <textarea className="input-glass" rows={5} placeholder="Tell us about your amazing trip..." value={newPost.experience_text} onChange={e => setNewPost({...newPost, experience_text: e.target.value})} />
@@ -83,21 +83,21 @@ export default function CommunityTab() {
                 )}
                 <div className="p-6">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center text-amber-900 font-bold text-sm">
                       {post.user_name?.[0]?.toUpperCase() || '?'}
                     </div>
                     <div>
-                      <h4 className="text-white font-medium text-sm">{post.user_name || 'Anonymous'}</h4>
-                      <p className="text-slate-500 text-xs">{new Date(post.created_at).toLocaleDateString()}</p>
+                      <h4 className="text-amber-900 font-medium text-sm">{post.user_name || 'Anonymous'}</h4>
+                      <p className="text-amber-600 text-xs">{new Date(post.created_at).toLocaleDateString()}</p>
                     </div>
                   </div>
-                  <h3 className="text-white font-bold text-xl mb-2">{post.title}</h3>
-                  {post.experience_text && <p className="text-slate-400 text-sm whitespace-pre-wrap">{post.experience_text}</p>}
-                  <div className="flex items-center gap-6 mt-4 pt-4 border-t border-slate-800">
-                    <button onClick={() => handleLike(post.id)} className="flex items-center gap-2 text-sm text-slate-400 hover:text-red-400 transition-colors">
+                  <h3 className="text-amber-900 font-bold text-xl mb-2">{post.title}</h3>
+                  {post.experience_text && <p className="text-amber-700 text-sm whitespace-pre-wrap">{post.experience_text}</p>}
+                  <div className="flex items-center gap-6 mt-4 pt-4 border-t border-amber-100">
+                    <button onClick={() => handleLike(post.id)} className="flex items-center gap-2 text-sm text-amber-700 hover:text-red-400 transition-colors">
                       <Heart size={18} className={post.likes_count > 0 ? 'text-red-400 fill-red-400' : ''} /> {post.likes_count || 0}
                     </button>
-                    <span className="flex items-center gap-2 text-sm text-slate-400"><MessageCircle size={18} /> Inspire</span>
+                    <span className="flex items-center gap-2 text-sm text-amber-700"><MessageCircle size={18} /> Inspire</span>
                   </div>
                 </div>
               </div>
@@ -108,11 +108,11 @@ export default function CommunityTab() {
         {!loading && posts.length === 0 && (
           <div className="text-center py-20 animate-fadeInUp">
             <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mx-auto mb-6">
-              <Camera size={40} className="text-purple-400/60" />
+              <Camera size={40} className="text-orange-600/60" />
             </div>
-            <h3 className="text-2xl font-bold text-white mb-2">Share your travel stories</h3>
-            <p className="text-slate-400 mb-2 max-w-md mx-auto">Be the first to share! Post your travel experiences, tips, and photos to inspire fellow travelers.</p>
-            <p className="text-slate-500 text-sm mb-6 flex items-center justify-center gap-2">
+            <h3 className="text-2xl font-bold text-amber-900 mb-2">Share your travel stories</h3>
+            <p className="text-amber-700 mb-2 max-w-md mx-auto">Be the first to share! Post your travel experiences, tips, and photos to inspire fellow travelers.</p>
+            <p className="text-amber-600 text-sm mb-6 flex items-center justify-center gap-2">
               <Sparkles size={14} className="text-amber-400" /> Your story could inspire someone's next adventure
             </p>
             {user && (

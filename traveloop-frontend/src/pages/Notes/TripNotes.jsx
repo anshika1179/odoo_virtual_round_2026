@@ -33,15 +33,15 @@ export default function TripNotes() {
 
   const filters = ['ALL', 'BY_DAY', 'BY_STOP'];
 
-  if (loading) return <div className="pt-20 flex justify-center"><Loader2 size={32} className="animate-spin text-indigo-400" /></div>;
+  if (loading) return <div className="pt-20 flex justify-center"><Loader2 size={32} className="animate-spin text-amber-700" /></div>;
 
   return (
     <div className="pt-20 pb-12 max-w-4xl mx-auto px-4">
       <div className="animate-fadeInUp">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-white">Trip Notes</h1>
-            <p className="text-slate-400">Journal your experiences and reminders</p>
+            <h1 className="text-3xl font-bold text-amber-900">Trip Notes</h1>
+            <p className="text-amber-700">Journal your experiences and reminders</p>
           </div>
           <button onClick={() => setShowAdd(!showAdd)} className="btn-primary"><Plus size={18} /> New Note</button>
         </div>
@@ -50,7 +50,7 @@ export default function TripNotes() {
         <div className="flex gap-2 mb-6">
           {filters.map(f => (
             <button key={f} onClick={() => setFilter(f)}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${filter === f ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${filter === f ? 'bg-amber-700/15 text-amber-600 border border-amber-700/30' : 'text-amber-700 hover:text-amber-900 hover:bg-white/5'}`}>
               {f === 'ALL' ? 'All' : f === 'BY_DAY' ? 'By Day' : 'By Stop'}
             </button>
           ))}
@@ -81,20 +81,20 @@ export default function TripNotes() {
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <StickyNote size={18} className="text-amber-400" />
-                    <h3 className="text-white font-semibold">{note.title}</h3>
+                    <h3 className="text-amber-900 font-semibold">{note.title}</h3>
                     <span className="badge badge-upcoming text-xs">{note.filter_type}</span>
                   </div>
-                  {note.content && <p className="text-slate-400 text-sm whitespace-pre-wrap ml-8">{note.content}</p>}
-                  <div className="flex gap-4 mt-3 ml-8 text-xs text-slate-500">
+                  {note.content && <p className="text-amber-700 text-sm whitespace-pre-wrap ml-8">{note.content}</p>}
+                  <div className="flex gap-4 mt-3 ml-8 text-xs text-amber-600">
                     {note.note_date && <span className="flex items-center gap-1"><Calendar size={12} /> {new Date(note.note_date).toLocaleDateString()}</span>}
                     <span>{new Date(note.created_at).toLocaleString()}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0 ml-4">
-                  <button onClick={() => handleToggle(note)} className="p-1 text-slate-400 hover:text-indigo-400 transition-colors">
-                    {note.is_active ? <ToggleRight size={22} className="text-green-400" /> : <ToggleLeft size={22} />}
+                  <button onClick={() => handleToggle(note)} className="p-1 text-amber-700 hover:text-amber-700 transition-colors">
+                    {note.is_active ? <ToggleRight size={22} className="text-emerald-600" /> : <ToggleLeft size={22} />}
                   </button>
-                  <button onClick={() => handleDelete(note.id)} className="p-1 text-slate-500 hover:text-red-400 transition-colors"><Trash2 size={16} /></button>
+                  <button onClick={() => handleDelete(note.id)} className="p-1 text-amber-600 hover:text-red-400 transition-colors"><Trash2 size={16} /></button>
                 </div>
               </div>
             </div>
@@ -102,8 +102,8 @@ export default function TripNotes() {
         </div>
 
         {notes.length === 0 && (
-          <div className="text-center py-16 text-slate-500">
-            <StickyNote size={48} className="mx-auto mb-4 text-slate-600" />
+          <div className="text-center py-16 text-amber-600">
+            <StickyNote size={48} className="mx-auto mb-4 text-amber-500" />
             <p>No notes yet. Start journaling your trip!</p>
           </div>
         )}

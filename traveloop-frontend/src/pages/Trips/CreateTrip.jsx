@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createTrip, searchCities } from '../../services/api';
-import { Calendar, MapPin, DollarSign, Plane, Loader2, Sparkles } from 'lucide-react';
+import { Calendar, MapPin, DollarSign, Plane, Loader2, Sparkles, Image } from 'lucide-react';
 
 export default function CreateTrip() {
   const [form, setForm] = useState({ title: '', description: '', start_date: '', end_date: '', total_budget: '', cover_photo_url: '' });
@@ -48,12 +48,12 @@ export default function CreateTrip() {
     <div className="pt-20 pb-12 max-w-5xl mx-auto px-4">
       <div className="animate-fadeInUp">
         <div className="flex items-center gap-3 mb-8">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center">
             <Plane size={24} className="text-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-white">Plan a New Trip</h1>
-            <p className="text-slate-400">Fill in the details and start building your itinerary</p>
+            <h1 className="text-3xl font-bold text-amber-900">Plan a New Trip</h1>
+            <p className="text-amber-700">Fill in the details and start building your itinerary</p>
           </div>
         </div>
 
@@ -64,27 +64,27 @@ export default function CreateTrip() {
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Trip Title *</label>
+                  <label className="block text-sm font-medium text-amber-800 mb-2">Trip Title *</label>
                   <input className="input-glass" placeholder="e.g., European Summer Adventure" value={form.title} onChange={set('title')} required />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Description</label>
+                  <label className="block text-sm font-medium text-amber-800 mb-2">Description</label>
                   <textarea className="input-glass" rows={3} placeholder="What's this trip about?" value={form.description} onChange={set('description')} />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Search a Place</label>
+                  <label className="block text-sm font-medium text-amber-800 mb-2">Search a Place</label>
                   <div className="relative">
-                    <MapPin size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                    <MapPin size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600" />
                     <input className="input-glass pl-10" placeholder="Search cities..." value={citySearch} onChange={e => setCitySearch(e.target.value)} />
                   </div>
                   {cities.length > 0 && citySearch && (
                     <div className="mt-2 glass rounded-xl p-2 max-h-40 overflow-y-auto">
                       {cities.slice(0, 5).map(c => (
                         <button key={c.id} type="button" onClick={() => { setForm({...form, title: form.title || `Trip to ${c.name}`}); setCitySearch(''); setCities([]); }}
-                          className="w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 text-sm text-slate-300 flex items-center gap-2">
-                          <MapPin size={14} className="text-indigo-400" /> {c.name}, {c.country}
+                          className="w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 text-sm text-amber-800 flex items-center gap-2">
+                          <MapPin size={14} className="text-amber-700" /> {c.name}, {c.country}
                         </button>
                       ))}
                     </div>
@@ -93,18 +93,27 @@ export default function CreateTrip() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2"><Calendar size={14} className="inline mr-1" />Start Date *</label>
+                    <label className="block text-sm font-medium text-amber-800 mb-2"><Calendar size={14} className="inline mr-1" />Start Date *</label>
                     <input type="date" className="input-glass" value={form.start_date} onChange={set('start_date')} required />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2"><Calendar size={14} className="inline mr-1" />End Date *</label>
+                    <label className="block text-sm font-medium text-amber-800 mb-2"><Calendar size={14} className="inline mr-1" />End Date *</label>
                     <input type="date" className="input-glass" value={form.end_date} onChange={set('end_date')} required />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2"><DollarSign size={14} className="inline mr-1" />Total Budget (USD)</label>
+                  <label className="block text-sm font-medium text-amber-800 mb-2"><DollarSign size={14} className="inline mr-1" />Total Budget (USD)</label>
                   <input type="number" className="input-glass" placeholder="5000" value={form.total_budget} onChange={set('total_budget')} />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-amber-800 mb-2"><Image size={14} className="inline mr-1" />Cover Photo URL</label>
+                  <input className="input-glass" placeholder="https://images.unsplash.com/..." value={form.cover_photo_url} onChange={set('cover_photo_url')} />
+                  {form.cover_photo_url && (
+                    <img src={form.cover_photo_url} alt="Cover preview" className="mt-2 w-full h-32 object-cover rounded-xl border border-amber-200"
+                      onError={e => { e.target.style.display = 'none'; }} />
+                  )}
                 </div>
 
                 <button type="submit" disabled={loading} className="btn-primary w-full justify-center py-3 text-base">
@@ -118,7 +127,7 @@ export default function CreateTrip() {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <Sparkles size={18} className="text-amber-400" />
-              <h3 className="text-lg font-semibold text-white">Suggestions</h3>
+              <h3 className="text-lg font-semibold text-amber-900">Suggestions</h3>
             </div>
             <div className="space-y-3">
               {suggestions.map(s => (
@@ -126,8 +135,8 @@ export default function CreateTrip() {
                   className="trip-card w-full flex items-center gap-3 p-3 text-left">
                   <img src={s.img} alt={s.name} className="w-14 h-14 rounded-lg object-cover" />
                   <div>
-                    <h4 className="text-white font-medium text-sm">{s.name}</h4>
-                    <p className="text-slate-400 text-xs">{s.desc}</p>
+                    <h4 className="text-amber-900 font-medium text-sm">{s.name}</h4>
+                    <p className="text-amber-700 text-xs">{s.desc}</p>
                   </div>
                 </button>
               ))}
