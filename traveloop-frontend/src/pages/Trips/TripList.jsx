@@ -27,7 +27,7 @@ export default function TripList() {
   const badgeClass = (s) => s === 'ONGOING' ? 'badge-ongoing' : s === 'UPCOMING' ? 'badge-upcoming' : 'badge-completed';
 
   return (
-    <div className="mx-auto" style={{ maxWidth: '1440px', padding: '120px 64px 80px 64px' }}>
+    <div className="page-container">
       <div className="mb-8">
         <h1 className="text-amber-950 font-bold" style={{ fontSize: '36px' }}>My Trips</h1>
         <p className="text-amber-900/70 mt-1">Manage all your travel plans</p>
