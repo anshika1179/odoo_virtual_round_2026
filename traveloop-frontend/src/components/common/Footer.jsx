@@ -14,10 +14,10 @@ export default function Footer() {
             <span className="brand-font text-amber-950" style={{ fontSize: '36px', fontWeight: 700 }}>Traveloop.</span>
           </Link>
           
-          {/* Hackathon Credits */}
-          <div className="footer-hackathon">
+          {/* Credits */}
+          <div className="footer-credits">
             <h3 className="footer-title">
-              Made for Odoo × Parul University Virtual Round
+              Made for Parul University Virtual Round
             </h3>
 
             <p className="footer-team-label">
