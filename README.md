@@ -5,7 +5,6 @@
   
   <h3>Team Leader: <strong>Anshika</strong></h3>
   <h4>Team Members: <strong>Khushi Patel, Atul Upadhyay, Satyam Kumar Singh</strong></h4>
-  <p><i>Built for the Parul University Virtual Round 2026</i></p>
 </div>
 
 ---
@@ -324,7 +323,3 @@ In the interest of transparency and MVP delivery timeframe:
 
 > **[Watch the Traveloop Demo Video Here](https://youtu.be/tE8NQdWLolg)**  
 > *Note to Judges: Please watch the comprehensive demo video above. It covers the complete user journey, dynamic trip creation and architecture explanation, the interactive itinerary builder in action, the financial tracking and PDF export, and concludes with community sharing, public links, and the admin dashboard.*
-
-<div align="center">
-  <p><i>Made with ❤️ for the Virtual Round 2026</i></p>
-</div>

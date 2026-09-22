@@ -17,7 +17,7 @@ export default function Footer() {
           {/* Credits */}
           <div className="footer-credits">
             <h3 className="footer-title">
-              Made for Parul University Virtual Round
+              Made with ❤️
             </h3>
 
             <p className="footer-team-label">
