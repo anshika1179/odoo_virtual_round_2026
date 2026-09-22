@@ -5,7 +5,7 @@
   
   <h3>Team Leader: <strong>Anshika</strong></h3>
   <h4>Team Members: <strong>Khushi Patel, Atul Upadhyay, Satyam Kumar Singh</strong></h4>
-  <p><i>Built for the Odoo × Parul University Virtual Round 2026</i></p>
+  <p><i>Built for the Parul University Virtual Round 2026</i></p>
 </div>
 
 ---
@@ -45,7 +45,7 @@ Traveloop directly addresses the fragmentation of modern travel planning. Instea
 
 ## ✨ 100% Feature Complete
 
-Traveloop strictly adheres to and fully implements all 14 requirements outlined in the hackathon problem statement:
+Traveloop strictly adheres to and fully implements all 14 requirements outlined in the problem statement:
 
 1. 🔐 **Authentication Flow** — Secure email/password login, JWT registration, and a complete 'Forgot Password' reset flow.
 2. 📊 **Dashboard Hub** — A central landing page highlighting upcoming trips, recently completed adventures, and popular cities.
@@ -150,7 +150,7 @@ Traveloop was built using a strict **Service-Oriented Architecture (SOA)** on th
 - **Models:** Map directly to the database.
 
 **Robust Input Validation (Pydantic):**
-All API inputs are rigorously validated using Pydantic schemas *before* reaching the service layer. If a user inputs an invalid date format, a negative budget, or a malformed email, the backend rejects it with a 422 Unprocessable Entity response. On the frontend, inline error messages ensure the user corrects these fields immediately, mapping perfectly to the hackathon's validation criteria.
+All API inputs are rigorously validated using Pydantic schemas *before* reaching the service layer. If a user inputs an invalid date format, a negative budget, or a malformed email, the backend rejects it with a 422 Unprocessable Entity response. On the frontend, inline error messages ensure the user corrects these fields immediately, mapping perfectly to the validation criteria.
 
 ---
 
@@ -326,5 +326,5 @@ In the interest of transparency and MVP delivery timeframe:
 > *Note to Judges: Please watch the comprehensive demo video above. It covers the complete user journey, dynamic trip creation and architecture explanation, the interactive itinerary builder in action, the financial tracking and PDF export, and concludes with community sharing, public links, and the admin dashboard.*
 
 <div align="center">
-  <p><i>Made with ❤️ for the Odoo Hackathon 2026</i></p>
+  <p><i>Made with ❤️ for the Virtual Round 2026</i></p>
 </div>
