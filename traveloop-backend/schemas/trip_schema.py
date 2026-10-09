@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 from typing import Optional, List
 from datetime import datetime
 
@@ -249,6 +249,7 @@ class NoteResponse(BaseModel):
 
 # ===== Community Schemas =====
 class CommunityPostCreate(BaseModel):
+    image_urls: List[str] = Field(default_factory=list, max_length=5)
     trip_id: Optional[int] = None
     title: str
     experience_text: Optional[str] = None
@@ -256,6 +257,8 @@ class CommunityPostCreate(BaseModel):
 
 
 class CommunityPostResponse(BaseModel):
+    image_urls: List[str] = Field(default_factory=list)
+    comments_count: int = 0
     id: int
     user_id: int
     user_name: Optional[str] = None
@@ -302,3 +305,23 @@ class ActivityResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class PostCommentCreate(BaseModel):
+    content: str = Field(min_length=1, max_length=2000)
+
+    @field_validator("content")
+    @classmethod
+    def validate_content(cls, value):
+        if not value.strip():
+            raise ValueError("Feedback cannot be empty")
+        return value.strip()
+
+
+class PostCommentResponse(BaseModel):
+    id: int
+    post_id: int
+    user_id: int
+    user_name: Optional[str] = None
+    content: str
+    created_at: Optional[datetime] = None

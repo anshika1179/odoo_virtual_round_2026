@@ -145,7 +145,7 @@ export default function Landing() {
               className="group cursor-pointer rounded-3xl overflow-hidden relative shadow-sm" style={{ height: '260px', animationDelay: `${i * 0.05}s` }}>
               <img src={city.image_url} alt={city.name}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                onError={(e) => { e.target.src = `https://via.placeholder.com/400x300/1e293b/6366f1?text=${city.name}`; }} />
+                onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent transition-opacity duration-500 group-hover:opacity-80" />
               <div className="absolute bottom-6 left-6">
                 <h3 className="text-white font-bold" style={{ fontSize: '20px', letterSpacing: '0.02em' }}>{city.name}</h3>
@@ -158,7 +158,7 @@ export default function Landing() {
         <div className="grid lg:hidden grid-cols-2 sm:grid-cols-3 gap-4">
           {cities.filter(c => !search || c.name.toLowerCase().includes(search.toLowerCase())).slice(0, 6).map((city, i) => (
             <Link to={`/search/cities`} key={city.id} className="group cursor-pointer rounded-2xl overflow-hidden relative aspect-square shadow-sm">
-              <img src={city.image_url} alt={city.name} className="w-full h-full object-cover" onError={(e) => { e.target.src = `https://via.placeholder.com/400x300/1e293b/6366f1?text=${city.name}`; }} />
+              <img src={city.image_url} alt={city.name} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               <div className="absolute bottom-4 left-4">
                 <h3 className="text-white font-semibold text-sm">{city.name}</h3>
@@ -168,6 +168,7 @@ export default function Landing() {
         </div>
       </section>
 
+      <div className="container mt-6"><Link to="/photo-credits" className="text-xs underline text-amber-900/60">Destination photo credits and licenses</Link></div>
       {/* World Map Interactive Section */}
       <section className="container" style={{ marginTop: '120px' }}>
         <div className="flex items-end justify-between mb-10">

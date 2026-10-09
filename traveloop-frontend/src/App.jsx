@@ -13,6 +13,7 @@ import TripList from './pages/Trips/TripList';
 import ItineraryBuilder from './pages/Itinerary/ItineraryBuilder';
 import ItineraryView from './pages/Itinerary/ItineraryView';
 import CitySearch from './pages/Search/CitySearch';
+import PhotoCredits from './pages/Search/PhotoCredits';
 import ExpenseInvoice from './pages/Budget/ExpenseInvoice';
 import PackingChecklist from './pages/Checklist/PackingChecklist';
 import TripNotes from './pages/Notes/TripNotes';
@@ -46,6 +47,7 @@ function App() {
             <PageTransition>
               <Routes>
                 {/* Public Routes */}
+                <Route path="/photo-credits" element={<PhotoCredits />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />

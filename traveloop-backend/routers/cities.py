@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models.city import City
 from schemas.trip_schema import CityResponse
+from seed.city_photos import CITY_PHOTOS
 
 router = APIRouter(prefix="/api/cities", tags=["Cities"])
 
@@ -27,6 +28,12 @@ def search_cities(
 @router.get("/popular", response_model=list[CityResponse])
 def popular_cities(db: Session = Depends(get_db)):
     return db.query(City).order_by(City.popularity_score.desc()).limit(12).all()
+
+
+@router.get("/photo-credits")
+def photo_credits():
+    return [{"city": name, **{key: value for key, value in photo.items()
+            if key != "previous_url"}} for name, photo in CITY_PHOTOS.items()]
 
 
 @router.get("/{city_id}", response_model=CityResponse)

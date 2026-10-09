@@ -1,7 +1,33 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getTrip, createStop, updateStop, deleteStop, searchCities } from '../../services/api';
-import { Plus, Trash2, GripVertical, MapPin, Calendar, DollarSign, Save, Loader2, ArrowRight, CheckCircle } from 'lucide-react';
+import { getTrip, createStop, reorderStops, deleteStop, searchCities } from '../../services/api';
+import { Plus, Trash2, GripVertical, MapPin, Calendar, DollarSign, Loader2, ArrowRight, CheckCircle } from 'lucide-react';
+
+import { DndContext, closestCenter, PointerSensor, KeyboardSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, useSortable, sortableKeyboardCoordinates, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import ItineraryCalendar from './ItineraryCalendar';
+import TripWeather from './TripWeather';
+
+function SortableSection({ stop, disabled, children }) {
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({ id: stop.id, disabled });
+  return (
+    <div
+      ref={setNodeRef}
+      className="glass shadow-soft hover:shadow-lg relative group"
+      style={{ borderRadius: "24px", padding: "32px", border: "1px solid rgba(120,90,60,0.08)", transform: CSS.Transform.toString(transform), transition, position: 'relative', zIndex: isDragging ? 10 : undefined, opacity: isDragging ? 0.8 : 1 }}
+    >
+      {children(
+        <button ref={setActivatorNodeRef} {...attributes} {...listeners} disabled={disabled}
+          aria-label={`Reorder ${stop.section_title}`} title="Drag to reorder, or press Space and use arrow keys"
+          className="p-2 rounded-xl text-amber-900/50 hover:bg-amber-100 cursor-grab active:cursor-grabbing disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-amber-700"
+          style={{ touchAction: 'none' }}>
+          <GripVertical size={20} />
+        </button>
+      )}
+    </div>
+  );
+}
 
 export default function ItineraryBuilder() {
   const { id } = useParams();
@@ -13,6 +39,15 @@ export default function ItineraryBuilder() {
   const [citySearch, setCitySearch] = useState('');
   const [cityResults, setCityResults] = useState([]);
   const [newStop, setNewStop] = useState({ section_title: '', description: '', arrival_date: '', departure_date: '', section_budget: '', city_id: null });
+  const [view, setView] = useState('list');
+  const [reordering, setReordering] = useState(false);
+  const [orderMessage, setOrderMessage] = useState('');
+  const reorderLock = useRef(false);
+  const addSectionRef = useRef(null);
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
   const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
@@ -25,7 +60,38 @@ export default function ItineraryBuilder() {
     else setCityResults([]);
   }, [citySearch]);
 
+  const handleDragEnd = async ({ active, over }) => {
+    if (!over || active.id === over.id || reorderLock.current || saving) return;
+    const oldIndex = stops.findIndex(s => s.id === active.id);
+    const newIndex = stops.findIndex(s => s.id === over.id);
+    if (oldIndex < 0 || newIndex < 0) return;
+    const previous = stops;
+    const reordered = arrayMove(stops, oldIndex, newIndex).map((stop, idx) => ({ ...stop, stop_order: idx }));
+    reorderLock.current = true;
+    setReordering(true);
+    setOrderMessage('Saving order...');
+    setStops(reordered);
+    try {
+      await reorderStops(id, { stop_ids: reordered.map(s => s.id) });
+      setOrderMessage('Order saved');
+    } catch (err) {
+      setStops(previous);
+      setOrderMessage('Could not save order. Your previous order has been restored. Please try again.');
+      console.error(err);
+    } finally {
+      reorderLock.current = false;
+      setReordering(false);
+    }
+  };
+
+  const addOnDate = (date) => {
+    setNewStop(current => ({ ...current, arrival_date: date, departure_date: date }));
+    addSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    addSectionRef.current?.querySelector('input')?.focus({ preventScroll: true });
+  };
+
   const addSection = async () => {
+    if (reorderLock.current || saving) return;
     if (!newStop.section_title) return;
     setSaving(true);
     try {
@@ -54,10 +120,13 @@ export default function ItineraryBuilder() {
   };
 
   const removeStop = async (stopId) => {
+    if (reorderLock.current || saving) return;
+    setSaving(true);
     try {
       await deleteStop(stopId);
       setStops(stops.filter(s => s.id !== stopId));
     } catch (err) { console.error(err); }
+    finally { setSaving(false); }
   };
 
   if (loading) return <div className="pt-20 flex justify-center"><Loader2 size={32} className="animate-spin text-amber-700" /></div>;
@@ -89,14 +158,31 @@ export default function ItineraryBuilder() {
           </button>
         </div>
 
+        <div style={{ marginBottom: "24px", gap: "12px" }} className="flex flex-wrap items-center">
+          <div style={{ gap: "8px" }} className="flex" role="group" aria-label="Itinerary view">
+            {['list', 'calendar', 'weather'].map(option => (
+              <button key={option} onClick={() => setView(option)} aria-pressed={view === option}
+                style={{ padding: "8px 16px" }}
+                className={`px-4 py-2 rounded-xl text-sm font-semibold ${view === option ? 'bg-amber-100 text-amber-950' : 'text-amber-900/60 hover:bg-amber-50'}`}>
+                {option === 'list' ? 'List view' : option === 'calendar' ? 'Calendar view' : 'Weather & packing'}
+              </button>
+            ))}
+          </div>
+          <p role="status" className="text-sm text-amber-700">{orderMessage}</p>
+        </div>
+
+        {view === 'calendar' ? (
+          <div style={{ marginBottom: "40px" }}><ItineraryCalendar trip={trip} stops={stops} onAddDate={addOnDate} /></div>
+        ) : view === 'weather' ? (
+          <div style={{ marginBottom: "40px" }}><TripWeather tripId={id} stops={stops} /></div>
+        ) : (
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={stops.map(s => s.id)} strategy={verticalListSortingStrategy}>
         {/* Existing Sections */}
         <div className="space-y-6 mb-10">
           {stops.map((stop, idx) => (
-            <div 
-              key={stop.id} 
-              className="glass shadow-soft hover:shadow-lg transition-all duration-300 animate-fadeInUp relative overflow-hidden group" 
-              style={{ borderRadius: "24px", padding: "32px", border: "1px solid rgba(120,90,60,0.08)", animationDelay: `${idx * 0.1}s` }}
-            >
+            <SortableSection key={stop.id} stop={stop} disabled={reordering || saving}>
+              {handle => <>
               <div className="absolute top-0 left-0 w-2 h-full bg-amber-600/60 rounded-l-2xl"></div>
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                 <div className="flex items-start gap-4">
@@ -133,21 +219,30 @@ export default function ItineraryBuilder() {
                     </div>
                   </div>
                 </div>
+                <div className="flex items-center gap-1 shrink-0">
+                {handle}
                 <button 
+                  disabled={reordering || saving}
                   onClick={() => removeStop(stop.id)} 
                   className="p-3 rounded-xl text-amber-900/40 hover:text-red-500 hover:bg-red-50 transition-colors shrink-0"
                   title="Remove Section"
                 >
                   <Trash2 size={20} />
                 </button>
+                </div>
               </div>
-            </div>
+              </>}
+            </SortableSection>
           ))}
         </div>
+          </SortableContext>
+        </DndContext>
+        )}
 
         {/* Add New Section */}
         <div 
-          className="glass" 
+          ref={addSectionRef}
+          className="glass scroll-mt-24"
           style={{ 
             borderRadius: "24px", 
             padding: "40px", 
@@ -259,7 +354,7 @@ export default function ItineraryBuilder() {
             <div className="pt-4 flex flex-col md:flex-row items-center gap-4">
               <button 
                 onClick={addSection} 
-                disabled={saving || !newStop.section_title} 
+                disabled={saving || reordering || !newStop.section_title}
                 className={`btn-primary w-full md:w-auto flex items-center justify-center gap-2 transition-all ${showSuccess ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-500/30' : ''}`}
                 style={{ height: "56px", borderRadius: "16px", padding: "0 32px", fontSize: "16px", fontWeight: 600 }}
               >

@@ -3,13 +3,13 @@ import {
   getCommunityPosts,
   createCommunityPost,
   likePost,
+  uploadCommunityImage,
 } from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import {
   Search,
   Heart,
-  MessageCircle,
   Plus,
   Send,
   Users,
@@ -17,9 +17,9 @@ import {
   Camera,
   Sparkles,
   Upload,
-  ImageIcon,
   X,
 } from "lucide-react";
+import PostFeedback from "./PostFeedback";
 import { FeedSkeleton } from "../../components/common/Skeletons";
 
 export default function CommunityTab() {
@@ -33,7 +33,9 @@ export default function CommunityTab() {
     title: "",
     experience_text: "",
     image_url: "",
+    image_urls: [],
   });
+  const [posting, setPosting] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -50,12 +52,17 @@ export default function CommunityTab() {
   }, [search]);
 
   const handleCreate = async () => {
-    if (!newPost.title) return;
-    await createCommunityPost(newPost);
-    setNewPost({ title: "", experience_text: "", image_url: "" });
-    setShowCreate(false);
-    toast.success("Experience shared with the community!");
-    loadPosts();
+    if (!newPost.title.trim() || uploadingImage || posting) return;
+    setPosting(true);
+    try {
+      await createCommunityPost(newPost);
+      setNewPost({ title: "", experience_text: "", image_url: "", image_urls: [] });
+      setShowCreate(false);
+      toast.success("Experience shared with the community!");
+      loadPosts();
+    } catch (err) {
+      toast.error(err.response?.data?.detail || "Could not share your experience. Please try again.");
+    } finally { setPosting(false); }
   };
 
   const handleLike = async (postId) => {
@@ -64,21 +71,34 @@ export default function CommunityTab() {
   };
 
   const handleImageUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files || []);
+    if (!files.length || uploadingImage || posting) return;
+    if (newPost.image_urls.length + files.length > 5) {
+      toast.error("You can upload up to 5 visit photos.");
+      e.target.value = "";
+      return;
+    }
+    if (files.some(file => !['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(file.type) || file.size > 5 * 1024 * 1024)) {
+      toast.error("Use JPG, PNG, GIF or WebP photos, up to 5 MB each.");
+      e.target.value = "";
+      return;
+    }
     setUploadingImage(true);
     try {
-      const res = await uploadCommunityImage(file);
-      setNewPost({ ...newPost, image_url: res.data.image_url });
-    } catch (err) {
-      toast.error("Failed to upload image");
+      for (const file of files) {
+        const res = await uploadCommunityImage(file);
+        setNewPost(current => ({ ...current, image_urls: [...current.image_urls, res.data.image_url] }));
+      }
+    } catch {
+      toast.error("A photo could not be uploaded. Photos already uploaded are kept; try the remaining photos again.");
     } finally {
       setUploadingImage(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
-  const removeImage = () => setNewPost({ ...newPost, image_url: "" });
+  const removeImage = () => setNewPost(current => ({ ...current, image_url: "" }));
+  const removePhoto = url => setNewPost(current => ({ ...current, image_urls: current.image_urls.filter(photo => photo !== url) }));
 
   return (
     <div className="community-page">
@@ -152,6 +172,7 @@ export default function CommunityTab() {
             <div className="space-y-4">
               <input
                 className="input-glass w-full"
+                maxLength={300}
                 placeholder="Title of your experience..."
                 value={newPost.title}
                 onChange={(e) =>
@@ -198,26 +219,34 @@ export default function CommunityTab() {
                   </button>
                 </div>
               )}
+              {newPost.image_urls.length > 0 && <div className="flex flex-wrap" style={{ gap: "12px", marginBottom: "12px" }}>
+                {newPost.image_urls.map((url, index) => <div key={url} className="relative">
+                  <img src={url} alt={`Visit photo preview ${index + 1}`} style={{ width: "140px", height: "110px", objectFit: "cover", borderRadius: "12px" }} />
+                  <button onClick={() => removePhoto(url)} disabled={uploadingImage || posting} aria-label={`Remove visit photo ${index + 1}`} className="absolute bg-red-500 text-white rounded-lg" style={{ top: "4px", right: "4px", padding: "4px" }}><X size={14} /></button>
+                </div>)}
+              </div>}
+              <p className="text-xs text-amber-900/60" style={{ marginBottom: "8px" }}>Visit photos: up to 5 photos, JPG/PNG/GIF/WebP, 5 MB each.</p>
               <div className="flex gap-3">
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  disabled={uploadingImage}
+                  disabled={uploadingImage || posting || newPost.image_urls.length >= 5}
                   className="btn-secondary flex items-center justify-center gap-2 text-sm flex-1"
                   style={{ height: "48px", borderRadius: "16px" }}
                 >
                   <Upload size={16} />{" "}
-                  {uploadingImage ? "Uploading..." : "Upload Image"}
+                  {uploadingImage ? "Uploading..." : `Upload Visit Photos (${newPost.image_urls.length}/5)`}
                 </button>
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="image/*"
+                  multiple
+                  accept="image/jpeg,image/png,image/gif,image/webp"
                   onChange={handleImageUpload}
                   className="hidden"
                 />
               </div>
-              <input
+              {newPost.image_urls.length === 0 && <input
                 className="input-glass w-full text-sm"
                 placeholder="Or paste image URL"
                 value={newPost.image_url}
@@ -231,10 +260,11 @@ export default function CommunityTab() {
                   border: "1px solid rgba(120,90,60,0.12)",
                   marginTop: "8px",
                 }}
-              />
+              />}
               <div className="flex gap-3 pt-2">
                 <button
                   onClick={handleCreate}
+                  disabled={uploadingImage || posting || !newPost.title.trim()}
                   className="btn-primary flex items-center gap-2"
                   style={{
                     padding: "0 28px",
@@ -243,9 +273,10 @@ export default function CommunityTab() {
                     fontWeight: 600,
                   }}
                 >
-                  <Send size={16} /> Post
+                  <Send size={16} /> {posting ? "Posting..." : "Post"}
                 </button>
                 <button
+                  disabled={posting || uploadingImage}
                   onClick={() => setShowCreate(false)}
                   className="btn-secondary"
                   style={{
@@ -278,14 +309,20 @@ export default function CommunityTab() {
                   animationDelay: `${i * 0.05}s`,
                 }}
               >
-                {post.image_url && (
+                {post.image_urls?.length > 1 ? (
+                  <div className="grid grid-cols-2" style={{ gap: "4px" }}>
+                    {post.image_urls.map((url, index) => <a key={url} href={url} target="_blank" rel="noreferrer" aria-label={`Open visit photo ${index + 1}`}>
+                      <img src={url} alt={`${post.title} - visit photo ${index + 1}`} className="w-full" style={{ height: "220px", objectFit: "cover" }} />
+                    </a>)}
+                  </div>
+                ) : post.image_url && (
                   <div
                     className="relative overflow-hidden shrink-0"
                     style={{ height: "320px" }}
                   >
                     <img
                       src={post.image_url}
-                      alt=""
+                      alt={`${post.title} - visit photo`}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       onError={(e) => {
                         e.target.style.display = "none";
@@ -329,10 +366,8 @@ export default function CommunityTab() {
                       />{" "}
                       {post.likes_count || 0}
                     </button>
-                    <span className="flex items-center gap-2 text-sm text-amber-900/60 font-medium">
-                      <MessageCircle size={20} /> Inspire
-                    </span>
                   </div>
+                  <div style={{ marginTop: "12px" }}><PostFeedback post={post} /></div>
                 </div>
               </div>
             ))}

@@ -135,7 +135,7 @@ export default function CitySearch() {
                    style={{ borderRadius: '28px', overflow: 'hidden', border: '1px solid rgba(120,90,60,0.08)', animationDelay: `${i * 0.05}s` }}>
                 <div className="relative overflow-hidden shrink-0" style={{ height: '240px' }}>
                   <img src={city.image_url} alt={city.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    onError={e => { e.target.src = `https://via.placeholder.com/400x300/1e293b/6366f1?text=${city.name}`; }} />
+                    onError={e => { e.currentTarget.style.visibility = 'hidden'; }} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 opacity-80" />
                   <div className="absolute bottom-5 left-5">
                     <h3 className="text-white font-bold text-2xl drop-shadow-sm">{city.name}</h3>
@@ -150,6 +150,7 @@ export default function CitySearch() {
                   </div>
                 </div>
                 <div className="flex-1 flex flex-col justify-between" style={{ padding: '24px' }}>
+                  <Link to={`/photo-credits#${encodeURIComponent(city.name)}`} className="text-xs underline text-amber-900/60 mb-3">Photo credit and license</Link>
                   <p className="text-amber-900/60 text-sm line-clamp-3 mb-6 leading-relaxed">{city.description}</p>
                   <div className="flex items-center justify-between text-sm text-amber-900/80 pt-4 border-t border-amber-900/10 mt-auto">
                     <span className="flex items-center gap-1.5 font-medium"><DollarSign size={14} className="text-amber-600" /> Cost Index: {city.cost_index}x</span>

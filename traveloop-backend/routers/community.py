@@ -3,9 +3,9 @@ import uuid
 from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File
 from sqlalchemy.orm import Session
 from database import get_db
-from models.community import CommunityPost, PostLike
+from models.community import CommunityPost, PostLike, PostPhoto, PostComment
 from models.user import User
-from schemas.trip_schema import CommunityPostCreate, CommunityPostResponse
+from schemas.trip_schema import CommunityPostCreate, CommunityPostResponse, PostCommentCreate, PostCommentResponse
 from middleware.auth_middleware import get_current_user
 
 router = APIRouter(prefix="/api/community", tags=["Community"])
@@ -24,7 +24,9 @@ def post_to_response(p, current_user_id=None):
         id=p.id, user_id=p.user_id, user_name=p.user.full_name if p.user else None,
         trip_id=p.trip_id, title=p.title, experience_text=p.experience_text,
         image_url=p.image_url, likes_count=p.likes_count, is_published=p.is_published,
-        created_at=p.created_at, user_liked=liked_by_me
+        created_at=p.created_at, user_liked=liked_by_me,
+        image_urls=[photo.image_url for photo in p.photos] or ([p.image_url] if p.image_url else []),
+        comments_count=len(p.comments)
     )
 
 
@@ -53,8 +55,20 @@ def list_posts(
 
 @router.post("", response_model=CommunityPostResponse)
 def create_post(data: CommunityPostCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    post = CommunityPost(user_id=current_user.id, trip_id=data.trip_id, title=data.title,
-                         experience_text=data.experience_text, image_url=data.image_url)
+    if not data.title.strip() or len(data.title) > 300:
+        raise HTTPException(status_code=422, detail="Title must be between 1 and 300 characters")
+    if data.trip_id is not None:
+        from models.trip import Trip
+        if not db.query(Trip).filter(Trip.id == data.trip_id, Trip.user_id == current_user.id).first():
+            raise HTTPException(status_code=404, detail="Trip not found")
+    photos = list(dict.fromkeys(data.image_urls))
+    for url in photos:
+        filename = url.removeprefix("/static/uploads/")
+        if not url.startswith(f"/static/uploads/community_{current_user.id}_") or "/" in filename or ".." in filename or not os.path.isfile(os.path.join(UPLOAD_DIR, filename)):
+            raise HTTPException(status_code=422, detail="Visit photos must be uploaded by you")
+    post = CommunityPost(user_id=current_user.id, trip_id=data.trip_id, title=data.title.strip(),
+                         experience_text=data.experience_text, image_url=photos[0] if photos else data.image_url)
+    post.photos = [PostPhoto(image_url=url, position=index) for index, url in enumerate(photos)]
     db.add(post)
     db.commit()
     db.refresh(post)
@@ -72,9 +86,13 @@ async def upload_community_image(
     if ext not in ALLOWED_EXTENSIONS:
         raise HTTPException(status_code=400, detail=f"Invalid file type. Allowed: {', '.join(ALLOWED_EXTENSIONS)}")
 
-    contents = await file.read()
+    contents = await file.read(MAX_FILE_SIZE + 1)
     if len(contents) > MAX_FILE_SIZE:
         raise HTTPException(status_code=400, detail="File too large. Maximum 5 MB.")
+
+    valid_image = (contents.startswith(b"\xff\xd8\xff") or contents.startswith(b"\x89PNG\r\n\x1a\n") or contents.startswith((b"GIF87a", b"GIF89a")) or (contents[:4] == b"RIFF" and contents[8:12] == b"WEBP"))
+    if not valid_image:
+        raise HTTPException(status_code=400, detail="File must contain a valid JPG, PNG, GIF or WebP image")
 
     unique_name = f"community_{current_user.id}_{uuid.uuid4().hex[:12]}{ext}"
     os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -127,3 +145,46 @@ def toggle_like(post_id: int, db: Session = Depends(get_db), current_user: User 
         p.likes_count = (p.likes_count or 0) + 1
         db.commit()
         return {"likes_count": p.likes_count, "user_liked": True}
+
+
+def published_post(post_id, db):
+    post = db.query(CommunityPost).filter(CommunityPost.id == post_id, CommunityPost.is_published == True).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return post
+
+
+def comment_to_response(comment):
+    return PostCommentResponse(id=comment.id, post_id=comment.post_id, user_id=comment.user_id,
+                               user_name=comment.user.full_name if comment.user else None,
+                               content=comment.content, created_at=comment.created_at)
+
+
+@router.get("/{post_id}/comments", response_model=list[PostCommentResponse])
+def list_comments(post_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    published_post(post_id, db)
+    comments = db.query(PostComment).filter(PostComment.post_id == post_id).order_by(PostComment.created_at, PostComment.id).all()
+    return [comment_to_response(comment) for comment in comments]
+
+
+@router.post("/{post_id}/comments", response_model=PostCommentResponse)
+def create_comment(post_id: int, data: PostCommentCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    published_post(post_id, db)
+    comment = PostComment(post_id=post_id, user_id=current_user.id, content=data.content)
+    db.add(comment)
+    db.commit()
+    db.refresh(comment)
+    return comment_to_response(comment)
+
+
+@router.delete("/{post_id}/comments/{comment_id}")
+def delete_comment(post_id: int, comment_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    published_post(post_id, db)
+    comment = db.query(PostComment).filter(PostComment.id == comment_id, PostComment.post_id == post_id).first()
+    if not comment:
+        raise HTTPException(status_code=404, detail="Feedback not found")
+    if comment.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="You can only delete your own feedback")
+    db.delete(comment)
+    db.commit()
+    return {"message": "Feedback deleted"}

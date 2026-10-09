@@ -72,6 +72,10 @@ export const uploadCommunityImage = (file) => {
   return API.post('/community/upload-image', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
 };
 
+export const getPostComments = (postId) => API.get(`/community/${postId}/comments`);
+export const createPostComment = (postId, data) => API.post(`/community/${postId}/comments`, data);
+export const deletePostComment = (postId, commentId) => API.delete(`/community/${postId}/comments/${commentId}`);
+
 // Share
 export const shareTrip = (tripId) => API.post(`/trips/${tripId}/share`);
 export const getShared = (token) => API.get(`/shared/${token}`);
