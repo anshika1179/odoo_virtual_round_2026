@@ -1,3 +1,4 @@
+import useCurrency from '../../utils/useCurrency';
 import { useState, useEffect } from 'react';
 import { searchCities, searchActivities } from '../../services/api';
 import { Search, MapPin, Filter, DollarSign, Clock, Star, Globe, Plus, Eye } from 'lucide-react';
@@ -5,6 +6,7 @@ import { CardSkeleton, RowSkeleton } from '../../components/common/Skeletons';
 import { Link } from 'react-router-dom';
 
 export default function CitySearch() {
+  const money = useCurrency();
   const [mode, setMode] = useState('cities');
   const [query, setQuery] = useState('');
   const [cities, setCities] = useState([]);
@@ -24,7 +26,7 @@ export default function CitySearch() {
           popularity: c.popularity || c.popularity_score * 10 || (100 - i)
         })))).catch(() => {}).finally(() => setLoading(false));
     } else {
-      searchActivities({ q: query, type: filters.type, max_cost: filters.max_cost || undefined })
+      searchActivities({ q: query, type: filters.type, max_cost: filters.max_cost ? money.toUsd(filters.max_cost) : undefined })
         .then(r => setActivities(r.data.map((a, i) => ({
           ...a,
           price: a.estimated_cost || 0,
@@ -99,7 +101,7 @@ export default function CitySearch() {
                   <option value="">All Types</option>
                   {actTypes.map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
-                <input type="number" className="input-glass" placeholder="Max cost $"
+                <input type="number" className="input-glass" placeholder={`Max cost ${money.symbol}`}
                   style={{ height: '56px', width: '140px', borderRadius: '18px', padding: '0 20px', border: '1px solid rgba(120,90,60,0.12)' }}
                   value={filters.max_cost} onChange={e => setFilters({...filters, max_cost: e.target.value})} />
               </div>
@@ -150,7 +152,6 @@ export default function CitySearch() {
                   </div>
                 </div>
                 <div className="flex-1 flex flex-col justify-between" style={{ padding: '24px' }}>
-                  <Link to={`/photo-credits#${encodeURIComponent(city.name)}`} className="text-xs underline text-amber-900/60 mb-3">Photo credit and license</Link>
                   <p className="text-amber-900/60 text-sm line-clamp-3 mb-6 leading-relaxed">{city.description}</p>
                   <div className="flex items-center justify-between text-sm text-amber-900/80 pt-4 border-t border-amber-900/10 mt-auto">
                     <span className="flex items-center gap-1.5 font-medium"><DollarSign size={14} className="text-amber-600" /> Cost Index: {city.cost_index}x</span>
@@ -178,7 +179,7 @@ export default function CitySearch() {
                 </div>
                 <div className="text-left sm:text-right shrink-0 mt-4 sm:mt-0 pt-4 sm:pt-0 border-t sm:border-0 border-amber-900/10 w-full sm:w-auto">
                   <span className="px-3 py-1.5 rounded-full bg-amber-900/5 text-amber-900 text-xs font-bold uppercase tracking-wider">{act.type}</span>
-                  <p className="text-amber-950 font-bold text-lg mt-3">${act.estimated_cost}</p>
+                  <p className="text-amber-950 font-bold text-lg mt-3">{money.fmt(act.estimated_cost)}</p>
                 </div>
               </div>
             ))}

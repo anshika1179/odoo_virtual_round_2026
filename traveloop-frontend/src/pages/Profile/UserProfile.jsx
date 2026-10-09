@@ -1,3 +1,4 @@
+import PhoneField from '../../components/common/PhoneField';
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -202,7 +203,8 @@ export default function UserProfile() {
               <button
                 onClick={() => fileRef.current?.click()}
                 disabled={uploading}
-                className="absolute inset-0 rounded-3xl bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer border-4 border-transparent"
+                aria-label="Change profile photo"
+                className="absolute inset-0 rounded-3xl bg-black/50 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity flex items-center justify-center cursor-pointer border-4 border-transparent"
               >
                 {uploading ? (
                   <Loader2 size={32} className="text-white animate-spin" />
@@ -218,11 +220,21 @@ export default function UserProfile() {
                 className="hidden"
               />
 
+              {/* Always-visible change-photo badge (hover does not exist on phones) */}
+              <button
+                onClick={() => fileRef.current?.click()}
+                disabled={uploading}
+                aria-label="Upload profile photo"
+                className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-amber-700 text-white flex items-center justify-center shadow-md border-2 border-[#FAF7F2]"
+              >
+                {uploading ? <Loader2 size={18} className="animate-spin" /> : <Camera size={18} />}
+              </button>
+
               {/* Remove photo button */}
               {photoSrc && !uploading && (
                 <button
                   onClick={handleRemovePhoto}
-                  className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-red-50 text-red-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-red-100 hover:scale-110 shadow-sm border border-red-200"
+                  className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-red-50 text-red-600 flex items-center justify-center sm:opacity-0 group-hover:opacity-100 transition-all hover:bg-red-100 hover:scale-110 shadow-sm border border-red-200"
                   title="Remove photo"
                 >
                   <Trash2 size={14} />
@@ -232,11 +244,12 @@ export default function UserProfile() {
 
             <div className="flex-1 mt-2">
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 mb-2">
-                <h1 className="text-4xl font-black text-amber-950 tracking-tight">
+                <h1 className="text-4xl font-black text-amber-950 tracking-tight cursor-pointer" onClick={() => setEditing(true)} title="Click to edit profile">
                   {user?.full_name}
                 </h1>
                 <button
                   onClick={() => setEditing(!editing)}
+                  aria-label="Edit profile"
                   className="p-2 rounded-xl text-amber-900/40 hover:text-amber-700 hover:bg-amber-100 transition-all mt-1 sm:mt-0"
                 >
                   <Edit3 size={20} />
@@ -288,11 +301,10 @@ export default function UserProfile() {
                   <label className="block text-sm font-bold text-amber-900/60 uppercase tracking-wider mb-2">
                     Phone
                   </label>
-                  <input
-                    className="input-glass w-full font-medium text-amber-950"
+                  <PhoneField
                     value={form.phone}
-                    onChange={set("phone")}
-                    style={{ height: "56px", borderRadius: "16px", padding: "0 20px", border: "1px solid rgba(120,90,60,0.12)", fontSize: "16px", outline: "none", backgroundColor: "rgba(255,255,255,0.7)" }}
+                    onChange={(phone) => setForm({ ...form, phone })}
+                    style={{ height: "56px", borderRadius: "16px", fontSize: "16px" }}
                   />
                 </div>
                 <div>

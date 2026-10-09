@@ -1,9 +1,11 @@
+import useCurrency from '../../utils/useCurrency';
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getShared, createTrip } from '../../services/api';
 import { Calendar, DollarSign, MapPin, Loader2, Eye, Clock, Copy, Check, Share2 } from 'lucide-react';
 
 export default function PublicItinerary() {
+  const money = useCurrency();
   const { token } = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -70,7 +72,7 @@ export default function PublicItinerary() {
             </div>
             <div className="glass rounded-xl px-4 py-3 text-center">
               <DollarSign size={18} className="mx-auto text-emerald-600 mb-1" />
-              <p className="text-xs text-amber-600">Budget: ${trip?.total_budget || totalBudget}</p>
+              <p className="text-xs text-amber-600">Budget: {money.fmt(trip?.total_budget || totalBudget)}</p>
             </div>
             <div className="glass rounded-xl px-4 py-3 text-center">
               <MapPin size={18} className="mx-auto text-orange-600 mb-1" />
@@ -140,7 +142,7 @@ export default function PublicItinerary() {
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <h4 className="text-amber-900 font-semibold text-lg">{stop.section_title}</h4>
-                          {stop.section_budget > 0 && <span className="badge badge-upcoming">${stop.section_budget}</span>}
+                          {stop.section_budget > 0 && <span className="badge badge-upcoming">{money.fmt(stop.section_budget)}</span>}
                         </div>
                         {stop.description && <p className="text-amber-700 text-sm mt-1">{stop.description}</p>}
                         {stop.arrival_date && (

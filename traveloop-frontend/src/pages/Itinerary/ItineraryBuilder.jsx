@@ -1,3 +1,4 @@
+import useCurrency from '../../utils/useCurrency';
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getTrip, createStop, reorderStops, deleteStop, searchCities } from '../../services/api';
@@ -30,6 +31,7 @@ function SortableSection({ stop, disabled, children }) {
 }
 
 export default function ItineraryBuilder() {
+  const money = useCurrency();
   const { id } = useParams();
   const navigate = useNavigate();
   const [trip, setTrip] = useState(null);
@@ -103,7 +105,7 @@ export default function ItineraryBuilder() {
         ...newStop,
         arrival_date: arrDate && !isNaN(arrDate.getTime()) ? arrDate.toISOString() : null,
         departure_date: depDate && !isNaN(depDate.getTime()) ? depDate.toISOString() : null,
-        section_budget: parseFloat(newStop.section_budget) || 0,
+        section_budget: money.toUsd(newStop.section_budget),
       };
 
       const res = await createStop(id, payload);
@@ -213,7 +215,7 @@ export default function ItineraryBuilder() {
                       {stop.section_budget > 0 && (
                         <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200/50 text-xs font-semibold text-emerald-700">
                           <DollarSign size={14} />
-                          <span>${stop.section_budget}</span>
+                          <span>{money.fmt(stop.section_budget)}</span>
                         </div>
                       )}
                     </div>
@@ -339,7 +341,7 @@ export default function ItineraryBuilder() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-amber-950 mb-2 flex items-center gap-2"><DollarSign size={16} className="text-amber-700"/> Budget (USD)</label>
+                <label className="block text-sm font-semibold text-amber-950 mb-2 flex items-center gap-2"><DollarSign size={16} className="text-amber-700"/> Budget ({money.code})</label>
                 <input 
                   type="number" 
                   className="input-glass w-full outline-none transition-colors" 

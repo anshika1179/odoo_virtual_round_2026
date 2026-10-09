@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { register as registerApi } from '../../services/api';
+import PhoneField from '../../components/common/PhoneField';
+import { splitPhone, digitsFor } from '../../utils/countries';
 import { Mail, Lock, User, Phone, MapPin, ArrowRight, Loader2 } from 'lucide-react';
 
 export default function Register() {
@@ -15,9 +17,12 @@ export default function Register() {
     e.preventDefault();
     if (form.password.length < 6) { setError('Password must be at least 6 characters'); return; }
     
-    if (form.phone && form.phone.replace('+91', '').length !== 10) {
-      setError('Phone number must be exactly 10 digits');
-      return;
+    if (form.phone) {
+      const { code, number } = splitPhone(form.phone);
+      if (number.length !== digitsFor(code)) {
+        setError(`Phone number must be ${digitsFor(code)} digits for ${code}`);
+        return;
+      }
     }
 
     setError('');
@@ -67,19 +72,19 @@ export default function Register() {
 
             {error && <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-600 text-sm">{error}</div>}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4 signup-form">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-amber-800 mb-1.5">Full Name *</label>
                   <div className="relative">
-                    <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600/50" />
-                    <input className="input-glass pl-10" placeholder="John Doe" value={form.full_name} onChange={set('full_name')} required />
+                    <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-700/70" />
+                    <input className="input-glass pl-10" placeholder="Enter your full name" value={form.full_name} onChange={set('full_name')} required />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-amber-800 mb-1.5">Email *</label>
                   <div className="relative">
-                    <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600/50" />
+                    <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-700/70" />
                     <input type="email" className="input-glass pl-10" placeholder="you@email.com" value={form.email} onChange={set('email')} required />
                   </div>
                 </div>
@@ -88,25 +93,12 @@ export default function Register() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-amber-800 mb-1.5">Phone</label>
-                  <div className="relative flex items-center">
-                    <Phone size={18} className="absolute left-3 text-amber-600/50" />
-                    <span className="absolute left-10 text-amber-800 font-medium select-none">+91</span>
-                    <input 
-                      className="input-glass w-full" 
-                      style={{ paddingLeft: '4.5rem' }}
-                      placeholder="9876543210" 
-                      value={form.phone ? form.phone.replace('+91', '') : ''} 
-                      onChange={(e) => {
-                        const val = e.target.value.replace(/\D/g, '').slice(0, 10);
-                        setForm({...form, phone: val ? `+91${val}` : ''});
-                      }} 
-                    />
-                  </div>
+                  <PhoneField value={form.phone} onChange={(phone) => setForm({ ...form, phone })} />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-amber-800 mb-1.5">Password *</label>
                   <div className="relative">
-                    <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600/50" />
+                    <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-700/70" />
                     <input type="password" className="input-glass pl-10" placeholder="Min 6 chars" value={form.password} onChange={set('password')} required />
                   </div>
                 </div>
@@ -116,14 +108,14 @@ export default function Register() {
                 <div>
                   <label className="block text-sm font-medium text-amber-800 mb-1.5">City</label>
                   <div className="relative">
-                    <MapPin size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600/50" />
+                    <MapPin size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-700/70" />
                     <input className="input-glass pl-10" placeholder="Mumbai" value={form.city} onChange={set('city')} />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-amber-800 mb-1.5">Country</label>
                   <div className="relative">
-                    <MapPin size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-600/50" />
+                    <MapPin size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-700/70" />
                     <input className="input-glass pl-10" placeholder="India" value={form.country} onChange={set('country')} />
                   </div>
                 </div>

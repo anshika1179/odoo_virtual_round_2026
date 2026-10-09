@@ -1,3 +1,4 @@
+import useCurrency from '../../utils/useCurrency';
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -21,6 +22,7 @@ import {
 import CityPreviewMap from "../../components/maps/CityPreviewMap";
 
 export default function CreateTrip() {
+  const money = useCurrency();
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -77,7 +79,7 @@ export default function CreateTrip() {
         ...form,
         start_date: new Date(form.start_date).toISOString(),
         end_date: new Date(form.end_date).toISOString(),
-        total_budget: budget || 0,
+        total_budget: money.toUsd(budget),
       });
       navigate(`/trips/${res.data.id}/builder`);
     } catch (err) {
@@ -306,7 +308,7 @@ export default function CreateTrip() {
                 <div>
                   <label className="block text-sm font-semibold text-amber-950 mb-2 flex items-center gap-2">
                     <DollarSign size={16} className="text-amber-700" /> Total
-                    Budget (USD)
+                    Budget ({money.code})
                   </label>
                   <input
                     type="number"

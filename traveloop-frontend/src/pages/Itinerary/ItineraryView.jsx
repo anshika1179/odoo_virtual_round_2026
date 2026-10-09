@@ -1,3 +1,4 @@
+import useCurrency from '../../utils/useCurrency';
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getTrip, getStops, getStopActivities, shareTrip } from '../../services/api';
@@ -5,6 +6,7 @@ import { Calendar, DollarSign, MapPin, Loader2, Edit, CheckSquare, StickyNote, C
 import TripRouteMap from '../../components/maps/TripRouteMap';
 
 export default function ItineraryView() {
+  const money = useCurrency();
   const { id } = useParams();
   const [trip, setTrip] = useState(null);
   const [stops, setStops] = useState([]);
@@ -110,7 +112,7 @@ export default function ItineraryView() {
                   <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center"><DollarSign size={20} className="text-emerald-700" /></div>
                   <div>
                     <div className="text-xs text-emerald-700/60 font-semibold uppercase tracking-wider">Budget</div>
-                    <div className="text-sm font-bold text-emerald-900">${trip.total_budget}</div>
+                    <div className="text-sm font-bold text-emerald-900">{money.fmt(trip.total_budget)}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 bg-orange-50/50 px-4 py-2.5 rounded-xl border border-orange-200/50">
@@ -211,7 +213,7 @@ export default function ItineraryView() {
                         </div>
                         {stop.section_budget > 0 && (
                           <span className="shrink-0 bg-emerald-100 text-emerald-800 border border-emerald-200 px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-1.5">
-                            <DollarSign size={16} />{stop.section_budget} Budget
+                            <DollarSign size={16} />{money.fmt(stop.section_budget)} Budget
                           </span>
                         )}
                       </div>
@@ -239,7 +241,7 @@ export default function ItineraryView() {
                                     <div className="w-2 h-2 rounded-full bg-amber-400" />
                                     <span className="text-amber-900 font-medium">{a.activity_name || a.custom_name}</span>
                                   </div>
-                                  <span className="text-emerald-700 font-bold bg-emerald-50 px-2 py-1 rounded-lg text-sm">${a.actual_cost}</span>
+                                  <span className="text-emerald-700 font-bold bg-emerald-50 px-2 py-1 rounded-lg text-sm">{money.fmt(a.actual_cost)}</span>
                                 </div>
                               ))}
                             </div>

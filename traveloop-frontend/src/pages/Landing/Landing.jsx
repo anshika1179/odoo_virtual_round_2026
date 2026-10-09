@@ -34,13 +34,13 @@ export default function Landing() {
         </div>
 
         <div className="container relative z-10">
-          <div className="flex flex-col lg:flex-row items-center justify-between" style={{ gap: '80px' }}>
+          <div className="flex flex-col lg:flex-row items-center justify-between lp-hero-row" style={{ gap: '80px' }}>
             
             {/* Left — Text Content */}
-            <div className="flex flex-col justify-center animate-fadeInUp" style={{ width: '48%', maxWidth: '520px' }}>
-              <h1 className="text-amber-950" style={{ fontSize: '72px', lineHeight: 1.1, fontWeight: 700, marginBottom: '32px' }}>
+            <div className="flex flex-col justify-center animate-fadeInUp lp-hero-text" style={{ width: '48%', maxWidth: '520px' }}>
+              <h1 className="text-amber-950 lp-hero-h1" style={{ fontSize: '72px', lineHeight: 1.1, fontWeight: 700, marginBottom: '32px' }}>
                 <div style={{ marginBottom: '16px' }}>
-                  <span className="text-amber-700 font-serif italic" style={{ fontSize: '64px', fontWeight: 400 }}>Travel beautifully.</span>
+                  <span className="text-amber-700 font-serif italic lp-hero-sub" style={{ fontSize: '64px', fontWeight: 400 }}>Travel beautifully.</span>
                 </div>
                 Plan simply.
               </h1>
@@ -168,7 +168,6 @@ export default function Landing() {
         </div>
       </section>
 
-      <div className="container mt-6"><Link to="/photo-credits" className="text-xs underline text-amber-900/60">Destination photo credits and licenses</Link></div>
       {/* World Map Interactive Section */}
       <section className="container" style={{ marginTop: '120px' }}>
         <div className="flex items-end justify-between mb-10">

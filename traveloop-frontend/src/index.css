@@ -577,3 +577,35 @@ h2, h3, h4 {
     width: 100%;
   }
 }
+
+/* Signup form: subtler corners, phone country-code picker */
+.signup-form .input-glass { border-radius: 14px; }
+.phone-field { display: flex; gap: 8px; }
+.phone-field .phone-code { width: 40%; min-width: 0; padding-left: 0.75rem; padding-right: 0.5rem; }
+.phone-field .phone-number { flex: 1; min-width: 0; }
+.signup-form .input-glass::placeholder { opacity: 0.55; }
+
+/* ===== Mobile pass (<= 640px): only shrinks fixed widths/padding that overflow a 390px screen ===== */
+@media (max-width: 640px) {
+  .lp-hero-row { gap: 32px !important; }
+  .lp-hero-text { width: 100% !important; max-width: 100% !important; }
+  .lp-hero-h1 { font-size: 44px !important; }
+  .lp-hero-sub { font-size: 38px !important; }
+  .lp-hero-text > div:last-child { flex-direction: column; align-items: stretch !important; width: 100%; }
+  .lp-hero-text > div:last-child > .relative, .lp-hero-text input { width: 100% !important; }
+  .lp-hero-text > div:last-child > a { width: 100%; }
+  [style*="padding: 120px 64px 80px 64px"], [style*="padding: 120px 48px 80px 48px"] { padding: 96px 16px 56px 16px !important; }
+  [style*="width: 380px"], [style*="width: 360px"] { width: 100% !important; }
+  [style*="padding: 80px 40px"] { padding: 40px 20px !important; }
+  [style*="padding: 32px"] { padding: 20px !important; }
+  [style*="padding: 40px"] { padding: 22px !important; }
+  [style*="padding: 48px 40px"] { padding: 28px 20px !important; }
+  [style*="font-size: 36px"] { font-size: 30px !important; }
+  .trip-layout { padding: 16px; }
+  .page-container { padding: 88px 16px 56px 16px; }
+  .px-10 { padding-left: 20px; padding-right: 20px; }
+  button, .btn-primary, .btn-secondary { min-height: 44px; }
+  h1 { overflow-wrap: break-word; }
+  table { font-size: 12px; }
+  th, td { padding: 10px 8px !important; }
+}

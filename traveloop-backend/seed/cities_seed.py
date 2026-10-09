@@ -124,7 +124,7 @@ def seed_cities(db: Session):
             db.add(City(**data))
         else:
             photo = CITY_PHOTOS[data["name"]]
-            if not city.image_url or city.image_url == photo["previous_url"]:
+            if not city.image_url or city.image_url in photo["legacy_urls"]:
                 city.image_url = photo["image_url"]
     db.commit()
 

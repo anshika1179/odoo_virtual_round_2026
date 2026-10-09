@@ -1,3 +1,4 @@
+import useCurrency from '../../utils/useCurrency';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getInvoice, getTrip, createExpense, deleteExpense, downloadInvoicePdf } from '../../services/api';
@@ -8,6 +9,7 @@ const COLORS = ['#6366f1', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6', '#ec4899'
 const CATEGORIES = ['HOTEL', 'FLIGHT', 'FOOD', 'ACTIVITY', 'TRANSPORT', 'MISC'];
 
 export default function ExpenseInvoice() {
+  const money = useCurrency();
   const { id } = useParams();
   const [invoice, setInvoice] = useState(null);
   const [trip, setTrip] = useState(null);
@@ -30,7 +32,7 @@ export default function ExpenseInvoice() {
   const handleAdd = async () => {
     if (!newExp.description || !newExp.unit_cost) return;
     try {
-      await createExpense(id, { ...newExp, unit_cost: parseFloat(newExp.unit_cost), quantity: parseInt(newExp.quantity) || 1 });
+      await createExpense(id, { ...newExp, unit_cost: money.toUsd(newExp.unit_cost), quantity: parseInt(newExp.quantity) || 1 });
       setNewExp({ category: 'FOOD', description: '', quantity: 1, unit_cost: '' });
       setShowAdd(false);
       loadData();
@@ -79,10 +81,10 @@ export default function ExpenseInvoice() {
     text += `${'Category'.padEnd(15)} ${'Description'.padEnd(25)} ${'Qty'.padEnd(5)} ${'Unit'.padEnd(10)} ${'Amount'.padEnd(10)}\n`;
     text += `${'-'.repeat(65)}\n`;
     invoice.expenses?.forEach(e => {
-      text += `${e.category.padEnd(15)} ${e.description.padEnd(25)} ${String(e.quantity).padEnd(5)} $${String(e.unit_cost).padEnd(9)} $${e.total_amount}\n`;
+      text += `${e.category.padEnd(15)} ${e.description.padEnd(25)} ${String(e.quantity).padEnd(5)} ${money.fmt(e.unit_cost,2).padEnd(10)} ${money.fmt(e.total_amount,2)}\n`;
     });
     text += `${'-'.repeat(65)}\n`;
-    text += `Total Budget: $${invoice.budget_summary?.total_budget}\nTotal Spent: $${invoice.budget_summary?.total_spent}\nRemaining: $${invoice.budget_summary?.remaining}\n`;
+    text += `Total Budget: ${money.fmt(invoice.budget_summary?.total_budget,2)}\nTotal Spent: ${money.fmt(invoice.budget_summary?.total_spent,2)}\nRemaining: ${money.fmt(invoice.budget_summary?.remaining,2)}\n`;
     return text;
   };
 
@@ -211,8 +213,8 @@ export default function ExpenseInvoice() {
                         <td className="p-5"><span className="badge bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold px-2 py-1">{exp.category}</span></td>
                         <td className="p-5 text-amber-950 font-medium">{exp.description}</td>
                         <td className="p-5 text-center text-amber-900/70 font-medium">{exp.quantity}</td>
-                        <td className="p-5 text-right text-amber-900/70 font-medium">${exp.unit_cost}</td>
-                        <td className="p-5 text-right text-emerald-700 font-bold">${exp.total_amount}</td>
+                        <td className="p-5 text-right text-amber-900/70 font-medium">{money.fmt(exp.unit_cost,2)}</td>
+                        <td className="p-5 text-right text-emerald-700 font-bold">{money.fmt(exp.total_amount,2)}</td>
                         <td className="p-5 text-right">
                           <button onClick={() => handleDelete(exp.id)} className="p-2 rounded-lg text-amber-900/40 hover:text-red-500 hover:bg-red-50 transition-colors">
                             <Trash2 size={16} />
@@ -237,7 +239,7 @@ export default function ExpenseInvoice() {
                 style={{ borderRadius: "24px", padding: "24px", border: "1px solid rgba(239,68,68,0.2)", backgroundColor: "rgba(254,226,226,0.5)" }}
               >
                 <div className="flex items-center gap-2 text-red-600 font-bold text-lg mb-1"><AlertTriangle size={20} /> Over Budget!</div>
-                <p className="text-red-800/70 text-sm font-medium">You've exceeded your budget by <span className="font-bold text-red-600">${Math.abs(invoice.budget_summary.remaining).toFixed(2)}</span></p>
+                <p className="text-red-800/70 text-sm font-medium">You've exceeded your budget by <span className="font-bold text-red-600">{money.fmt(Math.abs(invoice.budget_summary.remaining),2)}</span></p>
               </div>
             )}
 
@@ -247,10 +249,10 @@ export default function ExpenseInvoice() {
             >
               <h3 className="text-amber-950 font-bold text-xl mb-6">Budget Summary</h3>
               <div className="space-y-4">
-                <div className="flex justify-between items-center"><span className="text-amber-900/70 font-medium">Total Budget</span><span className="text-amber-950 font-bold text-lg">${invoice?.budget_summary?.total_budget || 0}</span></div>
-                <div className="flex justify-between items-center"><span className="text-amber-900/70 font-medium">Total Spent</span><span className="text-orange-600 font-bold text-lg">${invoice?.budget_summary?.total_spent?.toFixed(2) || 0}</span></div>
+                <div className="flex justify-between items-center"><span className="text-amber-900/70 font-medium">Total Budget</span><span className="text-amber-950 font-bold text-lg">{money.fmt(invoice?.budget_summary?.total_budget || 0)}</span></div>
+                <div className="flex justify-between items-center"><span className="text-amber-900/70 font-medium">Total Spent</span><span className="text-orange-600 font-bold text-lg">{money.fmt(invoice?.budget_summary?.total_spent || 0,2)}</span></div>
                 <div className="h-px bg-amber-900/10 my-2" />
-                <div className="flex justify-between items-center"><span className="text-amber-900/70 font-medium">Remaining</span><span className={`font-black text-xl ${isOverBudget ? 'text-red-600' : 'text-emerald-600'}`}>${invoice?.budget_summary?.remaining?.toFixed(2) || 0}</span></div>
+                <div className="flex justify-between items-center"><span className="text-amber-900/70 font-medium">Remaining</span><span className={`font-black text-xl ${isOverBudget ? 'text-red-600' : 'text-emerald-600'}`}>{money.fmt(invoice?.budget_summary?.remaining || 0,2)}</span></div>
               </div>
 
               {/* Progress bar */}
