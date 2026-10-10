@@ -114,27 +114,6 @@ export default function CommunityTab() {
             <p className="text-amber-900/70">
               Share experiences and get inspired by fellow travelers
             </p>
-            
-            {/* Search */}
-            <div className="relative community-search">
-              <Search
-                size={18}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-amber-900/40"
-              />
-              <input
-                className="input-glass outline-none transition-colors w-full"
-                placeholder="Search community posts..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                style={{
-                  height: "56px",
-                  borderRadius: "18px",
-                  padding: "0 20px 0 44px",
-                  border: "1px solid rgba(120,90,60,0.12)",
-                  fontSize: "15px",
-                }}
-              />
-            </div>
           </div>
           
           <div className="community-header-right">
@@ -152,6 +131,27 @@ export default function CommunityTab() {
               </button>
             )}
           </div>
+        </div>
+
+        {/* Search */}
+        <div className="relative community-search">
+          <Search
+            size={18}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none text-amber-800"
+          />
+          <input
+            className="input-glass outline-none transition-colors w-full"
+            placeholder="Search community posts..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{
+              height: "56px",
+              borderRadius: "18px",
+              padding: "0 20px 0 44px",
+              border: "1px solid rgba(120,90,60,0.12)",
+              fontSize: "15px",
+            }}
+          />
         </div>
 
         {/* Create Post */}

@@ -2,7 +2,7 @@ import useCurrency from '../../utils/useCurrency';
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getTrip, createStop, reorderStops, deleteStop, searchCities } from '../../services/api';
-import { Plus, Trash2, GripVertical, MapPin, Calendar, DollarSign, Loader2, ArrowRight, CheckCircle } from 'lucide-react';
+import { Plus, Trash2, GripVertical, MapPin, Calendar, IndianRupee, Loader2, ArrowRight, CheckCircle } from 'lucide-react';
 
 import { DndContext, closestCenter, PointerSensor, KeyboardSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, useSortable, sortableKeyboardCoordinates, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
@@ -214,7 +214,7 @@ export default function ItineraryBuilder() {
                       )}
                       {stop.section_budget > 0 && (
                         <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200/50 text-xs font-semibold text-emerald-700">
-                          <DollarSign size={14} />
+                          <IndianRupee size={14} />
                           <span>{money.fmt(stop.section_budget)}</span>
                         </div>
                       )}
@@ -341,7 +341,7 @@ export default function ItineraryBuilder() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-amber-950 mb-2 flex items-center gap-2"><DollarSign size={16} className="text-amber-700"/> Budget ({money.code})</label>
+                <label className="block text-sm font-semibold text-amber-950 mb-2 flex items-center gap-2"><IndianRupee size={16} className="text-amber-700"/> Budget ({money.code})</label>
                 <input 
                   type="number" 
                   className="input-glass w-full outline-none transition-colors" 

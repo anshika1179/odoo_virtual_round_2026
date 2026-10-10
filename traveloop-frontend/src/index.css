@@ -13,7 +13,7 @@
   --dark-surface: #78350f;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; }
 
 body {
   font-family: 'Inter', sans-serif;
@@ -386,7 +386,7 @@ footer {
   justify-content: space-between;
   align-items: flex-start;
   gap: 32px;
-  margin-bottom: 80px;
+  margin-bottom: 32px;
   flex-wrap: wrap;
 }
 .community-header-left {
@@ -400,7 +400,8 @@ footer {
 }
 .community-search {
   width: 100%;
-  max-width: 480px;
+  max-width: 100%;
+  margin-bottom: 48px;
 }
 .community-header-right {
   display: flex;

@@ -2,7 +2,7 @@ import useCurrency from '../../utils/useCurrency';
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getTrip, getStops, getStopActivities, shareTrip } from '../../services/api';
-import { Calendar, DollarSign, MapPin, Loader2, Edit, CheckSquare, StickyNote, Clock, Share2, Copy, Check, X, Map, Users } from 'lucide-react';
+import { Calendar, IndianRupee, MapPin, Loader2, Edit, CheckSquare, StickyNote, Clock, Share2, Copy, Check, X, Map, Users } from 'lucide-react';
 import GroupMembers from '../../components/trips/GroupMembers';
 import TripRouteMap from '../../components/maps/TripRouteMap';
 
@@ -111,7 +111,7 @@ export default function ItineraryView() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3 bg-emerald-50/50 px-4 py-2.5 rounded-xl border border-emerald-200/50">
-                  <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center"><DollarSign size={20} className="text-emerald-700" /></div>
+                  <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center"><IndianRupee size={20} className="text-emerald-700" /></div>
                   <div>
                     <div className="text-xs text-emerald-700/60 font-semibold uppercase tracking-wider">Budget</div>
                     <div className="text-sm font-bold text-emerald-900">{money.fmt(trip.total_budget)}</div>
@@ -137,7 +137,7 @@ export default function ItineraryView() {
                 <Users size={18} /> Group
               </button>
               <Link to={`/trips/${id}/budget`} className="btn-secondary flex items-center gap-2 justify-center" style={{ height: "48px", borderRadius: "14px", padding: "0 24px", fontWeight: 600 }}>
-                <DollarSign size={18} /> Budget
+                <IndianRupee size={18} /> Budget
               </Link>
               {trip.role !== 'MEMBER' && (
               <>
@@ -224,7 +224,7 @@ export default function ItineraryView() {
                         </div>
                         {stop.section_budget > 0 && (
                           <span className="shrink-0 bg-emerald-100 text-emerald-800 border border-emerald-200 px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-1.5">
-                            <DollarSign size={16} />{money.fmt(stop.section_budget)} Budget
+                            <IndianRupee size={16} />{money.fmt(stop.section_budget)} Budget
                           </span>
                         )}
                       </div>

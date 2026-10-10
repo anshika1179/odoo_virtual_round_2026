@@ -2,7 +2,7 @@ import useCurrency from '../../utils/useCurrency';
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getShared, createTrip } from '../../services/api';
-import { Calendar, DollarSign, MapPin, Loader2, Eye, Clock, Copy, Check, Share2 } from 'lucide-react';
+import { Calendar, IndianRupee, MapPin, Loader2, Eye, Clock, Copy, Check, Share2 } from 'lucide-react';
 
 export default function PublicItinerary() {
   const money = useCurrency();
@@ -71,7 +71,7 @@ export default function PublicItinerary() {
               <p className="text-xs text-amber-600">{new Date(trip?.start_date).toLocaleDateString()} — {new Date(trip?.end_date).toLocaleDateString()}</p>
             </div>
             <div className="glass rounded-xl px-4 py-3 text-center">
-              <DollarSign size={18} className="mx-auto text-emerald-600 mb-1" />
+              <IndianRupee size={18} className="mx-auto text-emerald-600 mb-1" />
               <p className="text-xs text-amber-600">Budget: {money.fmt(trip?.total_budget || totalBudget)}</p>
             </div>
             <div className="glass rounded-xl px-4 py-3 text-center">

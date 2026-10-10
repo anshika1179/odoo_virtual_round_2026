@@ -16,10 +16,6 @@ export default function Footer() {
           
           {/* Credits */}
           <div className="footer-credits">
-            <h3 className="footer-title">
-              Made with ❤️
-            </h3>
-
             <p className="footer-team-label">
               Team Members:
             </p>

@@ -1,7 +1,7 @@
 import useCurrency from '../../utils/useCurrency';
 import { useState, useEffect } from 'react';
-import { searchCities, searchActivities, getCityCountries } from '../../services/api';
-import { Search, MapPin, Filter, DollarSign, Clock, Star, Globe, Plus, Eye } from 'lucide-react';
+import { searchCities, searchActivities, getCityCountries, getCityRegions } from '../../services/api';
+import { Search, MapPin, Filter, IndianRupee, Clock, Star, Globe, Plus, Eye } from 'lucide-react';
 import { CardSkeleton, RowSkeleton } from '../../components/common/Skeletons';
 import { Link } from 'react-router-dom';
 
@@ -15,10 +15,17 @@ export default function CitySearch() {
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('');
   const [countries, setCountries] = useState([]);
+  const [regionOptions, setRegionOptions] = useState([]);
 
   useEffect(() => {
     getCityCountries().then(r => setCountries(r.data)).catch(() => {});
   }, []);
+
+  useEffect(() => {
+    getCityRegions(filters.country || undefined)
+      .then(r => setRegionOptions(r.data))
+      .catch(() => setRegionOptions([]));
+  }, [filters.country]);
 
   useEffect(() => {
     setLoading(true);
@@ -41,7 +48,7 @@ export default function CitySearch() {
     }
   }, [query, mode, filters]);
 
-  const regions = ['Europe', 'Asia', 'North America', 'South America', 'Africa', 'Oceania', 'Middle East', 'Caribbean'];
+  const regions = regionOptions.length ? regionOptions : ['Europe', 'Asia', 'North America', 'South America', 'Africa', 'Oceania', 'Middle East', 'Caribbean'];
   const actTypes = ['SIGHTSEEING', 'FOOD', 'ADVENTURE', 'CULTURE', 'SHOPPING', 'NIGHTLIFE', 'NATURE', 'WELLNESS'];
 
   const sortedCities = [...cities].sort((a, b) => {
@@ -75,11 +82,11 @@ export default function CitySearch() {
         {/* Mode Tabs */}
         <div className="flex items-center gap-3 mb-8">
           <button onClick={() => setMode('cities')}
-            className={`px-6 py-3 rounded-2xl text-sm font-medium transition-all ${mode === 'cities' ? 'bg-amber-900/10 text-amber-950 shadow-sm border border-amber-900/10' : 'text-amber-900/60 hover:text-amber-950 hover:bg-amber-900/5'}`}>
+            className={`px-6 py-3 rounded-2xl text-sm font-medium transition-all ${mode === 'cities' ? 'bg-amber-900/10 text-amber-950 shadow-sm border border-amber-900/10' : 'text-amber-900/80 hover:text-amber-950 hover:bg-amber-900/5'}`}>
             <Globe size={16} className="inline mr-2" />Cities
           </button>
           <button onClick={() => setMode('activities')}
-            className={`px-6 py-3 rounded-2xl text-sm font-medium transition-all ${mode === 'activities' ? 'bg-amber-900/10 text-amber-950 shadow-sm border border-amber-900/10' : 'text-amber-900/60 hover:text-amber-950 hover:bg-amber-900/5'}`}>
+            className={`px-6 py-3 rounded-2xl text-sm font-medium transition-all ${mode === 'activities' ? 'bg-amber-900/10 text-amber-950 shadow-sm border border-amber-900/10' : 'text-amber-900/80 hover:text-amber-950 hover:bg-amber-900/5'}`}>
             <Star size={16} className="inline mr-2" />Activities
           </button>
         </div>
@@ -88,7 +95,7 @@ export default function CitySearch() {
         <div className="glass shadow-soft" style={{ borderRadius: '24px', padding: '24px', marginBottom: '48px', border: '1px solid rgba(120,90,60,0.08)' }}>
           <div className="flex flex-col sm:flex-row items-center" style={{ gap: '24px' }}>
             <div className="relative flex-1 w-full">
-              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-amber-900/40" />
+              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none text-amber-800" />
               <input className="input-glass outline-none transition-colors w-full" placeholder={mode === 'cities' ? 'Search cities...' : 'Search activities...'}
                 style={{ height: '56px', borderRadius: '18px', padding: '0 20px 0 44px', border: '1px solid rgba(120,90,60,0.12)', fontSize: '15px' }}
                 value={query} onChange={e => setQuery(e.target.value)} />
@@ -96,7 +103,7 @@ export default function CitySearch() {
             {mode === 'cities' ? (
               <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
                 <select className="input-glass w-full sm:w-auto" style={{ height: '56px', borderRadius: '18px', padding: '0 24px', border: '1px solid rgba(120,90,60,0.12)' }}
-                        value={filters.country} onChange={e => setFilters({...filters, country: e.target.value})}>
+                        value={filters.country} onChange={e => setFilters({...filters, country: e.target.value, region: ''})}>
                   <option value="">All Countries</option>
                   {countries.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
@@ -166,7 +173,7 @@ export default function CitySearch() {
                 <div className="flex-1 flex flex-col justify-between" style={{ padding: '24px' }}>
                   <p className="text-amber-900/60 text-sm line-clamp-3 mb-6 leading-relaxed">{city.description}</p>
                   <div className="flex items-center justify-between text-sm text-amber-900/80 pt-4 border-t border-amber-900/10 mt-auto">
-                    <span className="flex items-center gap-1.5 font-medium"><DollarSign size={14} className="text-amber-600" /> Cost Index: {city.cost_index}x</span>
+                    <span className="flex items-center gap-1.5 font-medium"><IndianRupee size={14} className="text-amber-600" /> Cost Index: {city.cost_index}x</span>
                     <span className="flex items-center gap-1.5 font-medium"><Star size={14} className="text-amber-500" /> Score: {city.popularity_score}</span>
                   </div>
                 </div>

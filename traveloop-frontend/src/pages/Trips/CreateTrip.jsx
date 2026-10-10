@@ -10,7 +10,7 @@ import {
 import {
   Calendar,
   MapPin,
-  DollarSign,
+  IndianRupee,
   Plane,
   Loader2,
   Sparkles,
@@ -307,7 +307,7 @@ export default function CreateTrip() {
 
                 <div>
                   <label className="block text-sm font-semibold text-amber-950 mb-2 flex items-center gap-2">
-                    <DollarSign size={16} className="text-amber-700" /> Total
+                    <IndianRupee size={16} className="text-amber-700" /> Total
                     Budget ({money.code})
                   </label>
                   <input

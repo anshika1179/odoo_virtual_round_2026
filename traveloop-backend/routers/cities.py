@@ -35,6 +35,15 @@ def list_countries(db: Session = Depends(get_db)):
     return [r[0] for r in rows]
 
 
+@router.get("/regions", response_model=list[str])
+def list_regions(country: str | None = None, db: Session = Depends(get_db)):
+    q = db.query(City.region).distinct()
+    if country:
+        q = q.filter(City.country == country)
+    rows = q.order_by(City.region).all()
+    return [r[0] for r in rows if r[0]]
+
+
 @router.get("/{city_id}", response_model=CityResponse)
 def get_city(city_id: int, db: Session = Depends(get_db)):
     city = db.query(City).filter(City.id == city_id).first()

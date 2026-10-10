@@ -2,6 +2,115 @@ from sqlalchemy.orm import Session
 from models.city import City
 from seed.city_photos import CITY_PHOTOS
 
+# Latitude/longitude for every seeded city (used by the map views).
+CITY_COORDS = {
+    "Paris": (48.8566, 2.3522),
+    "Tokyo": (35.6762, 139.6503),
+    "New York": (40.7128, -74.006),
+    "London": (51.5074, -0.1278),
+    "Dubai": (25.2048, 55.2708),
+    "Bali": (-8.3405, 115.092),
+    "Rome": (41.9028, 12.4964),
+    "Barcelona": (41.3874, 2.1686),
+    "Sydney": (-33.8688, 151.2093),
+    "Bangkok": (13.7563, 100.5018),
+    "Istanbul": (41.0082, 28.9784),
+    "Cape Town": (-33.9249, 18.4241),
+    "Marrakech": (31.6295, -7.9811),
+    "Santorini": (36.461, 25.376),
+    "Kyoto": (35.0116, 135.7681),
+    "Cusco": (-13.532, -71.9675),
+    "Reykjavik": (64.1466, -21.9426),
+    "Amsterdam": (52.3676, 4.9041),
+    "Singapore": (1.3521, 103.8198),
+    "Rio de Janeiro": (-22.9068, -43.1729),
+    "Prague": (50.0755, 14.4378),
+    "Lisbon": (38.7223, -9.1393),
+    "Seoul": (37.5665, 126.978),
+    "Vienna": (48.2082, 16.3738),
+    "Buenos Aires": (-34.6037, -58.3816),
+    "Maldives": (4.1755, 73.5093),
+    "Jaipur": (26.9124, 75.7873),
+    "Havana": (23.1136, -82.3666),
+    "Cairo": (30.0444, 31.2357),
+    "Vancouver": (49.2827, -123.1207),
+    "Dubrovnik": (42.6507, 18.0944),
+    "Petra": (30.3285, 35.4444),
+    "Queenstown": (-45.0312, 168.6626),
+    "Hanoi": (21.0278, 105.8342),
+    "Florence": (43.7696, 11.2558),
+    "Amalfi Coast": (40.6281, 14.485),
+    "Chiang Mai": (18.7883, 98.9853),
+    "Zürich": (47.3769, 8.5417),
+    "Maui": (20.7984, -156.3319),
+    "Colombo": (6.9271, 79.8612),
+    "Kathmandu": (27.7172, 85.324),
+    "Edinburgh": (55.9533, -3.1883),
+    "Munich": (48.1351, 11.582),
+    "San Francisco": (37.7749, -122.4194),
+    "Phuket": (7.8804, 98.3923),
+    "Cartagena": (10.391, -75.4794),
+    "Lhasa": (29.652, 91.1721),
+    "Nairobi": (-1.2921, 36.8219),
+    "Athens": (37.9838, 23.7275),
+    "Mexico City": (19.4326, -99.1332),
+    "Berlin": (52.52, 13.405),
+    "Copenhagen": (55.6761, 12.5683),
+    "Helsinki": (60.1699, 24.9384),
+    "Oslo": (59.9139, 10.7522),
+    "Stockholm": (59.3293, 18.0686),
+    "Bruges": (51.2093, 3.2247),
+    "Budapest": (47.4979, 19.0402),
+    "Krakow": (50.0647, 19.945),
+    "Nice": (43.7102, 7.262),
+    "Porto": (41.1579, -8.6291),
+    "Seville": (37.3891, -5.9845),
+    "Split": (43.5081, 16.4402),
+    "Moscow": (55.7558, 37.6173),
+    "Tallinn": (59.437, 24.7536),
+    "Tbilisi": (41.7151, 44.8271),
+    "Kuala Lumpur": (3.139, 101.6869),
+    "Mumbai": (19.076, 72.8777),
+    "Delhi": (28.7041, 77.1025),
+    "Goa": (15.2993, 74.124),
+    "Hong Kong": (22.3193, 114.1694),
+    "Shanghai": (31.2304, 121.4737),
+    "Beijing": (39.9042, 116.4074),
+    "Taipei": (25.033, 121.5654),
+    "Osaka": (34.6937, 135.5023),
+    "Siem Reap": (13.3671, 103.8448),
+    "Luang Prabang": (19.8856, 102.1347),
+    "Zanzibar": (-6.1659, 39.199),
+    "Victoria Falls": (-17.9243, 25.8572),
+    "Casablanca": (33.5731, -7.5898),
+    "Accra": (5.6037, -0.187),
+    "Lima": (-12.0464, -77.0428),
+    "Bogota": (4.711, -74.0721),
+    "Santiago": (-33.4489, -70.6693),
+    "Quito": (-0.1807, -78.4678),
+    "Medellín": (6.2442, -75.5812),
+    "Muscat": (23.588, 58.3829),
+    "Toronto": (43.6532, -79.3832),
+    "Montreal": (45.5017, -73.5673),
+    "Los Angeles": (34.0522, -118.2437),
+    "Miami": (25.7617, -80.1918),
+    "Chicago": (41.8781, -87.6298),
+    "Cancún": (21.1619, -86.8515),
+    "Doha": (25.2854, 51.531),
+    "Abu Dhabi": (24.4539, 54.3773),
+    "Tel Aviv": (32.0853, 34.7818),
+    "Amman": (31.9454, 35.9284),
+    "Melbourne": (-37.8136, 144.9631),
+    "Auckland": (-36.8485, 174.7633),
+    "Fiji": (-17.7134, 178.065),
+    "Valletta": (35.8989, 14.5146),
+    "Salzburg": (47.8095, 13.055),
+    "Lucerne": (47.0502, 8.3093),
+    "Varanasi": (25.3176, 82.9739),
+    "Ho Chi Minh City": (10.8231, 106.6297),
+    "Udaipur": (24.5854, 73.7125),
+}
+
 CITIES_DATA = [
     {"name": "Paris", "country": "France", "region": "Europe", "cost_index": 1.8, "popularity_score": 98, "description": "City of Light, romance, Eiffel Tower, world-class cuisine", "image_url": CITY_PHOTOS['Paris']["image_url"]},
     {"name": "Tokyo", "country": "Japan", "region": "Asia", "cost_index": 1.6, "popularity_score": 96, "description": "Blend of ultramodern and traditional, cherry blossoms, sushi", "image_url": CITY_PHOTOS['Tokyo']["image_url"]},
@@ -116,13 +225,20 @@ def seed_cities(db: Session):
     """Seed new installs and replace only the old bundled photos on existing installs.
 
     Match by name + country, never by row position. Custom city photos are kept.
+    Rows that predate map support also get their coordinates backfilled.
     """
     cities = {(city.name, city.country): city for city in db.query(City).all()}
     for data in CITIES_DATA:
         city = cities.get((data["name"], data["country"]))
+        coords = CITY_COORDS.get(data["name"])
         if city is None:
+            if coords:
+                data = {**data, "latitude": coords[0], "longitude": coords[1]}
             db.add(City(**data))
         else:
+            if coords and (city.latitude is None or city.longitude is None):
+                city.latitude = coords[0]
+                city.longitude = coords[1]
             photo = CITY_PHOTOS[data["name"]]
             if not city.image_url or city.image_url in photo["legacy_urls"]:
                 city.image_url = photo["image_url"]

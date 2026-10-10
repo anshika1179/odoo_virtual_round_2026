@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getPopularCities, getTrips } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
-import { Search, MapPin, Plane, Calendar, TrendingUp, ChevronRight, Globe, Sparkles, DollarSign, CheckSquare, Users, StickyNote, Map } from 'lucide-react';
+import { Search, MapPin, Plane, Calendar, TrendingUp, ChevronRight, Globe, Sparkles, IndianRupee, CheckSquare, Users, StickyNote, Map } from 'lucide-react';
 import WorldMap from '../../components/maps/WorldMap';
 
 export default function Landing() {
@@ -18,7 +18,7 @@ export default function Landing() {
 
   const features = [
     { icon: <Plane size={24} />, title: 'Smart Itineraries', desc: 'Build day-by-day travel plans with city search and drag & drop stops.', color: 'from-amber-700 to-amber-900' },
-    { icon: <DollarSign size={24} />, title: 'Budget Tracking', desc: 'Track expenses by category with visual charts and invoice exports.', color: 'from-emerald-500 to-green-600' },
+    { icon: <IndianRupee size={24} />, title: 'Budget Tracking', desc: 'Track expenses by category with visual charts and invoice exports.', color: 'from-emerald-500 to-green-600' },
     { icon: <CheckSquare size={24} />, title: 'Packing Checklists', desc: 'Category-based packing lists with progress tracking. Never forget essentials.', color: 'from-orange-600 to-yellow-600' },
     { icon: <Users size={24} />, title: 'Community Hub', desc: 'Share travel stories, get inspired, and connect with fellow travelers.', color: 'from-amber-600 to-orange-700' },
   ];

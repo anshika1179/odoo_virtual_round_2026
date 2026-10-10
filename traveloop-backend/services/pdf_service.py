@@ -17,19 +17,106 @@ from reportlab.platypus import (
 from reportlab.graphics.shapes import Drawing, Rect, String, Circle, Line
 from reportlab.graphics import renderPDF
 
+# A Unicode TTF is needed for currency glyphs like the rupee sign (Helvetica
+# has no glyph for them). Use the first font found on the system; if none is
+# available, amounts fall back to the currency code (e.g. "INR") as prefix.
+import os as _os
+from reportlab.pdfbase import pdfmetrics as _pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont as _TTFont
 
-# ── Brand Colours ────────────────────────────────────────────────────
-BRAND_INDIGO = colors.HexColor("#6366f1")
-BRAND_PURPLE = colors.HexColor("#7c3aed")
-BRAND_DARK = colors.HexColor("#0f172a")
-BRAND_CARD = colors.HexColor("#1e293b")
-BRAND_SURFACE = colors.HexColor("#334155")
-BRAND_TEXT = colors.HexColor("#e2e8f0")
-BRAND_MUTED = colors.HexColor("#94a3b8")
-BRAND_GREEN = colors.HexColor("#10b981")
-BRAND_RED = colors.HexColor("#ef4444")
-BRAND_AMBER = colors.HexColor("#f59e0b")
+_UNICODE_FONT = None
+for _font_path in (
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+    "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+    "/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf",
+    "C:/Windows/Fonts/arial.ttf",
+    "C:/Windows/Fonts/segoeui.ttf",
+    "/System/Library/Fonts/Supplemental/Arial.ttf",
+):
+    if _os.path.exists(_font_path):
+        try:
+            _pdfmetrics.registerFont(_TTFont("UnicodeSans", _font_path))
+            _UNICODE_FONT = "UnicodeSans"
+            break
+        except Exception:
+            continue
+
+
+# ── Brand Colours (black & white invoice) ───────────────────────────
+BRAND_INDIGO = colors.black
+BRAND_PURPLE = colors.black
+BRAND_DARK = colors.black
+BRAND_CARD = colors.black
+BRAND_SURFACE = colors.black
+BRAND_TEXT = colors.black
+BRAND_MUTED = colors.HexColor("#555555")
+BRAND_GREEN = colors.black
+BRAND_RED = colors.black
+BRAND_AMBER = colors.black
 WHITE = colors.white
+
+# ── Display currency (mirrors the frontend rule: amounts stored in USD,
+# shown in the user's country currency; rates are fixed approximations) ──
+_CURRENCIES = {
+    "india": ("INR", "\u20b9", 83, "en-IN"),
+    "united states": ("USD", "$", 1, "en-US"), "usa": ("USD", "$", 1, "en-US"),
+    "united kingdom": ("GBP", "\u00a3", 0.79, "en-GB"), "uk": ("GBP", "\u00a3", 0.79, "en-GB"),
+    "france": ("EUR", "\u20ac", 0.92, "fr-FR"), "germany": ("EUR", "\u20ac", 0.92, "de-DE"),
+    "italy": ("EUR", "\u20ac", 0.92, "it-IT"), "spain": ("EUR", "\u20ac", 0.92, "es-ES"),
+    "netherlands": ("EUR", "\u20ac", 0.92, "nl-NL"), "portugal": ("EUR", "\u20ac", 0.92, "pt-PT"),
+    "ireland": ("EUR", "\u20ac", 0.92, "en-IE"),
+    "japan": ("JPY", "\u00a5", 150, "ja-JP"), "china": ("CNY", "\u00a5", 7.2, "zh-CN"),
+    "australia": ("AUD", "A$", 1.5, "en-AU"), "canada": ("CAD", "C$", 1.37, "en-CA"),
+    "singapore": ("SGD", "S$", 1.35, "en-SG"),
+    "united arab emirates": ("AED", "AED ", 3.67, "en-AE"), "uae": ("AED", "AED ", 3.67, "en-AE"),
+    "thailand": ("THB", "\u0e3f", 36, "th-TH"), "indonesia": ("IDR", "Rp ", 15800, "id-ID"),
+    "malaysia": ("MYR", "RM ", 4.7, "ms-MY"), "south korea": ("KRW", "\u20a9", 1350, "ko-KR"),
+    "switzerland": ("CHF", "CHF ", 0.88, "de-CH"), "new zealand": ("NZD", "NZ$", 1.65, "en-NZ"),
+    "sri lanka": ("LKR", "Rs ", 300, "si-LK"), "nepal": ("NPR", "Rs ", 133, "ne-NP"),
+    "pakistan": ("PKR", "Rs ", 280, "en-PK"), "bangladesh": ("BDT", "\u09f3", 110, "bn-BD"),
+    "south africa": ("ZAR", "R ", 18.5, "en-ZA"), "brazil": ("BRL", "R$", 5.2, "pt-BR"),
+    "mexico": ("MXN", "MX$", 18, "es-MX"), "turkey": ("TRY", "\u20ba", 33, "tr-TR"),
+    "russia": ("RUB", "\u20bd", 92, "ru-RU"), "egypt": ("EGP", "E\u00a3", 48, "ar-EG"),
+    "saudi arabia": ("SAR", "SAR ", 3.75, "en-SA"),
+}
+
+
+def _currency_for(country):
+    return _CURRENCIES.get((country or "").strip().lower(), ("USD", "$", 1, "en-US"))
+
+
+def _indian_group(intpart):
+    if len(intpart) <= 3:
+        return intpart
+    last3 = intpart[-3:]
+    rest = intpart[:-3]
+    groups = []
+    while len(rest) > 2:
+        groups.insert(0, rest[-2:])
+        rest = rest[:-2]
+    if rest:
+        groups.insert(0, rest)
+    return ",".join(groups + [last3])
+
+
+def _make_money(country):
+    code, symbol, rate, locale = _currency_for(country)
+    if not symbol.isascii():
+        if _UNICODE_FONT:
+            symbol = f'<font name="{_UNICODE_FONT}">{symbol}</font>'
+        else:
+            symbol = code + " "
+
+    def fmt(usd, digits=None):
+        n = (float(usd) or 0) * rate
+        d = digits if digits is not None else (0 if rate >= 100 else (0 if float(n).is_integer() else 2))
+        s = f"{n:,.{d}f}"
+        if locale == "en-IN":
+            intpart, _, frac = s.partition(".")
+            s = _indian_group(intpart.replace(",", "")) + (("." + frac) if d > 0 else "")
+        return symbol + s
+
+    return code, fmt
 
 
 def _create_styles():
@@ -108,7 +195,7 @@ def _draw_header_bar(canvas, doc):
     canvas.rect(0, 0, w, 3 * mm, fill=1, stroke=0)
 
 
-def generate_invoice_pdf(trip, expenses, budget_summary, category_breakdown, user_name: str) -> bytes:
+def generate_invoice_pdf(trip, expenses, budget_summary, category_breakdown, user_name: str, user_country: str = "") -> bytes:
     """
     Generate a professional PDF invoice and return raw bytes.
 
@@ -130,6 +217,7 @@ def generate_invoice_pdf(trip, expenses, budget_summary, category_breakdown, use
     )
     styles = _create_styles()
     story = []
+    currency_code, money = _make_money(user_country)
 
     # ── LOGO / TITLE BLOCK ────────────────────────────────────────
     story.append(Spacer(1, 6 * mm))
@@ -168,7 +256,7 @@ def generate_invoice_pdf(trip, expenses, budget_summary, category_breakdown, use
         [
             Paragraph(f"Dates: {start_str}  →  {end_str}", styles['TableCell']),
             "",
-            Paragraph(f"Currency: USD", styles['TableCell']),
+            Paragraph(f"Currency: {currency_code}", styles['TableCell']),
         ],
     ]
     info_table = Table(info_data, colWidths=[85 * mm, 10 * mm, 75 * mm])
@@ -194,9 +282,9 @@ def generate_invoice_pdf(trip, expenses, budget_summary, category_breakdown, use
         Paragraph("Remaining", styles['InfoLabel']),
         Paragraph("Status", styles['InfoLabel']),
     ], [
-        Paragraph(f"<b>${total_budget:,.2f}</b>", styles['InfoValue']),
-        Paragraph(f"<b>${total_spent:,.2f}</b>", styles['InfoValue']),
-        Paragraph(f"<b>${remaining:,.2f}</b>", styles['InfoValue']),
+        Paragraph(f"<b>{money(total_budget)}</b>", styles['InfoValue']),
+        Paragraph(f"<b>{money(total_spent)}</b>", styles['InfoValue']),
+        Paragraph(f"<b>{money(remaining)}</b>", styles['InfoValue']),
         Paragraph(
             f"<b>{'OVER BUDGET' if is_over else 'WITHIN BUDGET'}</b>",
             ParagraphStyle('StatusVal', parent=styles['InfoValue'],
@@ -205,9 +293,9 @@ def generate_invoice_pdf(trip, expenses, budget_summary, category_breakdown, use
     ]]
     budget_table = Table(budget_data, colWidths=[42.5 * mm] * 4)
     budget_table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#f8fafc")),
+        ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#f5f5f5")),
         ('BOX', (0, 0), (-1, -1), 0.5, BRAND_SURFACE),
-        ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.HexColor("#e2e8f0")),
+        ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.HexColor("#d4d4d4")),
         ('TOPPADDING', (0, 0), (-1, -1), 6),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
         ('LEFTPADDING', (0, 0), (-1, -1), 8),
@@ -237,8 +325,8 @@ def generate_invoice_pdf(trip, expenses, budget_summary, category_breakdown, use
             Paragraph(str(exp.get("category", "")), styles['TableCell']),
             Paragraph(str(exp.get("description", "")), styles['TableCell']),
             Paragraph(str(exp.get("quantity", 1)), styles['TableCell']),
-            Paragraph(f"${exp.get('unit_cost', 0):,.2f}", styles['TableCellRight']),
-            Paragraph(f"${exp.get('total_amount', 0):,.2f}", styles['TableCellRight']),
+            Paragraph(f"{money(exp.get('unit_cost', 0), 2)}", styles['TableCellRight']),
+            Paragraph(f"{money(exp.get('total_amount', 0), 2)}", styles['TableCellRight']),
         ])
 
     if not expenses:
@@ -252,7 +340,7 @@ def generate_invoice_pdf(trip, expenses, budget_summary, category_breakdown, use
     table_data.append([
         "", "", "", "",
         Paragraph("TOTAL", styles['TotalLabel']),
-        Paragraph(f"${total_spent:,.2f}", styles['TotalValue']),
+        Paragraph(f"{money(total_spent)}", styles['TotalValue']),
     ])
 
     col_widths = [10 * mm, 25 * mm, 62 * mm, 15 * mm, 25 * mm, 30 * mm]
@@ -265,14 +353,14 @@ def generate_invoice_pdf(trip, expenses, budget_summary, category_breakdown, use
         ('FONTSIZE', (0, 0), (-1, 0), 9),
         # Body
         ('BACKGROUND', (0, 1), (-1, -2), WHITE),
-        ('ROWBACKGROUNDS', (0, 1), (-1, -2), [WHITE, colors.HexColor("#f8fafc")]),
+        ('ROWBACKGROUNDS', (0, 1), (-1, -2), [WHITE, colors.HexColor("#f5f5f5")]),
         ('TEXTCOLOR', (0, 1), (-1, -1), BRAND_DARK),
         # Totals row
-        ('BACKGROUND', (0, -1), (-1, -1), colors.HexColor("#f1f5f9")),
+        ('BACKGROUND', (0, -1), (-1, -1), colors.HexColor("#eeeeee")),
         ('LINEABOVE', (0, -1), (-1, -1), 1.5, BRAND_INDIGO),
         # Grid
         ('BOX', (0, 0), (-1, -1), 0.5, BRAND_SURFACE),
-        ('INNERGRID', (0, 0), (-1, -2), 0.25, colors.HexColor("#e2e8f0")),
+        ('INNERGRID', (0, 0), (-1, -2), 0.25, colors.HexColor("#d4d4d4")),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ('TOPPADDING', (0, 0), (-1, -1), 5),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
@@ -299,7 +387,7 @@ def generate_invoice_pdf(trip, expenses, budget_summary, category_breakdown, use
             pct = (amount / total_spent * 100) if total_spent > 0 else 0
             cat_data.append([
                 Paragraph(str(cat), styles['TableCell']),
-                Paragraph(f"${amount:,.2f}", styles['TableCellRight']),
+                Paragraph(f"{money(amount, 2)}", styles['TableCellRight']),
                 Paragraph(f"{pct:.1f}%", styles['TableCellRight']),
             ])
 
@@ -307,9 +395,9 @@ def generate_invoice_pdf(trip, expenses, budget_summary, category_breakdown, use
         cat_table.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (-1, 0), BRAND_PURPLE),
             ('TEXTCOLOR', (0, 0), (-1, 0), WHITE),
-            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [WHITE, colors.HexColor("#f8fafc")]),
+            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [WHITE, colors.HexColor("#f5f5f5")]),
             ('BOX', (0, 0), (-1, -1), 0.5, BRAND_SURFACE),
-            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.HexColor("#e2e8f0")),
+            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.HexColor("#d4d4d4")),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
             ('TOPPADDING', (0, 0), (-1, -1), 5),
             ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
@@ -327,7 +415,7 @@ def generate_invoice_pdf(trip, expenses, budget_summary, category_breakdown, use
     ))
     story.append(Paragraph(
         f"Generated by <b>Traveloop</b> on {invoice_date}  •  "
-        f"Invoice #{invoice_no}  •  All amounts in USD",
+        f"Invoice #{invoice_no}  •  All amounts in {currency_code}",
         styles['Footer'],
     ))
     story.append(Spacer(1, 2 * mm))

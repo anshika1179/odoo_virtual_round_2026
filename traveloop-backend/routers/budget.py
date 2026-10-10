@@ -173,6 +173,7 @@ def get_invoice_pdf(trip_id: int, db: Session = Depends(get_db), current_user: U
         budget_summary=budget_data,
         category_breakdown=categories,
         user_name=current_user.full_name,
+        user_country=current_user.country or "",
     )
 
     safe_title = trip.title.replace(" ", "_").replace("/", "-")[:50]

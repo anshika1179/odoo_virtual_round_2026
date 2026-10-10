@@ -100,8 +100,8 @@ export default function ExpenseInvoice() {
 
   return (
     <div
-      className="mx-auto flex flex-col items-center"
-      style={{ maxWidth: "1440px", padding: "120px 64px 80px 64px" }}
+      className="mx-auto flex flex-col items-center px-6 md:px-16"
+      style={{ maxWidth: "1440px", paddingTop: "120px", paddingBottom: "80px" }}
     >
       <div className="animate-fadeInUp w-full" style={{ maxWidth: "1200px" }}>
         <div className="flex flex-col sm:flex-row items-center justify-between mb-10 gap-4 text-center sm:text-left">

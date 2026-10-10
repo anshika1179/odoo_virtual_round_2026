@@ -1,10 +1,12 @@
+import useCurrency from '../../utils/useCurrency';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getTrips, deleteTrip, getMyInvitations, acceptInvitation, declineInvitation } from '../../services/api';
-import { Search, Plus, Calendar, DollarSign, MapPin, Plane, Globe, Trash2, Edit, AlertTriangle, Users, Check, X } from 'lucide-react';
+import { Search, Plus, Calendar, IndianRupee, MapPin, Plane, Globe, Trash2, Edit, AlertTriangle, Users, Check, X } from 'lucide-react';
 import { CardSkeleton } from '../../components/common/Skeletons';
 
 export default function TripList() {
+  const money = useCurrency();
   const navigate = useNavigate();
   const [trips, setTrips] = useState([]);
   const [filter, setFilter] = useState('');
@@ -209,7 +211,7 @@ export default function TripList() {
                     <p className="text-amber-900/60 text-sm line-clamp-2 mb-4 leading-relaxed">{trip.description || 'No description provided.'}</p>
                     <div className="flex items-center justify-between pt-4 border-t border-amber-900/10">
                       <span className="flex items-center gap-1.5 text-xs font-medium text-amber-900/70"><Calendar size={14} /> {new Date(trip.start_date).toLocaleDateString()}</span>
-                      <span className="flex items-center gap-1.5 text-xs font-bold text-amber-900"><DollarSign size={14} /> ${trip.price}</span>
+                      <span className="flex items-center gap-1.5 text-xs font-bold text-amber-900"><IndianRupee size={14} /> {money.fmt(trip.price)}</span>
                     </div>
                   </div>
                 </Link>
