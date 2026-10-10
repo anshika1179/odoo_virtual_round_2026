@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { searchCities, searchActivities, getCityCountries, getCityRegions } from '../../services/api';
 import { Search, MapPin, Filter, IndianRupee, Clock, Star, Globe, Plus, Eye } from 'lucide-react';
 import { CardSkeleton, RowSkeleton } from '../../components/common/Skeletons';
+import AddToTripModal from '../../components/activities/AddToTripModal';
 import { Link } from 'react-router-dom';
 
 export default function CitySearch() {
@@ -14,6 +15,7 @@ export default function CitySearch() {
   const [filters, setFilters] = useState({ country: '', region: '', type: '', max_cost: '' });
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('');
+  const [picked, setPicked] = useState(null);
   const [countries, setCountries] = useState([]);
   const [regionOptions, setRegionOptions] = useState([]);
 
@@ -183,7 +185,8 @@ export default function CitySearch() {
         ) : (
           <div className="space-y-4">
             {sortedActivities.map((act, i) => (
-              <div key={act.id} className="glass group hover:-translate-y-1 transition-all duration-300 animate-fadeInUp flex flex-col sm:flex-row items-start sm:items-center gap-6" 
+              <div key={act.id} onClick={() => setPicked(act)} role="button" tabIndex={0} onKeyDown={e => { if (e.key === 'Enter') setPicked(act); }} title="Click to add this activity to a trip"
+                   className="glass group hover:-translate-y-1 transition-all duration-300 animate-fadeInUp flex flex-col sm:flex-row items-start sm:items-center gap-6 cursor-pointer" 
                    style={{ padding: '28px', borderRadius: '24px', border: '1px solid rgba(120,90,60,0.08)', animationDelay: `${i * 0.03}s` }}>
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-100 to-orange-50 flex items-center justify-center shrink-0 border border-amber-900/5 group-hover:scale-105 transition-transform">
                   <Star size={24} className="text-amber-700" />
@@ -199,6 +202,14 @@ export default function CitySearch() {
                 <div className="text-left sm:text-right shrink-0 mt-4 sm:mt-0 pt-4 sm:pt-0 border-t sm:border-0 border-amber-900/10 w-full sm:w-auto">
                   <span className="px-3 py-1.5 rounded-full bg-amber-900/5 text-amber-900 text-xs font-bold uppercase tracking-wider">{act.type}</span>
                   <p className="text-amber-950 font-bold text-lg mt-3">{money.fmt(act.estimated_cost)}</p>
+                  <div className="mt-3 flex sm:justify-end">
+                    <button
+                      onClick={e => { e.stopPropagation(); setPicked(act); }}
+                      className="flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-xl bg-amber-900/5 text-amber-800 hover:bg-amber-900/10 hover:text-amber-950 transition-colors"
+                    >
+                      <Plus size={13} /> Add to Trip
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -206,6 +217,8 @@ export default function CitySearch() {
         )}
         </>
         )}
+
+        {picked && <AddToTripModal activity={picked} onClose={() => setPicked(null)} />}
 
         {!loading && ((mode === 'cities' && cities.length === 0) || (mode === 'activities' && activities.length === 0)) && (
           <div className="text-center text-amber-900/50" style={{ padding: '80px 0' }}>No results found. Try adjusting your search or filters.</div>

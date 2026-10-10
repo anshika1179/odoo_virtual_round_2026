@@ -9,6 +9,7 @@ import { SortableContext, useSortable, sortableKeyboardCoordinates, verticalList
 import { CSS } from '@dnd-kit/utilities';
 import ItineraryCalendar from './ItineraryCalendar';
 import TripWeather from './TripWeather';
+import StopActivities from '../../components/itinerary/StopActivities';
 
 function SortableSection({ stop, disabled, children }) {
   const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({ id: stop.id, disabled });
@@ -233,6 +234,7 @@ export default function ItineraryBuilder() {
                 </button>
                 </div>
               </div>
+              <StopActivities stop={stop} />
               </>}
             </SortableSection>
           ))}
