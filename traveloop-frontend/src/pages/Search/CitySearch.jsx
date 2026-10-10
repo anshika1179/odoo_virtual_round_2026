@@ -1,6 +1,6 @@
 import useCurrency from '../../utils/useCurrency';
 import { useState, useEffect } from 'react';
-import { searchCities, searchActivities } from '../../services/api';
+import { searchCities, searchActivities, getCityCountries } from '../../services/api';
 import { Search, MapPin, Filter, DollarSign, Clock, Star, Globe, Plus, Eye } from 'lucide-react';
 import { CardSkeleton, RowSkeleton } from '../../components/common/Skeletons';
 import { Link } from 'react-router-dom';
@@ -14,6 +14,11 @@ export default function CitySearch() {
   const [filters, setFilters] = useState({ country: '', region: '', type: '', max_cost: '' });
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('');
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() => {
+    getCityCountries().then(r => setCountries(r.data)).catch(() => {});
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -89,11 +94,18 @@ export default function CitySearch() {
                 value={query} onChange={e => setQuery(e.target.value)} />
             </div>
             {mode === 'cities' ? (
-              <select className="input-glass w-full sm:w-auto" style={{ height: '56px', borderRadius: '18px', padding: '0 24px', border: '1px solid rgba(120,90,60,0.12)' }} 
-                      value={filters.region} onChange={e => setFilters({...filters, region: e.target.value})}>
-                <option value="">All Regions</option>
-                {regions.map(r => <option key={r} value={r}>{r}</option>)}
-              </select>
+              <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+                <select className="input-glass w-full sm:w-auto" style={{ height: '56px', borderRadius: '18px', padding: '0 24px', border: '1px solid rgba(120,90,60,0.12)' }}
+                        value={filters.country} onChange={e => setFilters({...filters, country: e.target.value})}>
+                  <option value="">All Countries</option>
+                  {countries.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+                <select className="input-glass w-full sm:w-auto" style={{ height: '56px', borderRadius: '18px', padding: '0 24px', border: '1px solid rgba(120,90,60,0.12)' }}
+                        value={filters.region} onChange={e => setFilters({...filters, region: e.target.value})}>
+                  <option value="">All Regions</option>
+                  {regions.map(r => <option key={r} value={r}>{r}</option>)}
+                </select>
+              </div>
             ) : (
               <div className="flex items-center gap-4 w-full sm:w-auto">
                 <select className="input-glass" style={{ height: '56px', borderRadius: '18px', padding: '0 24px', border: '1px solid rgba(120,90,60,0.12)' }} 

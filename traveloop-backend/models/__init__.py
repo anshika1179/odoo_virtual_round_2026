@@ -7,9 +7,11 @@ from models.budget import TripActivity, TripBudget, ExpenseItem
 from models.checklist import PackingChecklist
 from models.note import TripNote
 from models.community import CommunityPost, PostLike, SharedItinerary
+from models.trip_member import TripMember, MemberStatus
 
 __all__ = [
     "User", "Trip", "TripStatus", "City", "Activity", "ActivityType",
     "TripStop", "TripActivity", "TripBudget", "ExpenseItem",
-    "PackingChecklist", "TripNote", "CommunityPost", "PostLike", "SharedItinerary"
+    "PackingChecklist", "TripNote", "CommunityPost", "PostLike", "SharedItinerary",
+    "TripMember", "MemberStatus"
 ]

@@ -37,3 +37,4 @@ class Trip(Base):
     checklist = relationship("PackingChecklist", back_populates="trip", cascade="all, delete-orphan")
     notes = relationship("TripNote", back_populates="trip", cascade="all, delete-orphan")
     community_posts = relationship("CommunityPost", back_populates="trip")
+    members = relationship("TripMember", back_populates="trip", cascade="all, delete-orphan")

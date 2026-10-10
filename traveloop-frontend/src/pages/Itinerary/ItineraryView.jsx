@@ -2,7 +2,8 @@ import useCurrency from '../../utils/useCurrency';
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getTrip, getStops, getStopActivities, shareTrip } from '../../services/api';
-import { Calendar, DollarSign, MapPin, Loader2, Edit, CheckSquare, StickyNote, Clock, Share2, Copy, Check, X, Map } from 'lucide-react';
+import { Calendar, DollarSign, MapPin, Loader2, Edit, CheckSquare, StickyNote, Clock, Share2, Copy, Check, X, Map, Users } from 'lucide-react';
+import GroupMembers from '../../components/trips/GroupMembers';
 import TripRouteMap from '../../components/maps/TripRouteMap';
 
 export default function ItineraryView() {
@@ -16,6 +17,7 @@ export default function ItineraryView() {
   const [shareUrl, setShareUrl] = useState('');
   const [sharing, setSharing] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [groupModal, setGroupModal] = useState(false);
 
   const handleShare = async () => {
     setSharing(true);
@@ -126,12 +128,19 @@ export default function ItineraryView() {
             </div>
             
             <div className="flex flex-wrap md:flex-col gap-3 shrink-0">
+              {trip.role !== 'MEMBER' && (
               <Link to={`/trips/${id}/builder`} className="btn-secondary flex items-center gap-2 justify-center" style={{ height: "48px", borderRadius: "14px", padding: "0 24px", fontWeight: 600 }}>
                 <Edit size={18} /> Edit Plan
               </Link>
+              )}
+              <button onClick={() => setGroupModal(true)} className="btn-secondary flex items-center gap-2 justify-center" style={{ height: "48px", borderRadius: "14px", padding: "0 24px", fontWeight: 600 }}>
+                <Users size={18} /> Group
+              </button>
               <Link to={`/trips/${id}/budget`} className="btn-secondary flex items-center gap-2 justify-center" style={{ height: "48px", borderRadius: "14px", padding: "0 24px", fontWeight: 600 }}>
                 <DollarSign size={18} /> Budget
               </Link>
+              {trip.role !== 'MEMBER' && (
+              <>
               <Link to={`/trips/${id}/checklist`} className="btn-secondary flex items-center gap-2 justify-center" style={{ height: "48px", borderRadius: "14px", padding: "0 24px", fontWeight: 600 }}>
                 <CheckSquare size={18} /> Checklist
               </Link>
@@ -141,6 +150,8 @@ export default function ItineraryView() {
               <button onClick={handleShare} disabled={sharing} className="btn-primary flex items-center gap-2 justify-center" style={{ height: "48px", borderRadius: "14px", padding: "0 24px", fontWeight: 600 }}>
                 {sharing ? <Loader2 size={18} className="animate-spin" /> : <Share2 size={18} />} Share
               </button>
+              </>
+              )}
             </div>
           </div>
         </div>
@@ -256,6 +267,9 @@ export default function ItineraryView() {
           </div>
         )}
       </div>
+
+      {/* Group Members Modal */}
+      {groupModal && <GroupMembers tripId={id} onClose={() => setGroupModal(false)} />}
 
       {/* Share Modal */}
       {shareModal && (

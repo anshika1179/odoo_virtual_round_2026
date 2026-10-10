@@ -1,7 +1,7 @@
 """Trip business logic service layer."""
 from sqlalchemy.orm import Session
 from models.trip import Trip
-from models.stop import Stop
+from models.stop import TripStop
 from fastapi import HTTPException
 
 
@@ -55,7 +55,7 @@ def delete_trip(db: Session, trip_id: int, user_id: int):
     """Delete a trip and all related data."""
     trip = get_trip_or_404(db, trip_id, user_id)
     # Delete stops first
-    db.query(Stop).filter(Stop.trip_id == trip_id).delete()
+    db.query(TripStop).filter(Stop.trip_id == trip_id).delete()
     db.delete(trip)
     db.commit()
     return {"message": "Trip deleted"}
@@ -66,7 +66,7 @@ def get_trip_stats(db: Session, trip_id: int):
     trip = db.query(Trip).filter(Trip.id == trip_id).first()
     if not trip:
         return None
-    stops = db.query(Stop).filter(Stop.trip_id == trip_id).all()
+    stops = db.query(TripStop).filter(Stop.trip_id == trip_id).all()
     total_spent = sum(s.section_budget or 0 for s in stops)
     return {
         "total_stops": len(stops),
@@ -74,3 +74,21 @@ def get_trip_stats(db: Session, trip_id: int):
         "total_spent": total_spent,
         "remaining": (trip.total_budget or 0) - total_spent,
     }
+
+
+def user_can_view_trip(db: Session, trip_id: int, user_id: int) -> Trip:
+    """Get a trip the user owns OR is an ACCEPTED group member of."""
+    from models.trip_member import TripMember, MemberStatus
+    trip = db.query(Trip).filter(Trip.id == trip_id).first()
+    if not trip:
+        raise HTTPException(status_code=404, detail="Trip not found")
+    if trip.user_id == user_id:
+        return trip
+    membership = db.query(TripMember).filter(
+        TripMember.trip_id == trip_id,
+        TripMember.user_id == user_id,
+        TripMember.status == MemberStatus.ACCEPTED.value
+    ).first()
+    if not membership:
+        raise HTTPException(status_code=404, detail="Trip not found")
+    return trip

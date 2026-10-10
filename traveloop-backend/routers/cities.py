@@ -29,6 +29,12 @@ def popular_cities(db: Session = Depends(get_db)):
     return db.query(City).order_by(City.popularity_score.desc()).limit(12).all()
 
 
+@router.get("/countries", response_model=list[str])
+def list_countries(db: Session = Depends(get_db)):
+    rows = db.query(City.country).distinct().order_by(City.country).all()
+    return [r[0] for r in rows]
+
+
 @router.get("/{city_id}", response_model=CityResponse)
 def get_city(city_id: int, db: Session = Depends(get_db)):
     city = db.query(City).filter(City.id == city_id).first()

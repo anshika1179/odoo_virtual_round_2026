@@ -8,15 +8,14 @@ from models.user import User
 from schemas.trip_schema import BudgetUpdate, BudgetResponse, ExpenseCreate, ExpenseUpdate, ExpenseResponse
 from middleware.auth_middleware import get_current_user
 from services.pdf_service import generate_invoice_pdf
+from services.trip_service import user_can_view_trip
 
 router = APIRouter(prefix="/api", tags=["Budget & Expenses"])
 
 
 @router.get("/trips/{trip_id}/budget", response_model=BudgetResponse)
 def get_budget(trip_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    trip = db.query(Trip).filter(Trip.id == trip_id, Trip.user_id == current_user.id).first()
-    if not trip:
-        raise HTTPException(status_code=404, detail="Trip not found")
+    trip = user_can_view_trip(db, trip_id, current_user.id)
     budget = db.query(TripBudget).filter(TripBudget.trip_id == trip_id).first()
     if not budget:
         budget = TripBudget(trip_id=trip_id)
@@ -46,9 +45,7 @@ def update_budget(trip_id: int, data: BudgetUpdate, db: Session = Depends(get_db
 
 @router.get("/trips/{trip_id}/expenses", response_model=list[ExpenseResponse])
 def list_expenses(trip_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    trip = db.query(Trip).filter(Trip.id == trip_id, Trip.user_id == current_user.id).first()
-    if not trip:
-        raise HTTPException(status_code=404, detail="Trip not found")
+    trip = user_can_view_trip(db, trip_id, current_user.id)
     return db.query(ExpenseItem).filter(ExpenseItem.trip_id == trip_id).all()
 
 
@@ -110,9 +107,7 @@ def delete_expense(expense_id: int, db: Session = Depends(get_db), current_user:
 
 @router.get("/trips/{trip_id}/invoice")
 def get_invoice(trip_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    trip = db.query(Trip).filter(Trip.id == trip_id, Trip.user_id == current_user.id).first()
-    if not trip:
-        raise HTTPException(status_code=404, detail="Trip not found")
+    trip = user_can_view_trip(db, trip_id, current_user.id)
     expenses = db.query(ExpenseItem).filter(ExpenseItem.trip_id == trip_id).all()
     budget = db.query(TripBudget).filter(TripBudget.trip_id == trip_id).first()
     categories = {}

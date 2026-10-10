@@ -77,6 +77,7 @@ class TripResponse(BaseModel):
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
     stops: Optional[List[StopResponse]] = []
+    role: Optional[str] = None  # OWNER or MEMBER (group trips)
 
     class Config:
         from_attributes = True
@@ -325,3 +326,50 @@ class PostCommentResponse(BaseModel):
     user_name: Optional[str] = None
     content: str
     created_at: Optional[datetime] = None
+
+
+# ===== Group Trip Member Schemas =====
+class MemberInvite(BaseModel):
+    email: str
+
+    @field_validator("email")
+    @classmethod
+    def validate_email(cls, v):
+        v = (v or "").strip().lower()
+        if "@" not in v:
+            raise ValueError("Enter a valid email address")
+        return v
+
+
+class TripMemberResponse(BaseModel):
+    id: int
+    trip_id: int
+    user_id: int
+    full_name: Optional[str] = None
+    email: Optional[str] = None
+    status: str
+    is_owner: bool = False
+    invited_at: Optional[datetime] = None
+    responded_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class TripInvitationResponse(BaseModel):
+    id: int
+    trip_id: int
+    trip_title: str
+    owner_name: Optional[str] = None
+    start_date: Optional[datetime] = None
+    end_date: Optional[datetime] = None
+    status: str
+    invited_at: Optional[datetime] = None
+
+
+class GroupSplitResponse(BaseModel):
+    member_count: int
+    total_budget: float
+    total_spent: float
+    per_person_budget: float
+    per_person_spent: float

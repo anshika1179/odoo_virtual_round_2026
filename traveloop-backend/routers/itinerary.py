@@ -10,6 +10,7 @@ from schemas.trip_schema import (
     TripActivityCreate, TripActivityResponse
 )
 from middleware.auth_middleware import get_current_user
+from services.trip_service import user_can_view_trip
 
 router = APIRouter(prefix="/api", tags=["Itinerary"])
 
@@ -38,9 +39,7 @@ def create_stop(trip_id: int, data: StopCreate, db: Session = Depends(get_db), c
 
 @router.get("/trips/{trip_id}/stops", response_model=list[StopResponse])
 def list_stops(trip_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    trip = db.query(Trip).filter(Trip.id == trip_id, Trip.user_id == current_user.id).first()
-    if not trip:
-        raise HTTPException(status_code=404, detail="Trip not found")
+    trip = user_can_view_trip(db, trip_id, current_user.id)
     stops = db.query(TripStop).filter(TripStop.trip_id == trip_id).order_by(TripStop.stop_order).all()
     return [StopResponse(id=s.id, trip_id=s.trip_id, city_id=s.city_id, 
                          city_name=s.city.name if s.city else None,

@@ -22,6 +22,7 @@ export const deleteTrip = (id) => API.delete(`/trips/${id}`);
 
 // Cities
 export const searchCities = (params) => API.get('/cities/search', { params });
+export const getCityCountries = () => API.get('/cities/countries');
 export const getPopularCities = () => API.get('/cities/popular');
 export const getCity = (id) => API.get(`/cities/${id}`);
 
@@ -90,6 +91,14 @@ export const uploadProfilePhoto = (file) => {
 };
 export const deleteProfilePhoto = () => API.delete('/profile/photo');
 export const deleteAccount = () => API.delete('/profile');
+
+// Group trips
+export const getTripMembers = (tripId) => API.get(`/trips/${tripId}/members`);
+export const inviteTripMember = (tripId, email) => API.post(`/trips/${tripId}/members`, { email });
+export const removeTripMember = (tripId, memberId) => API.delete(`/trips/${tripId}/members/${memberId}`);
+export const getMyInvitations = () => API.get('/me/invitations');
+export const acceptInvitation = (memberId) => API.post(`/me/invitations/${memberId}/accept`);
+export const declineInvitation = (memberId) => API.post(`/me/invitations/${memberId}/decline`);
 
 // Admin
 export const getAdminStats = () => API.get('/admin/stats');

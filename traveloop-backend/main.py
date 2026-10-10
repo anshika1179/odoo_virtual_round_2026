@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
 from database import SessionLocal
-from routers import auth, trips, cities, activities, itinerary, budget, checklist, notes, community, share, profile, admin
+from routers import auth, trips, cities, activities, itinerary, budget, checklist, notes, community, share, profile, admin, members
 from seed.cities_seed import seed_cities
 from seed.activities_seed import seed_activities
 from utils.password_hash import hash_password
@@ -110,6 +110,7 @@ app.include_router(community.router)
 app.include_router(share.router)
 app.include_router(profile.router)
 app.include_router(admin.router)
+app.include_router(members.router)
 
 
 @app.get("/")

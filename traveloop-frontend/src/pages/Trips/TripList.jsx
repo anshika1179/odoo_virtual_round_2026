@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getTrips, deleteTrip } from '../../services/api';
-import { Search, Plus, Calendar, DollarSign, MapPin, Plane, Globe, Trash2, Edit, AlertTriangle } from 'lucide-react';
+import { getTrips, deleteTrip, getMyInvitations, acceptInvitation, declineInvitation } from '../../services/api';
+import { Search, Plus, Calendar, DollarSign, MapPin, Plane, Globe, Trash2, Edit, AlertTriangle, Users, Check, X } from 'lucide-react';
 import { CardSkeleton } from '../../components/common/Skeletons';
 
 export default function TripList() {
@@ -13,6 +13,22 @@ export default function TripList() {
   const [sortBy, setSortBy] = useState('');
   const [deleteModal, setDeleteModal] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [invitations, setInvitations] = useState([]);
+
+  const loadInvitations = () => {
+    getMyInvitations().then(r => setInvitations(r.data)).catch(() => {});
+  };
+
+  useEffect(() => { loadInvitations(); }, []);
+
+  const respondInvite = async (memberId, action) => {
+    try {
+      if (action === 'accept') await acceptInvitation(memberId);
+      else await declineInvitation(memberId);
+      loadInvitations();
+      loadTrips();
+    } catch {}
+  };
 
   const loadTrips = () => {
     const params = {};
@@ -94,6 +110,33 @@ export default function TripList() {
         </div>
       </div>
 
+      {invitations.length > 0 && (
+        <div className="glass shadow-soft animate-fadeInUp" style={{ borderRadius: '24px', padding: '24px', marginBottom: '48px', border: '1px solid rgba(120,90,60,0.08)' }}>
+          <h2 className="text-amber-950 font-bold text-lg flex items-center gap-2 mb-4"><Users size={20} className="text-amber-700" /> Trip Invitations</h2>
+          <div className="space-y-3">
+            {invitations.map(inv => (
+              <div key={inv.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white/40 rounded-2xl border border-amber-900/10" style={{ padding: '14px 18px' }}>
+                <div>
+                  <div className="text-amber-950 font-bold">{inv.trip_title}</div>
+                  <div className="text-amber-900/60 text-sm">
+                    {inv.owner_name} invited you
+                    {inv.start_date && ` · ${new Date(inv.start_date).toLocaleDateString()} - ${new Date(inv.end_date).toLocaleDateString()}`}
+                  </div>
+                </div>
+                <div className="flex gap-2 shrink-0">
+                  <button onClick={() => respondInvite(inv.id, 'accept')} className="btn-primary flex items-center gap-1.5" style={{ height: '40px', borderRadius: '12px', padding: '0 16px', fontSize: '14px', fontWeight: 600 }}>
+                    <Check size={15} /> Accept
+                  </button>
+                  <button onClick={() => respondInvite(inv.id, 'decline')} className="btn-secondary flex items-center gap-1.5" style={{ height: '40px', borderRadius: '12px', padding: '0 16px', fontSize: '14px', fontWeight: 600 }}>
+                    <X size={15} /> Decline
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {loading ? (
         <CardSkeleton count={6} />
       ) : trips.length === 0 ? (
@@ -127,6 +170,7 @@ export default function TripList() {
                     style={{ borderRadius: '24px', overflow: 'hidden', border: '1px solid rgba(120,90,60,0.08)', animationDelay: `${i * 0.05}s` }}>
                 
                 {/* Edit & Delete overlay buttons */}
+                {trip.role !== 'MEMBER' && (
                 <div className="absolute top-4 left-4 z-10 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button 
                     onClick={() => navigate(`/trips/${trip.id}/builder`)}
@@ -143,6 +187,7 @@ export default function TripList() {
                     <Trash2 size={16} />
                   </button>
                 </div>
+                )}
 
                 <Link to={`/trips/${trip.id}/view`} className="block">
                   <div className="h-48 relative overflow-hidden">
@@ -150,7 +195,10 @@ export default function TripList() {
                       <div className="flex items-center justify-center h-full bg-amber-50/50"><MapPin size={40} className="text-amber-900/20" /></div>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                    <div className="absolute top-4 right-4">
+                    <div className="absolute top-4 right-4 flex gap-2">
+                      {trip.role === 'MEMBER' && (
+                        <span className="px-3 py-1.5 rounded-full text-xs font-bold shadow-sm bg-orange-100 text-orange-800 flex items-center gap-1"><Users size={11} /> GROUP</span>
+                      )}
                       <span className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-sm ${trip.status === 'ONGOING' ? 'bg-amber-100 text-amber-800' : trip.status === 'UPCOMING' ? 'bg-blue-50 text-blue-700' : 'bg-green-50 text-green-700'}`}>
                         {trip.status}
                       </span>

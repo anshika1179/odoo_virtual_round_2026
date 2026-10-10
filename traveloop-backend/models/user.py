@@ -23,3 +23,4 @@ class User(Base):
     # Relationships
     trips = relationship("Trip", back_populates="user", cascade="all, delete-orphan")
     community_posts = relationship("CommunityPost", back_populates="user", cascade="all, delete-orphan")
+    trip_memberships = relationship("TripMember", back_populates="user", cascade="all, delete-orphan")

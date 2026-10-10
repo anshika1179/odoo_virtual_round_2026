@@ -7,6 +7,7 @@ from models.budget import TripBudget
 from models.user import User
 from schemas.trip_schema import TripCreate, TripUpdate, TripResponse, StopResponse
 from middleware.auth_middleware import get_current_user
+from models.trip_member import TripMember, MemberStatus
 from datetime import datetime, timezone
 
 router = APIRouter(prefix="/api/trips", tags=["Trips"])
@@ -23,7 +24,7 @@ def compute_trip_status(trip: Trip) -> str:
     return "ONGOING"
 
 
-def trip_to_response(trip: Trip) -> dict:
+def trip_to_response(trip: Trip, role: str = "OWNER") -> dict:
     stops = []
     for s in trip.stops:
         stops.append(StopResponse(
@@ -54,7 +55,8 @@ def trip_to_response(trip: Trip) -> dict:
         total_budget=trip.total_budget,
         created_at=trip.created_at,
         updated_at=trip.updated_at,
-        stops=stops
+        stops=stops,
+        role=role
     )
 
 
@@ -95,7 +97,28 @@ def list_trips(
         query = query.order_by(getattr(Trip, sort_by, Trip.created_at).desc())
 
     trips = query.all()
-    return [trip_to_response(t) for t in trips]
+    responses = [trip_to_response(t, role="OWNER") for t in trips]
+
+    # Group trips where the user is an accepted member
+    memberships = db.query(TripMember).filter(
+        TripMember.user_id == current_user.id,
+        TripMember.status == MemberStatus.ACCEPTED.value
+    ).all()
+    member_trip_ids = [m.trip_id for m in memberships]
+    if member_trip_ids:
+        member_trips = db.query(Trip).options(
+            joinedload(Trip.stops)
+        ).filter(Trip.id.in_(member_trip_ids)).all()
+        for t in member_trips:
+            t.status = compute_trip_status(t)
+            responses.append(trip_to_response(t, role="MEMBER"))
+        db.commit()
+        if status:
+            responses = [r for r in responses if r.status == status.upper()]
+        if search:
+            responses = [r for r in responses if search.lower() in r.title.lower()]
+
+    return responses
 
 
 @router.post("", response_model=TripResponse)
@@ -134,12 +157,22 @@ def get_trip(
 ):
     trip = db.query(Trip).options(
         joinedload(Trip.stops)
-    ).filter(Trip.id == trip_id, Trip.user_id == current_user.id).first()
+    ).filter(Trip.id == trip_id).first()
     if not trip:
         raise HTTPException(status_code=404, detail="Trip not found")
+    role = "OWNER"
+    if trip.user_id != current_user.id:
+        membership = db.query(TripMember).filter(
+            TripMember.trip_id == trip_id,
+            TripMember.user_id == current_user.id,
+            TripMember.status == MemberStatus.ACCEPTED.value
+        ).first()
+        if not membership:
+            raise HTTPException(status_code=404, detail="Trip not found")
+        role = "MEMBER"
     trip.status = compute_trip_status(trip)
     db.commit()
-    return trip_to_response(trip)
+    return trip_to_response(trip, role=role)
 
 
 @router.put("/{trip_id}", response_model=TripResponse)

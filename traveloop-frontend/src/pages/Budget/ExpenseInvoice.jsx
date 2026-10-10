@@ -1,9 +1,9 @@
 import useCurrency from '../../utils/useCurrency';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getInvoice, getTrip, createExpense, deleteExpense, downloadInvoicePdf } from '../../services/api';
+import { getInvoice, getTrip, createExpense, deleteExpense, downloadInvoicePdf, getTripMembers } from '../../services/api';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import { DollarSign, Download, FileText, Plus, Trash2, Loader2, AlertTriangle, CheckCircle } from 'lucide-react';
+import { DollarSign, Download, FileText, Plus, Trash2, Loader2, AlertTriangle, CheckCircle, Users } from 'lucide-react';
 
 const COLORS = ['#6366f1', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6', '#ec4899'];
 const CATEGORIES = ['HOTEL', 'FLIGHT', 'FOOD', 'ACTIVITY', 'TRANSPORT', 'MISC'];
@@ -13,6 +13,7 @@ export default function ExpenseInvoice() {
   const { id } = useParams();
   const [invoice, setInvoice] = useState(null);
   const [trip, setTrip] = useState(null);
+  const [groupSplit, setGroupSplit] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [newExp, setNewExp] = useState({ category: 'FOOD', description: '', quantity: 1, unit_cost: '' });
@@ -24,6 +25,10 @@ export default function ExpenseInvoice() {
       const [invRes, tripRes] = await Promise.all([getInvoice(id), getTrip(id)]);
       setInvoice(invRes.data);
       setTrip(tripRes.data);
+      try {
+        const memRes = await getTripMembers(id);
+        setGroupSplit(memRes.data.split);
+      } catch {}
     } catch {} finally { setLoading(false); }
   };
 
@@ -267,6 +272,21 @@ export default function ExpenseInvoice() {
                 </div>
               </div>
             </div>
+
+            {/* Group Split */}
+            {groupSplit && groupSplit.member_count > 1 && (
+              <div
+                className="glass shadow-soft"
+                style={{ borderRadius: "24px", padding: "32px", border: "1px solid rgba(120,90,60,0.08)" }}
+              >
+                <h3 className="text-amber-950 font-bold text-xl mb-6 flex items-center gap-2"><Users size={20} className="text-amber-700" /> Group Split</h3>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center"><span className="text-amber-900/70 font-medium">Split between</span><span className="text-amber-950 font-bold">{groupSplit.member_count} people</span></div>
+                  <div className="flex justify-between items-center"><span className="text-amber-900/70 font-medium">Budget per person</span><span className="text-amber-950 font-bold text-lg">{money.fmt(groupSplit.per_person_budget)}</span></div>
+                  <div className="flex justify-between items-center"><span className="text-amber-900/70 font-medium">Spent per person</span><span className="text-orange-600 font-bold text-lg">{money.fmt(groupSplit.per_person_spent,2)}</span></div>
+                </div>
+              </div>
+            )}
 
             {/* Pie Chart */}
             {pieData.length > 0 && (
