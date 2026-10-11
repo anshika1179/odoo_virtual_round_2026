@@ -77,31 +77,31 @@ def get_growth_data(db: Session = Depends(get_db), admin: User = Depends(get_adm
                 first_year -= 1
             unique_months.insert(0, (first_year, first_month))
 
-    # Query new users per month using strftime (SQLite compatible)
+    # Query new users per month (works on SQLite and Postgres)
     user_counts_raw = (
         db.query(
-            func.strftime('%Y', User.created_at).label('year'),
-            func.strftime('%m', User.created_at).label('month'),
+            cast(func.extract('year', User.created_at), Integer).label('year'),
+            cast(func.extract('month', User.created_at), Integer).label('month'),
             func.count(User.id).label('count'),
         )
         .filter(User.created_at.isnot(None))
         .group_by('year', 'month')
         .all()
     )
-    user_counts = {(r.year, r.month.lstrip('0')): r.count for r in user_counts_raw}
+    user_counts = {(str(r.year), str(r.month)): r.count for r in user_counts_raw}
 
     # Query new trips per month
     trip_counts_raw = (
         db.query(
-            func.strftime('%Y', Trip.created_at).label('year'),
-            func.strftime('%m', Trip.created_at).label('month'),
+            cast(func.extract('year', Trip.created_at), Integer).label('year'),
+            cast(func.extract('month', Trip.created_at), Integer).label('month'),
             func.count(Trip.id).label('count'),
         )
         .filter(Trip.created_at.isnot(None))
         .group_by('year', 'month')
         .all()
     )
-    trip_counts = {(r.year, r.month.lstrip('0')): r.count for r in trip_counts_raw}
+    trip_counts = {(str(r.year), str(r.month)): r.count for r in trip_counts_raw}
 
     # Count all users/trips created BEFORE our 12-month window
     first_year, first_month = unique_months[0]
