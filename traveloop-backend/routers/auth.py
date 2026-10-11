@@ -9,6 +9,7 @@ from middleware.auth_middleware import get_current_user
 from pydantic import BaseModel, EmailStr, field_validator
 from datetime import timedelta
 import logging
+import os
 
 logger = logging.getLogger("traveloop.auth")
 
@@ -34,7 +35,8 @@ class ResetPasswordRequest(BaseModel):
 
 class ForgotPasswordResponse(BaseModel):
     message: str
-    reset_token: str  # In production, this would be sent via email, not returned
+    # Only set when DEMO_RESET_TOKEN_IN_RESPONSE=true (demo mode, no email sender).
+    reset_token: str | None = None
 
 
 # ─── Auth Endpoints ─────────────────────────────────────────────────────
@@ -87,27 +89,26 @@ def forgot_password(data: ForgotPasswordRequest, db: Session = Depends(get_db)):
     """
     Initiate a password reset.
 
-    Generates a short-lived JWT reset token (15 min expiry) for the given email.
-    In a production environment, this token would be emailed to the user.
-    For this demo, it is returned in the response so the frontend can use it.
+    Always returns the same generic message, whether or not the email exists.
+    There is no email sender yet, so the 15 minute reset token is only
+    returned in the response when DEMO_RESET_TOKEN_IN_RESPONSE=true (off by
+    default). Otherwise it is written to the server log.
     """
+    generic = "If an account exists for this email, a password reset token has been generated."
     user = db.query(User).filter(User.email == data.email).first()
     if not user:
-        # Don't reveal whether email exists — still return 200
-        raise HTTPException(status_code=404, detail="No account found with this email")
+        return ForgotPasswordResponse(message=generic)
 
-    # Generate a short-lived reset token (15 min)
     reset_token = create_access_token(
         data={"sub": str(user.id), "email": user.email, "purpose": "password_reset"},
         expires_delta=timedelta(minutes=15),
     )
 
-    logger.info(f"Password reset token generated for {data.email}")
+    if os.getenv("DEMO_RESET_TOKEN_IN_RESPONSE", "").lower() == "true":
+        return ForgotPasswordResponse(message=generic, reset_token=reset_token)
 
-    return ForgotPasswordResponse(
-        message="Password reset token generated. Use it within 15 minutes.",
-        reset_token=reset_token,
-    )
+    logger.info(f"Password reset token for {data.email}: {reset_token}")
+    return ForgotPasswordResponse(message=generic)
 
 
 @router.post("/reset-password")

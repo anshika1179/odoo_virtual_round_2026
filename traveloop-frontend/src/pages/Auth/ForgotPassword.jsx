@@ -7,6 +7,7 @@ export default function ForgotPassword() {
   const [step, setStep] = useState('email');
   const [email, setEmail] = useState('');
   const [resetToken, setResetToken] = useState('');
+  const [tokenInput, setTokenInput] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,7 @@ export default function ForgotPassword() {
     setLoading(true);
     try {
       const res = await API.post('/auth/forgot-password', { email });
-      setResetToken(res.data.reset_token);
+      setResetToken(res.data.reset_token || '');
       setStep('reset');
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to send reset request');
@@ -32,7 +33,7 @@ export default function ForgotPassword() {
     if (newPassword !== confirmPassword) { setError('Passwords do not match'); return; }
     setLoading(true);
     try {
-      await API.post('/auth/reset-password', { token: resetToken, new_password: newPassword });
+      await API.post('/auth/reset-password', { token: resetToken || tokenInput.trim(), new_password: newPassword });
       setStep('done');
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to reset password');
@@ -92,8 +93,15 @@ export default function ForgotPassword() {
             {step === 'reset' && (
               <form onSubmit={handleReset} className="space-y-5">
                 <div className="p-3 rounded-xl bg-green-500/10 border border-green-500/30 text-green-700 text-sm flex items-center gap-2">
-                  <CheckCircle size={16} /> Reset token generated for {email}
+                  <CheckCircle size={16} /> {resetToken ? `Reset token generated for ${email}` : 'If an account exists for this email, a reset token was generated. Enter it below.'}
                 </div>
+                {!resetToken && (
+                  <div>
+                    <label className="block text-sm font-medium text-amber-800 mb-1.5">Reset Token</label>
+                    <input type="text" className="input-glass" placeholder="Paste your reset token"
+                      value={tokenInput} onChange={e => setTokenInput(e.target.value)} required />
+                  </div>
+                )}
                 <div>
                   <label className="block text-sm font-medium text-amber-800 mb-1.5">New Password</label>
                   <div className="relative">
