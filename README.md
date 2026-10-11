@@ -306,7 +306,7 @@ The backend **automatically seeds the database on startup** (via the FastAPI lif
 To reset the demo data, stop the server, delete `traveloop.db`, and start the backend again - the seeders re-run at startup.
 
 ### 🔑 Test Accounts
-* **Admin:** `admin@traveloop.com` / `admin123`
+* **Admin:** `admin@traveloop.com` (seeded on first start; change its password immediately)
 *(Note: If you create a fresh account and wish to access the admin panel, you must manually set `is_admin=True` for your user row in the SQLite database).*
 * **Regular User:** `test@test.com` / `password123`
 
