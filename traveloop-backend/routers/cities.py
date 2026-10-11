@@ -12,9 +12,12 @@ def search_cities(
     q: str = Query(""),
     country: str = Query(None),
     region: str = Query(None),
+    city_id: int = Query(None),
     db: Session = Depends(get_db)
 ):
     query = db.query(City)
+    if city_id:
+        query = query.filter(City.id == city_id)
     if q:
         query = query.filter(City.name.ilike(f"%{q}%"))
     if country:
@@ -42,6 +45,15 @@ def list_regions(country: str | None = None, db: Session = Depends(get_db)):
         q = q.filter(City.country == country)
     rows = q.order_by(City.region).all()
     return [r[0] for r in rows if r[0]]
+
+
+@router.get("/options")
+def city_options(country: str | None = None, db: Session = Depends(get_db)):
+    q = db.query(City.id, City.name)
+    if country:
+        q = q.filter(City.country == country)
+    rows = q.order_by(City.name).all()
+    return [{"id": r[0], "name": r[1]} for r in rows]
 
 
 @router.get("/{city_id}", response_model=CityResponse)

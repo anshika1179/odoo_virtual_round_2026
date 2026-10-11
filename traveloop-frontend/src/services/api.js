@@ -22,6 +22,7 @@ export const deleteTrip = (id) => API.delete(`/trips/${id}`);
 
 // Cities
 export const searchCities = (params) => API.get('/cities/search', { params });
+export const getCityOptions = (country) => API.get('/cities/options', { params: { country } });
 export const getCityCountries = () => API.get('/cities/countries');
 export const getCityRegions = (country) => API.get('/cities/regions', { params: country ? { country } : {} });
 export const getPopularCities = () => API.get('/cities/popular');

@@ -1,6 +1,6 @@
 import useCurrency from '../../utils/useCurrency';
 import { useState, useEffect } from 'react';
-import { searchCities, searchActivities, getCityCountries, getCityRegions } from '../../services/api';
+import { searchCities, searchActivities, getCityCountries, getCityRegions, getCityOptions } from '../../services/api';
 import { Search, MapPin, Filter, IndianRupee, Clock, Star, Globe, Plus, Eye } from 'lucide-react';
 import { CardSkeleton, RowSkeleton } from '../../components/common/Skeletons';
 import AddToTripModal from '../../components/activities/AddToTripModal';
@@ -12,7 +12,8 @@ export default function CitySearch() {
   const [query, setQuery] = useState('');
   const [cities, setCities] = useState([]);
   const [activities, setActivities] = useState([]);
-  const [filters, setFilters] = useState({ country: '', region: '', type: '', max_cost: '' });
+  const [filters, setFilters] = useState({ country: '', region: '', city_id: '', type: '', max_cost: '' });
+  const [cityOptions, setCityOptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('');
   const [picked, setPicked] = useState(null);
@@ -30,9 +31,15 @@ export default function CitySearch() {
   }, [filters.country]);
 
   useEffect(() => {
+    getCityOptions(filters.country || undefined)
+      .then(r => setCityOptions(r.data))
+      .catch(() => setCityOptions([]));
+  }, [filters.country]);
+
+  useEffect(() => {
     setLoading(true);
     if (mode === 'cities') {
-      searchCities({ q: query, country: filters.country, region: filters.region })
+      searchCities({ q: query, country: filters.country, region: filters.region, city_id: filters.city_id || undefined })
         .then(r => setCities(r.data.map((c, i) => ({
           ...c,
           price: c.price || c.cost_index * 250 || Math.floor(Math.random() * 1000) + 500,
@@ -105,9 +112,14 @@ export default function CitySearch() {
             {mode === 'cities' ? (
               <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
                 <select className="input-glass w-full sm:w-auto" style={{ height: '56px', borderRadius: '18px', padding: '0 24px', border: '1px solid rgba(120,90,60,0.12)' }}
-                        value={filters.country} onChange={e => setFilters({...filters, country: e.target.value, region: ''})}>
+                        value={filters.country} onChange={e => setFilters({...filters, country: e.target.value, region: '', city_id: ''})}>
                   <option value="">All Countries</option>
                   {countries.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+                <select className="input-glass w-full sm:w-auto" style={{ height: '56px', borderRadius: '18px', padding: '0 24px', border: '1px solid rgba(120,90,60,0.12)' }}
+                        value={filters.city_id} onChange={e => setFilters({...filters, city_id: e.target.value})}>
+                  <option value="">All Cities</option>
+                  {cityOptions.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
                 <select className="input-glass w-full sm:w-auto" style={{ height: '56px', borderRadius: '18px', padding: '0 24px', border: '1px solid rgba(120,90,60,0.12)' }}
                         value={filters.region} onChange={e => setFilters({...filters, region: e.target.value})}>
