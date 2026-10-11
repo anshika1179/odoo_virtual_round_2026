@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/globe.svg" width="80" alt="Traveloop Logo"/>
   <h1>🌍 TRAVELOOP</h1>
   <p><strong>A Premium, Full-Stack Multi-City Travel Planning Ecosystem</strong></p>
-  
+
   <h3>Team Leader: <strong>Anshika</strong></h3>
   <h4>Team Members: <strong>Khushi Patel, Atul Upadhyay, Satyam Kumar Singh</strong></h4>
 </div>
@@ -11,9 +11,9 @@
 
 ## 📖 Overview
 
-**Traveloop** is a comprehensive, production-grade application designed to solve the chaos of travel planning. While most travel tools force you to juggle spreadsheets, finance apps, and separate note-taking tools, Traveloop unifies multi-city itinerary building, dynamic budget tracking, and interactive packing lists into a single, cohesive ecosystem.
+**Traveloop** is a comprehensive, production-grade application designed to solve the chaos of travel planning. While most travel tools force you to juggle spreadsheets, finance apps, and separate note-taking tools, Traveloop unifies multi-city itinerary building, dynamic budget tracking, live weather forecasts, and interactive packing lists into a single, cohesive ecosystem.
 
-It empowers users to seamlessly design complex routes, discover global activities, and share their experiences—all wrapped in a stunning, modern **Amber-themed Glassmorphism UI**.
+The app opens on a **public, animated landing page** - a full-screen hero with search, a continuously scrolling strip of real destination photos, and an airplane flying the "Discover → Connect → Plan" path - before ever asking visitors to sign up. From there it empowers users to seamlessly design complex routes, discover global cities and activities, split expenses with friends, and share their experiences - all wrapped in a stunning, modern **Amber-themed Glassmorphism UI**.
 
 The application successfully demonstrates complex relational database management, handling highly normalized data structures connecting users, trips, stops, localized activities, and granular financial expenses.
 
@@ -34,32 +34,36 @@ The application must demonstrate proper use of relational databases to store and
 
 Traveloop directly addresses the fragmentation of modern travel planning. Instead of using Excel for budgets, WhatsApp for sharing, and scattered notes for itineraries, our platform centralizes the entire experience.
 
-* **For Custom Multi-City Itineraries:** We built an interactive drag-and-drop Itinerary Builder. Users simply add "Stops" (cities) and the platform automatically handles the complex date logic, plotting it onto a visually stunning chronological Timeline View.
-* **For Activity & Destination Discovery:** We pre-seeded a robust database of global cities and activities. Users can effortlessly filter these by region, cost, and interest category (e.g., Adventure, Food) and instantly slot them into their trip.
+* **For Custom Multi-City Itineraries:** We built an interactive Itinerary Builder. Users simply add "Stops" (cities) and the platform automatically handles the complex date logic, plotting it onto a visually stunning chronological Timeline View with numbered map markers.
+* **For Activity & Destination Discovery:** We pre-seeded a robust database of **105 global cities and 160+ activities**. Users can filter destinations by country, city, and region (the filters cascade - picking a country narrows the city and region lists), filter activities by cost and interest category, and slot anything directly into a trip with one click.
 * **For Cost Breakdowns:** Every activity added dynamically feeds into a centralized Budget Dashboard. We utilized Recharts to provide visual pie-chart breakdowns and implemented ReportLab to generate downloadable PDF invoices on the fly.
+* **For Group Travel:** Trips can be shared with friends as members. Group expenses are tracked per person and the backend automatically computes a fair split for every member.
 * **For Sharing & Collaboration:** We implemented a secure, UUID-based token system. Users can click "Share" to generate a public, read-only link of their itinerary. Viewers can instantly share it to social media or click **"Copy This Trip"** to securely clone the entire itinerary, complete with all relational database stops and activities, into their own account.
 * **For Relational Database Mastery:** By strictly normalizing our SQLite database with SQLAlchemy (connecting Users → Trips → Stops → Activities & Expenses), we ensured that cascading deletions and real-time budget aggregations work flawlessly, perfectly satisfying the technical requirements of the prompt.
 
 ---
 
-## ✨ 100% Feature Complete
+## ✨ Feature Complete
 
-Traveloop strictly adheres to and fully implements all 14 requirements outlined in the problem statement:
+Traveloop strictly adheres to and fully implements all 14 requirements outlined in the problem statement, plus extras:
 
-1. 🔐 **Authentication Flow** — Secure email/password login, JWT registration, and a complete 'Forgot Password' reset flow.
-2. 📊 **Dashboard Hub** — A central landing page highlighting upcoming trips, recently completed adventures, and popular cities.
-3. ✈️ **Dynamic Trip Creation** — Forms to initialize trips with validation for start/end dates, cover photos, and intelligent constraints.
-4. 🗂️ **My Trips (Trip List)** — A beautiful grid displaying all user trips with inline **Edit** and **Delete** functionality and status badging.
-5. 🗺️ **Itinerary Builder** — A drag-and-drop, interactive builder to add stops, search for cities, and seamlessly slot activities into specific dates.
-6. 📅 **Chronological Timeline View** — A visually striking day-by-day itinerary view mapping out all stops, schedules, and costs chronologically.
-7. 🏙️ **City Discovery Search** — A robust search interface filtering destinations by country, region, and popularity.
-8. 🏄 **Activity Search** — Browse things to do categorized by interest (Sightseeing, Food, Adventure) and filterable by budget.
-9. 💰 **Budget & Cost Breakdown** — Financial dashboards with dynamic **Recharts pie charts** showing total spent vs. budget, and **1-click PDF Invoice Exports** (generated natively in Python).
-10. ✅ **Packing Checklist** — Categorized, interactive checklists with progress bars to ensure nothing is forgotten.
-11. 🔗 **Public Itinerary Sharing** — Generate secure, public URLs. Viewers can share the trip on social media or click **"Copy This Trip"** to instantly clone the itinerary into their own account.
-12. 👤 **User Profiles & Privacy** — Track lifetime travel stats, update profile pictures, and utilize the "Danger Zone" to securely delete the account and all associated data.
-13. 📝 **Trip Journal & Notes** — A dedicated text-editor screen for saving flight numbers, hotel details, and personal reminders.
-14. 👑 **Admin Analytics Dashboard** — A secure admin-only route visualizing platform growth, user metrics, and top-performing destinations.
+1. 🏠 **Public Landing Page (Entry Route)** — Opening the app lands on an animated marketing page *before* any login/signup: a full-bleed hero with destination search and stats, a continuously moving left-to-right strip of real place photos from the database, and a "How Traveloop Works" section where an airplane flies along a dotted Discover → Connect → Plan path. Logged-out visitors get "Get started free" / "Log in" calls to action.
+2. 🔐 **Authentication Flow** — Secure email/password login, JWT registration, and a complete 'Forgot Password' reset flow.
+3. 📊 **Dashboard Hub** — Once logged in, the home page highlights upcoming trips, recently completed adventures, and popular cities.
+4. ✈️ **Dynamic Trip Creation** — Forms to initialize trips with validation for start/end dates, cover photos, and intelligent constraints.
+5. 🗂️ **My Trips (Trip List)** — A beautiful grid displaying all user trips with inline **Edit** and **Delete** functionality and status badging.
+6. 🗺️ **Itinerary Builder** — An interactive builder to add stops, search for cities, and slot activities into specific dates, with per-stop activities managed inline.
+7. 📅 **Chronological Timeline View** — A visually striking day-by-day itinerary view mapping out all stops, schedules, and costs chronologically.
+8. 🏙️ **City Discovery Search** — A robust search interface with cascading **country → city → region** filters plus popularity sorting, powered by dedicated endpoints (`/api/cities/countries`, `/api/cities/regions`, `/api/cities/options`).
+9. 🏄 **Activity Search & Add-to-Trip** — Browse things to do by interest (Sightseeing, Food, Adventure) and budget, then add any activity straight to a trip stop through the Add-to-Trip modal - without leaving the Explore page.
+10. 🌦️ **Live Weather Forecasts** — Each trip section shows a day-by-day weather forecast (high/low, rain probability, wind) for its exact dates, fetched live from the free Open-Meteo API using the stop's real coordinates - no API key required.
+11. 💰 **Budget & Cost Breakdown** — Financial dashboards with dynamic **Recharts pie charts** showing total spent vs. budget, and **1-click PDF Invoice Exports** (generated natively in Python).
+12. ✅ **Packing Checklist** — Categorized, interactive checklists with progress bars to ensure nothing is forgotten.
+13. 👥 **Group Trips & Expense Splitting** — Invite members to a trip and let the backend compute each person's fair share of the total spend.
+14. 🔗 **Public Itinerary Sharing** — Generate secure, public URLs. Viewers can share the trip on social media or click **"Copy This Trip"** to instantly clone the itinerary into their own account.
+15. 👤 **User Profiles & Privacy** — Track lifetime travel stats, update profile pictures, and utilize the "Danger Zone" to securely delete the account and all associated data.
+16. 📝 **Trip Journal & Notes** — A dedicated text-editor screen for saving flight numbers, hotel details, and personal reminders.
+17. 👑 **Admin Analytics Dashboard** — A secure admin-only route visualizing platform growth, user metrics, and top-performing destinations.
 
 ---
 
@@ -74,21 +78,27 @@ traveloop-frontend/
 ├── src/
 │   ├── assets/             # Global CSS and fonts
 │   ├── components/         # Reusable UI elements
+│   │   ├── activities/     # AddToTripModal (add any activity to a trip)
 │   │   ├── auth/           # Login/Register components
-│   │   └── common/         # Buttons, Navbars, Footers, Modals
+│   │   ├── common/         # Buttons, Navbars, Footers, Modals
+│   │   ├── itinerary/      # StopActivities (per-stop activity management)
+│   │   ├── maps/           # WorldMap, TripRouteMap, CityPreviewMap (Leaflet)
+│   │   └── trips/          # GroupMembers (invite & split UI)
 │   ├── context/            # Global State (AuthContext, ToastContext)
 │   ├── pages/              # Main route views
 │   │   ├── Admin/          # Analytics dashboard
 │   │   ├── Auth/           # Auth flows
 │   │   ├── Budget/         # Financial breakdown
 │   │   ├── Checklist/      # Packing list logic
-│   │   ├── Itinerary/      # Timeline and Builder views
-│   │   ├── Landing/        # Home screen
+│   │   ├── Community/      # Travel stories feed
+│   │   ├── Itinerary/      # Timeline, Builder & TripWeather views
+│   │   ├── Landing/        # Public landing page (entry route)
+│   │   ├── Notes/          # Trip journal
 │   │   ├── Profile/        # User settings
-│   │   ├── Search/         # City & Activity search
+│   │   ├── Search/         # City & Activity search (cascading filters)
 │   │   ├── Share/          # Public URL views
 │   │   └── Trips/          # My Trips listing
-│   ├── services/           # Axios API configuration
+│   ├── services/           # Axios API configuration + weather.js (Open-Meteo)
 │   ├── App.jsx             # Main router configuration
 │   └── index.css           # Tailwind & Glassmorphism styles
 ```
@@ -102,10 +112,12 @@ traveloop-backend/
 ├── models/                 # SQLAlchemy Database Models
 ├── routers/                # API Endpoints (Controllers)
 ├── schemas/                # Pydantic input/output validation
+├── seed/                   # Data seeders (cities_seed.py, activities_seed.py)
 ├── services/               # Core business logic & PDF generation
+├── static/                 # Uploaded files (profile photos, covers)
+├── tests/                  # Backend tests
 ├── utils/                  # Helper functions (hashing, JWTs)
-├── main.py                 # FastAPI application entry point
-└── seed.py                 # Initial data seeder
+└── main.py                 # FastAPI entry point (auto-seeds on startup)
 ```
 
 ---
@@ -120,23 +132,26 @@ The evaluation heavily weights complex relational database handling. Traveloop u
    * **Relationships:** 1:N with `trips`, `community_posts`, `shared_itineraries`.
 2. **`trips`**
    * **Keys:** `id` (PK), `user_id` (FK to users.id)
-   * **Relationships:** 1:N with `trip_stops`, `expenses`, `checklist_items`, `notes`.
+   * **Relationships:** 1:N with `trip_stops`, `expenses`, `checklist_items`, `notes`, `trip_members`.
    * **Cascade:** Deleting a trip cascades to delete ALL stops, activities, and financial records associated with it.
 3. **`cities`**
    * **Keys:** `id` (PK)
-   * **Description:** Seeded catalog of global destinations.
+   * **Description:** Seeded catalog of 105 global destinations, each with **latitude/longitude coordinates** (used by the interactive maps and the weather forecasts), region, country, popularity score, and photo.
 4. **`activities`**
    * **Keys:** `id` (PK), `city_id` (FK to cities.id)
-   * **Description:** Pre-seeded things to do in specific cities.
+   * **Description:** 160+ pre-seeded things to do in specific cities.
 5. **`trip_stops`** (The connective tissue of an itinerary)
    * **Keys:** `id` (PK), `trip_id` (FK to trips.id), `city_id` (FK to cities.id)
    * **Cascade:** If a user decides to skip a city and deletes a stop, the database automatically cascades to delete all `stop_activities` bound to that specific visit.
 6. **`stop_activities`**
    * **Keys:** `id` (PK), `stop_id` (FK to trip_stops.id), `activity_id` (FK to activities.id)
-7. **`expenses`** & **`trip_budget`**
+7. **`trip_members`**
+   * **Keys:** `id` (PK), `trip_id` (FK to trips.id), `user_id` (FK to users.id)
+   * **Description:** Group-trip membership with roles, powering per-person expense splitting.
+8. **`expenses`** & **`trip_budget`**
    * **Keys:** `id` (PK), `trip_id` (FK to trips.id)
    * **Description:** Granular line-item financial tracking.
-8. **`shared_itineraries`**
+9. **`shared_itineraries`**
    * **Keys:** `public_url_token` (PK, UUID), `trip_id` (FK to trips.id)
 
 ---
@@ -157,11 +172,14 @@ All API inputs are rigorously validated using Pydantic schemas *before* reaching
 
 These specific features demonstrate technical depth and advanced implementation:
 
-* **PDF Invoice Export:** When a user clicks "Download Invoice", the FastAPI backend dynamically generates a professional PDF using **ReportLab**. It streams a custom-formatted file containing the trip name, an itemized table of expenses, total budget summary, and generation date directly to the client.
+* **Animated Public Landing Page:** The entry route (`/`) is fully public. A CSS keyframe marquee loops the real seeded city photos left to right (pausing on hover), and an SVG `<animateMotion>` element flies an airplane icon along a dotted cubic path from Discover to Plan. Logged-out visitors get sign-up CTAs; logged-in users see their dashboard content.
+* **Live Weather via Open-Meteo:** The frontend calls the free Open-Meteo forecast API directly with each stop's seeded latitude/longitude, then matches the forecast days to the stop's arrival/departure dates. No API key, no backend proxy, up to 16 days ahead.
+* **PDF Invoice Export:** When a user clicks "Download Invoice", the FastAPI backend dynamically generates a professional PDF using **ReportLab**. It streams a custom-formatted file containing the trip name, an itemized table of expenses, total budget summary, and generation date directly to the client, with full currency (₹) support via an embedded Unicode font.
 * **"Copy This Trip" Cloning Engine:** When a logged-in viewer clicks "Copy This Trip" on a public itinerary, the system performs a deep copy operation. It creates a full duplicate of the `trip` record, clones every single `trip_stop`, and recursively duplicates all `stop_activities` under the viewer's account ID.
 * **Auto Trip Status Computation:** Trip status (UPCOMING, ONGOING, COMPLETED) is *not* stored statically in the database. Every time trips are fetched, the backend computes the status dynamically by comparing today's date against the `start_date` and `end_date`. This ensures status is always 100% accurate without requiring background cron jobs.
 * **Cascade Budget Recalculation:** Every time an expense item is added, edited, or deleted, the backend automatically recalculates and updates the `total_spent` field. Similarly, when a stop is removed, all its child activities are deleted, and the budget dynamically reflects the savings.
-* **Interactive Leaflet Map:** The Itinerary View screen integrates an interactive Leaflet map using OpenStreetMap tiles (requiring no API key). Each city stop is plotted as a numbered marker with a popup showing the city name and dates. A polyline connects all stops to visualize the exact travel route, and the map automatically adjusts its bounds to ensure all markers are perfectly framed.
+* **Group Expense Splitting:** The backend aggregates every expense on a shared trip and computes a fair per-member split, so group travelers instantly see who owes what.
+* **Interactive Leaflet Maps:** Itinerary and Explore screens integrate interactive Leaflet maps using OpenStreetMap tiles (requiring no API key). Each city stop is plotted as a numbered marker at its true seeded coordinates with a popup showing the city name and dates. A polyline connects all stops to visualize the exact travel route, and the map automatically adjusts its bounds to ensure all markers are perfectly framed.
 
 ---
 
@@ -181,8 +199,9 @@ Security is handled at every layer:
 * **FastAPI over Django/Flask:** Chosen for its asynchronous speed, native Pydantic integration, and out-of-the-box auto-generated Swagger documentation.
 * **JWT over Session Auth:** Ensures the backend remains stateless, allowing the API to scale effortlessly and serve multiple clients (e.g., web and mobile) seamlessly.
 * **Recharts:** Selected for financial data visualization due to its declarative React component structure and smooth SVGs.
-* **React Context API over Redux:** Traveloop’s global state is limited primarily to Auth and Notifications. Context API perfectly handles this without the excessive boilerplate of Redux.
+* **React Context API over Redux:** Traveloop's global state is limited primarily to Auth and Notifications. Context API perfectly handles this without the excessive boilerplate of Redux.
 * **Cascade Deletes:** Enforced at the database level rather than application level to guarantee orphan records are never left behind.
+* **Client-side Weather:** Open-Meteo is free and keyless, so forecasts are fetched directly from the browser using the stop's coordinates - one less secret to manage and no rate-limit coupling to our backend.
 
 ---
 
@@ -195,11 +214,18 @@ FastAPI auto-generates interactive Swagger documentation. Once the backend is ru
 | **Auth** | POST | `/api/auth/register` | No | Registers a new user. |
 | **Auth** | POST | `/api/auth/login` | No | Authenticates user and returns JWT. |
 | **Auth** | POST | `/api/auth/forgot-password`| No | Generates a reset token. |
+| **Cities** | GET | `/api/cities/search` | No | Searches cities; supports `country` and `city_id` filters. |
+| **Cities** | GET | `/api/cities/popular` | No | Most popular destinations (powers the landing page strip). |
+| **Cities** | GET | `/api/cities/countries` | No | All countries in the catalog (filter dropdown). |
+| **Cities** | GET | `/api/cities/regions` | No | Regions, optionally narrowed by `country`. |
+| **Cities** | GET | `/api/cities/options` | No | Lightweight city id+name list for the city filter dropdown. |
 | **Trips** | GET | `/api/trips` | Yes | Fetches user's trips. |
 | **Trips** | POST | `/api/trips` | Yes | Creates a new trip. |
 | **Stops** | POST | `/api/trips/{id}/stops` | Yes | Adds a city stop to an itinerary. |
 | **Stops** | PUT | `/api/trips/{id}/stops/reorder`| Yes| Updates chronological order of stops. |
 | **Activities**| GET | `/api/activities/search` | Yes | Searches activities with budget filters. |
+| **Group Trips**| GET | `/api/trips/{id}/members` | Yes | Lists trip members and the computed expense split. |
+| **Group Trips**| POST | `/api/trips/{id}/members` | Yes | Invites a member to a shared trip. |
 | **Budget** | GET | `/api/trips/{id}/budget` | Yes | Fetches financial breakdown pie chart data. |
 | **Budget** | GET | `/api/trips/{id}/invoice/pdf`| Yes| Streams PDF receipt download. |
 | **Checklist**| POST | `/api/trips/{id}/checklist` | Yes | Adds a packing item. |
@@ -212,7 +238,7 @@ FastAPI auto-generates interactive Swagger documentation. Once the backend is ru
 
 ## 💻 Tech Stack
 
-* **Frontend:** React.js 18, Vite, Tailwind CSS, Recharts 2.x, **Leaflet** / **react-leaflet** (Interactive Maps).
+* **Frontend:** React.js 18, Vite, Tailwind CSS, Recharts 2.x, **Leaflet** / **react-leaflet** (Interactive Maps), **Open-Meteo** (keyless weather forecasts).
 * **Backend:** Python 3.10+, FastAPI, SQLAlchemy, Alembic, **ReportLab** (PDF Generation).
 * **Database:** SQLite3
 
@@ -255,7 +281,7 @@ pip install -r requirements.txt
 # Run Database Migrations
 alembic upgrade head
 
-# Start the FastAPI server
+# Start the FastAPI server (this also seeds cities & activities on first run)
 python3 -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
@@ -266,21 +292,18 @@ cd traveloop-frontend
 npm install
 npm run dev
 ```
-Access the application at `http://localhost:5173`.
+Access the application at `http://localhost:5173` - you will land on the public landing page first, and can sign up or log in from there.
 
 ---
 
 ## 🌱 Seed Data
 
-The backend includes a comprehensive `seed.py` script that automatically populates the database upon initialization.
-* **Cities:** 50+ global destinations covering Europe, Asia, Americas, and Oceania.
-* **Activities:** 75+ curated experiences categorized by Sightseeing, Adventure, Food, etc.
+The backend **automatically seeds the database on startup** (via the FastAPI lifespan handler in `main.py`) whenever the tables are empty.
+* **Cities:** 105 global destinations covering Europe, Asia, the Americas, Oceania, and more - each with real latitude/longitude coordinates, region, popularity score, and photo.
+* **Activities:** 160+ curated experiences categorized by Sightseeing, Adventure, Food, etc.
 * **Admin User:** Automatically generates the admin account.
 
-To manually re-run the seed (or reset the data):
-```bash
-python3 seed.py
-```
+To reset the demo data, stop the server, delete `traveloop.db`, and start the backend again - the seeders re-run at startup.
 
 ### 🔑 Test Accounts
 * **Admin:** `admin@traveloop.com` / `admin123`
@@ -294,7 +317,7 @@ python3 seed.py
 All team members actively contributed to the repository using feature branches.
 
 * **Anshika (Team Leader):** System Architecture, Authentication flows, Core API design.
-* **Khushi Patel:** Itinerary Builder UI, Drag-and-drop logic, Interactive Map integration.
+* **Khushi Patel:** Itinerary Builder UI, Interactive Map & Weather integration.
 * **Atul Upadhyay:** Financial Dashboards, Recharts implementation, ReportLab PDF generation.
 * **Satyam Kumar Singh:** Database Migrations, Profile Management, Admin Analytics.
 
@@ -305,21 +328,22 @@ All team members actively contributed to the repository using feature branches.
 In the interest of transparency and MVP delivery timeframe:
 * **Email Reset:** We did not integrate a third-party SMTP service (like SendGrid). The "Forgot Password" flow directly returns the reset token in the API response for testing purposes.
 * **Photo Uploads:** Profile photos are currently saved locally to the backend server filesystem rather than an S3 bucket.
-* **Drag-and-Drop:** Timeline reordering utilizes standard state-array manipulation rather than a heavy library like `react-beautiful-dnd`.
+* **Weather Range:** Open-Meteo's free forecast covers up to 16 days ahead; trip dates beyond that simply show no forecast rows.
 
 ---
 
 ## 🔧 Troubleshooting
 
 * **Port 8000 already in use:** Run the backend on a different port: `uvicorn main:app --port 8001`.
-* **Database not found error:** Ensure you ran `alembic upgrade head` and `python3 seed.py` in the backend directory.
+* **Database not found error:** Ensure you ran `alembic upgrade head` in the backend directory, then start the server (seeding runs automatically at startup).
 * **CORS Error:** Verify that your frontend `VITE_API_BASE_URL` exactly matches the backend host, and check the `CORSMiddleware` configuration in `main.py`.
 * **Leaflet Map Not Rendering:** Ensure the Leaflet CSS import (`import 'leaflet/dist/leaflet.css';`) is present at the top of your map component.
+* **Blank page after pulling new changes:** Restart both servers - the backend re-seeds at startup, and Vite needs a fresh dev server to pick up new routes.
 * **Alembic Migration Error:** If migrations clash, delete the `traveloop.db` file and the `alembic/versions` folder, then recreate a fresh migration: `alembic revision --autogenerate -m "init"` followed by `alembic upgrade head`.
 
 ---
 
 ## 🎥 Submission Video
 
-> **[Watch the Traveloop Demo Video Here](https://youtu.be/tE8NQdWLolg)**  
+> **[Watch the Traveloop Demo Video Here](https://youtu.be/tE8NQdWLolg)**
 > *Note to Judges: Please watch the comprehensive demo video above. It covers the complete user journey, dynamic trip creation and architecture explanation, the interactive itinerary builder in action, the financial tracking and PDF export, and concludes with community sharing, public links, and the admin dashboard.*
