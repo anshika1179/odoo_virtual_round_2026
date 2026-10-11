@@ -610,18 +610,3 @@ h2, h3, h4 {
   table { font-size: 12px; }
   th, td { padding: 10px 8px !important; }
 }
-
-/* Moving places strip (landing) */
-@keyframes marquee-ltr {
-  from { transform: translateX(-50%); }
-  to { transform: translateX(0); }
-}
-.marquee-track {
-  display: flex;
-  gap: 24px;
-  width: max-content;
-  animation: marquee-ltr 40s linear infinite;
-}
-.marquee-track:hover {
-  animation-play-state: paused;
-}

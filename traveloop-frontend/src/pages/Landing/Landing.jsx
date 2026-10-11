@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { getPopularCities, getTrips } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
-import { Search, MapPin, Plane, Calendar, TrendingUp, ChevronRight, Globe, Sparkles, IndianRupee, CheckSquare, Users, StickyNote, Map, Star } from 'lucide-react';
+import { Search, MapPin, Plane, Calendar, TrendingUp, ChevronRight, Globe, Sparkles, IndianRupee, CheckSquare, Users, StickyNote, Map } from 'lucide-react';
 import WorldMap from '../../components/maps/WorldMap';
 
 export default function Landing() {
@@ -10,14 +10,6 @@ export default function Landing() {
   const [cities, setCities] = useState([]);
   const [prevTrips, setPrevTrips] = useState([]);
   const [search, setSearch] = useState('');
-  const navigate = useNavigate();
-  const goSearch = (e) => { e.preventDefault(); navigate('/search/cities'); };
-
-  const steps = [
-    { icon: <Map size={26} />, title: 'Discover', desc: 'Find destinations based on your interests.' },
-    { icon: <Users size={26} />, title: 'Connect', desc: 'Meet travelers going your way.' },
-    { icon: <Calendar size={26} />, title: 'Plan', desc: 'Build your itinerary together.' },
-  ];
 
   useEffect(() => {
     getPopularCities().then(r => setCities(r.data)).catch(() => {});
@@ -34,83 +26,71 @@ export default function Landing() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative overflow-hidden flex items-center" style={{ minHeight: '88vh', paddingTop: '110px', paddingBottom: '90px' }}>
-        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600" alt="Mountains at sunset"
-             className="absolute inset-0 w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/25 to-amber-950/60" />
-
-        {/* Top-right motto */}
-        <div className="absolute hidden md:flex flex-col items-end text-white/90 font-serif italic" style={{ top: '110px', right: '48px', fontSize: '19px', lineHeight: 1.5 }}>
-          <span>Explore · Plan</span>
-          <span className="flex items-center gap-2">Connect · Repeat <Plane size={18} /></span>
+      <section className="relative overflow-hidden flex items-center justify-center" style={{ minHeight: '80vh', paddingTop: '80px', paddingBottom: '120px' }}>
+        {/* Minimalist Background Gradients */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-[20%] -right-[10%] w-[70%] h-[70%] bg-gradient-to-br from-amber-100/40 via-orange-50/20 to-transparent rounded-full blur-3xl opacity-60" />
+          <div className="absolute -bottom-[20%] -left-[10%] w-[60%] h-[60%] bg-gradient-to-tr from-orange-100/30 via-yellow-50/10 to-transparent rounded-full blur-3xl opacity-50" />
         </div>
 
         <div className="container relative z-10">
-          <div className="animate-fadeInUp" style={{ maxWidth: '760px' }}>
-            <h1 className="text-white" style={{ fontSize: '64px', lineHeight: 1.08, fontWeight: 700, marginBottom: '20px' }}>
-              <span className="font-serif italic" style={{ fontWeight: 400, color: '#fcd9a8' }}>Travel farther.</span><br />
-              Connect deeper.
-            </h1>
-            <p className="text-white/85" style={{ fontSize: '19px', lineHeight: 1.7, marginBottom: '36px', maxWidth: '560px' }}>
-              Discover places, meet fellow travelers, and build trips worth remembering.
-            </p>
+          <div className="flex flex-col lg:flex-row items-center justify-between lp-hero-row" style={{ gap: '80px' }}>
+            
+            {/* Left — Text Content */}
+            <div className="flex flex-col justify-center animate-fadeInUp lp-hero-text" style={{ width: '48%', maxWidth: '520px' }}>
+              <h1 className="text-amber-950 lp-hero-h1" style={{ fontSize: '72px', lineHeight: 1.1, fontWeight: 700, marginBottom: '32px' }}>
+                <div style={{ marginBottom: '16px' }}>
+                  <span className="text-amber-700 font-serif italic lp-hero-sub" style={{ fontSize: '64px', fontWeight: 400 }}>Travel beautifully.</span>
+                </div>
+                Plan simply.
+              </h1>
+              
+              <p className="text-amber-900" style={{ fontSize: '20px', lineHeight: 1.8, marginBottom: '40px', opacity: 0.85 }}>
+                Curate stunning itineraries, manage your budgets, and explore the world with an elegant platform designed for modern wanderers.
+              </p>
 
-            {/* Search pill */}
-            <form onSubmit={goSearch} className="flex items-center bg-white shadow-xl" style={{ borderRadius: '999px', padding: '8px', maxWidth: '620px', gap: '8px' }}>
-              <Search size={20} className="text-amber-900/40 shrink-0" style={{ marginLeft: '14px' }} />
-              <input className="flex-1 outline-none bg-transparent text-amber-950" placeholder="Where do you want to go?"
-                style={{ fontSize: '16px', minWidth: 0 }}
-                value={search} onChange={e => setSearch(e.target.value)} />
-              <button type="submit" className="btn-primary shrink-0" style={{ height: '48px', padding: '0 28px', borderRadius: '999px', fontSize: '15px' }}>Search</button>
-            </form>
+              <div className="flex items-center" style={{ gap: '18px', marginTop: '12px' }}>
+                <div className="relative">
+                  <Search size={20} strokeWidth={1.5} className="absolute left-5 top-1/2 -translate-y-1/2 text-amber-900/40" />
+                  <input className="input-glass outline-none transition-colors" placeholder="Search destinations..."
+                    style={{ height: '58px', width: '360px', borderRadius: '18px', padding: '0 22px 0 52px', border: '1px solid rgba(120,90,60,0.12)', fontSize: '16px' }}
+                    value={search} onChange={e => setSearch(e.target.value)} />
+                </div>
+                <Link to="/trips/new" className="btn-primary flex items-center justify-center shrink-0" 
+                  style={{ height: '58px', padding: '0 32px', borderRadius: '18px', fontSize: '18px', fontWeight: 600, gap: '8px' }}>
+                  <Plane size={18} strokeWidth={2} /> Start Planning
+                </Link>
+              </div>
+            </div>
 
-            {!user && (
-              <div className="flex flex-wrap items-center" style={{ gap: '14px', marginTop: '26px' }}>
-                <Link to="/register" className="btn-primary" style={{ height: '46px', padding: '0 26px', borderRadius: '999px', fontSize: '15px', display: 'inline-flex', alignItems: 'center' }}>Get started free</Link>
-                <Link to="/login" className="text-white font-semibold" style={{ fontSize: '15px', padding: '0 10px', textDecoration: 'underline', textUnderlineOffset: '4px' }}>Log in</Link>
-              </div>
-            )}
+            {/* Right — Hero Visual */}
+            <div className="hidden lg:flex justify-end items-center animate-fadeInUp" style={{ width: '52%', animationDelay: '0.2s' }}>
+              <div className="relative group" 
+                   style={{ width: '620px', height: '440px', borderRadius: '32px', overflow: 'hidden', boxShadow: '0 20px 60px rgba(80,50,20,0.12)', transform: 'translateY(0)', transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1)' }}
+                   onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-8px)'; e.currentTarget.style.boxShadow = '0 30px 70px rgba(80,50,20,0.18)'; }}
+                   onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 20px 60px rgba(80,50,20,0.12)'; }}>
+                
+                <img src="https://images.unsplash.com/photo-1534113414509-0eec2bfb493f?w=800" alt="Amalfi Coast" 
+                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                
+                <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
 
-            {/* Stats */}
-            <div className="flex flex-wrap items-center text-white" style={{ gap: '44px', marginTop: '44px' }}>
-              <div className="flex items-center gap-3">
-                <Users size={24} className="text-amber-300" />
-                <div><p className="font-bold" style={{ fontSize: '22px', lineHeight: 1.2 }}>10K+</p><p className="text-white/70 text-sm">Travelers</p></div>
-              </div>
-              <div className="flex items-center gap-3">
-                <MapPin size={24} className="text-amber-300" />
-                <div><p className="font-bold" style={{ fontSize: '22px', lineHeight: 1.2 }}>100+</p><p className="text-white/70 text-sm">Destinations</p></div>
-              </div>
-              <div className="flex items-center gap-3">
-                <Star size={24} className="text-amber-300" />
-                <div><p className="font-bold" style={{ fontSize: '22px', lineHeight: 1.2 }}>4.9/5</p><p className="text-white/70 text-sm">Experiences</p></div>
+                {/* Card Header Overlay */}
+                <div className="absolute top-0 left-0 w-full flex justify-between items-start" style={{ padding: '24px 28px' }}>
+                  <div className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl shadow-sm border border-white/50">
+                    <h3 className="text-amber-950 font-bold text-lg">Amalfi Coast</h3>
+                    <p className="text-amber-900/70 text-xs font-medium">Italy</p>
+                  </div>
+                  <div className="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-sm border border-white/50 flex items-center gap-1.5">
+                    <Calendar size={14} className="text-amber-700" />
+                    <span className="text-amber-950 text-xs font-bold">7 Days</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Moving places strip */}
-      {cities.length > 0 && (
-        <section style={{ paddingTop: '64px', paddingBottom: '8px' }}>
-          <div className="overflow-hidden">
-            <div className="marquee-track">
-              {[...cities, ...cities].map((city, i) => (
-                <Link to="/search/cities" key={city.id + '-' + i} className="relative rounded-3xl overflow-hidden shrink-0 shadow-sm block"
-                      style={{ width: '280px', height: '180px' }}>
-                  <img src={city.image_url} alt={city.name} className="w-full h-full object-cover"
-                       onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
-                  <div className="absolute bottom-4 left-4">
-                    <h3 className="text-white font-bold" style={{ fontSize: '18px' }}>{city.name}</h3>
-                    <p className="text-white/80 text-xs font-medium">{city.country}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Feature Cards Section */}
       <section className="container" style={{ paddingTop: '120px', paddingBottom: '120px' }}>
@@ -184,41 +164,6 @@ export default function Landing() {
                 <h3 className="text-white font-semibold text-sm">{city.name}</h3>
               </div>
             </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* How Traveloop Works */}
-      <section className="container" style={{ marginTop: '120px' }}>
-        <div className="text-center" style={{ marginBottom: '12px' }}>
-          <p className="text-amber-700 font-bold uppercase" style={{ fontSize: '13px', letterSpacing: '0.15em' }}>How Traveloop Works</p>
-          <h2 className="text-amber-950 font-bold" style={{ fontSize: '36px', marginTop: '10px' }}>Your trip. Your people. Your loop.</h2>
-        </div>
-
-        {/* Dotted path with flying plane */}
-        <div className="hidden md:block" style={{ marginBottom: '-6px' }}>
-          <svg viewBox="0 0 1000 170" className="w-full" style={{ height: '170px' }}>
-            <path id="loopPath" d="M 80 130 C 260 30, 420 140, 520 80 C 620 20, 760 120, 920 40"
-                  fill="none" stroke="rgba(180,120,60,0.45)" strokeWidth="2.5" strokeDasharray="2 10" strokeLinecap="round" />
-            <g>
-              <animateMotion dur="8s" repeatCount="indefinite" rotate="auto">
-                <mpath href="#loopPath" />
-              </animateMotion>
-              <path transform="translate(-12,-12) scale(1.4)" fill="#b45309"
-                d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
-            </g>
-          </svg>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: '28px' }}>
-          {steps.map((step, i) => (
-            <div key={i} className="glass text-center animate-fadeInUp" style={{ borderRadius: '28px', padding: '36px 28px', border: '1px solid rgba(120,90,60,0.08)', animationDelay: `${i * 0.1}s` }}>
-              <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 shadow-sm" style={{ margin: '0 auto 18px' }}>
-                {step.icon}
-              </div>
-              <h3 className="text-amber-950 font-bold" style={{ fontSize: '22px' }}>{step.title}</h3>
-              <p className="text-amber-900/60" style={{ fontSize: '15px', lineHeight: 1.7, marginTop: '8px' }}>{step.desc}</p>
-            </div>
           ))}
         </div>
       </section>
