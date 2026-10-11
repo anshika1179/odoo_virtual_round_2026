@@ -46,13 +46,13 @@ function App() {
             <PageTransition>
               <Routes>
                 {/* Public Routes */}
+                <Route path="/" element={<Landing />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/share/:token" element={<PublicItinerary />} />
 
                 {/* Protected Routes */}
-                <Route path="/" element={<PrivateRoute><Landing /></PrivateRoute>} />
                 <Route path="/trips" element={<PrivateRoute><TripList /></PrivateRoute>} />
                 <Route path="/trips/new" element={<PrivateRoute><CreateTrip /></PrivateRoute>} />
                 <Route path="/trips/:id/builder" element={<PrivateRoute><ItineraryBuilder /></PrivateRoute>} />
